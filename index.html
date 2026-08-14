@@ -104,6 +104,16 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:500;letter-spacing:-.025em;line-he
 .pk-p{flex:0 0 auto;text-align:right;font-size:16px;font-weight:500;letter-spacing:-.015em;white-space:nowrap}
 .pk-p small{display:block;font-size:12px;color:var(--mute);font-weight:400;margin-top:4px}
 .ex{margin-top:14px;border:1px solid var(--line)}
+.exrow{cursor:default}
+.exrow:hover{background:var(--paper)}
+.dost-in{display:flex;align-items:center;gap:10px;margin-top:14px}
+.dost-in input{width:104px;border:1px solid var(--line);background:var(--paper);font:inherit;font-size:16px;
+  color:var(--ink);padding:10px 12px;outline:none;text-align:right}
+.dost-in input:focus{border-color:var(--ink)}
+.dost-in span{font-size:13.5px;color:var(--mute)}
+.dost-calc{display:block;font-size:12.5px;color:var(--mute);margin-top:10px;line-height:1.5}
+.dost-far{display:block;font-size:12.5px;color:var(--ink);margin-top:10px;line-height:1.5;
+  background:var(--lime);padding:8px 10px}
 /* на узком — цена уходит под текст, ничего не сжимается в колонку */
 @media(max-width:620px){
   .pkrow,.exrow{flex-wrap:wrap;gap:0 18px}
@@ -266,7 +276,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 56px;font-size:12.5px;col
 <footer><div class="wrap">Прайс действителен на дату выгрузки. Монтаж указан для объекта в радиусе 50 км от производства, дальше считается отдельно. Аренда крана для разгрузки не включена.</div></footer>
 
 <script>
-const DATA = [{"name":"ЗАРЯ","factory":"Country","photo":"assets/photos/render_6.jpg","variants":[{"title":"16 м²","m2":16,"mat":1178000,"rab":320000,"otd":290000,"inzh":190000,"fund":56250,"dost":150000,"plan":null},{"title":"20 м²","m2":20,"mat":1440500,"rab":400000,"otd":350000,"inzh":250000,"fund":56250,"dost":150000,"plan":null},{"title":"24 м²","m2":24,"mat":1753000,"rab":480000,"otd":470000,"inzh":250000,"fund":56250,"dost":150000,"plan":null}]},{"name":"ЗЕНИТ","factory":"Chalet","photo":"assets/photos/CHALET.jpg","variants":[{"title":"36 м²","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"dost":150000,"plan":"assets/plans/CHALET_36_p4R.png"},{"title":"36 м² · с сауной","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"dost":150000,"plan":"assets/plans/CHALET_SAUNA_36_p5R.png"},{"title":"42 м²","m2":42,"mat":2748938,"rab":840000,"otd":750000,"inzh":510000,"fund":100000,"dost":150000,"plan":"assets/plans/CHALET_42_p5L.png"}]},{"name":"ПИК","factory":"A-Frame","photo":"assets/photos/A-FRAME.jpg","variants":[{"title":"44 м²","m2":44,"mat":2679750,"rab":880000,"otd":690000,"inzh":630000,"fund":100000,"dost":150000,"plan":"assets/plans/A-FRAME_44_p9R.png"}]},{"name":"МОНБЛАН","factory":"Mont Blanc","photo":"assets/photos/MONT_BLANC.jpg","variants":[{"title":"54 м²","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"dost":150000,"plan":"assets/plans/MONT_BLANC_54_p13R.png"},{"title":"54 м² · с сауной","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"dost":150000,"plan":"assets/plans/MONT_BLANC_54_p14R.png"}]},{"name":"РАССВЕТ","factory":"Alpine Barn","photo":"assets/photos/ALPINE_BARN.jpg","variants":[{"title":"54 м²","m2":54,"mat":3613781,"rab":1080000,"otd":990000,"inzh":630000,"fund":125000,"dost":150000,"plan":"assets/plans/ALPINE_BARN_54_p21R.png"},{"title":"72 м²","m2":72,"mat":4662703,"rab":1440000,"otd":1290000,"inzh":870000,"fund":156250,"dost":150000,"plan":"assets/plans/ALPINE_BARN_72_p22L.png"},{"title":"93 м²","m2":93,"mat":6017625,"rab":1860000,"otd":1850000,"inzh":940000,"fund":218750,"dost":150000,"plan":"assets/plans/ALPINE_BARN_93_p22R.png"}]},{"name":"ПРОСТОР","factory":"Nordic","photo":"assets/photos/NORDIC.jpg","variants":[{"title":"65 м²","m2":65,"mat":3643781,"rab":1300000,"otd":1290000,"inzh":660000,"fund":193750,"dost":150000,"plan":"assets/plans/NORDIC_65_p3L.png"},{"title":"75 м²","m2":75,"mat":3999281,"rab":1500000,"otd":1350000,"inzh":900000,"fund":212500,"dost":150000,"plan":"assets/plans/NORDIC_75_p2R.png"},{"title":"82 м² · с сауной","m2":82,"mat":4299281,"rab":1640000,"otd":1470000,"inzh":990000,"fund":237500,"dost":150000,"plan":"assets/plans/NORDIC_SAUNA_75_p3R.png"}]},{"name":"ГОРИЗОНТ","factory":"Manhattan","photo":"assets/photos/MANHATTAN.jpg","variants":[{"title":"69 м²","m2":69,"mat":5424469,"rab":1380000,"otd":1300000,"inzh":770000,"fund":150000,"dost":150000,"plan":"assets/plans/MANHATTAN_69_p27R.png"},{"title":"82 м² · с навесом для машины","m2":82,"mat":6308719,"rab":1640000,"otd":1500000,"inzh":960000,"fund":168750,"dost":150000,"plan":"assets/plans/MANHATTAN_82_p29L.png"},{"title":"82 м²","m2":82,"mat":6421219,"rab":1640000,"otd":1500000,"inzh":960000,"fund":287500,"dost":150000,"plan":"assets/plans/MANHATTAN_82_p28L.png"},{"title":"89 м²","m2":89,"mat":6990750,"rab":1780000,"otd":1650000,"inzh":1020000,"fund":187500,"dost":187500,"plan":"assets/plans/MANHATTAN_89_p28R.png"}]},{"name":"ВЕРШИНА","factory":"Barn","photo":"assets/photos/BARN.jpg","variants":[{"title":"72 м²","m2":72,"mat":4653000,"rab":1440000,"otd":1290000,"inzh":870000,"fund":100000,"dost":150000,"plan":"assets/plans/BARN_72_p15R.png"},{"title":"102 м²","m2":102,"mat":6526125,"rab":2040000,"otd":1990000,"inzh":1070000,"fund":175000,"dost":150000,"plan":"assets/plans/BARN_102_p16L.png"},{"title":"108 м²","m2":108,"mat":6942938,"rab":2160000,"otd":2150000,"inzh":1090000,"fund":150000,"dost":150000,"plan":"assets/plans/BARN_108_p16R.png"}]},{"name":"РАССВЕТ XL","factory":"Alpine Barn","photo":"assets/photos/ALPINE_BARN.jpg","variants":[{"title":"96 м²","m2":96,"mat":6186516,"rab":1920000,"otd":1900000,"inzh":980000,"fund":218750,"dost":150000,"plan":"assets/plans/ALPINE_BARN_96_p23L.png"},{"title":"117 м²","m2":117,"mat":7486172,"rab":2340000,"otd":2190000,"inzh":1320000,"fund":250000,"dost":150000,"plan":"assets/plans/ALPINE_BARN_117_p23R.png"},{"title":"142 м²","m2":142,"mat":9006750,"rab":2840000,"otd":2750000,"inzh":1510000,"fund":312500,"dost":150000,"plan":"assets/plans/ALPINE_BARN_142_p24L.png"}]},{"name":"НЕБОСВОД","factory":"Open Space","photo":"assets/photos/OPEN_SPACE.jpg","variants":[{"title":"112 м² · 3 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"dost":150000,"plan":"assets/plans/OPEN_SPACE_112_p25R.png"},{"title":"112 м² · 4 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"dost":150000,"plan":"assets/plans/OPEN_SPACE_112_p26R.png"},{"title":"112 м² · 3 спальни + сауна","m2":112,"mat":7345669,"rab":2240000,"otd":2050000,"inzh":1310000,"fund":250000,"dost":150000,"plan":"assets/plans/OPEN_SPACE_112_p26L.png"}]},{"name":"МЕРИДИАН","factory":"Brooklyn","photo":"assets/photos/BROOKLYN.jpg","variants":[{"title":"117 м²","m2":117,"mat":7439906,"rab":2340000,"otd":2290000,"inzh":1220000,"fund":250000,"dost":300000,"plan":null},{"title":"240 м²","m2":240,"mat":17468438,"rab":4800000,"otd":4290000,"inzh":2910000,"fund":600000,"dost":600000,"plan":"assets/plans/BROOKLYN_240_p31R.png"}]},{"name":"ВЫСОТА","factory":"Boston","photo":"assets/photos/BOSTON.jpg","variants":[{"title":"125 м²","m2":125,"mat":8926500,"rab":2500000,"otd":2500000,"inzh":1250000,"fund":187500,"dost":300000,"plan":"assets/plans/BOSTON_125_p32R.png"},{"title":"222 м²","m2":222,"mat":15129675,"rab":4440000,"otd":4500000,"inzh":2160000,"fund":262500,"dost":150000,"plan":"assets/plans/BOSTON_222_p33R.png"}]},{"name":"АЗИМУТ","factory":"Andorra","photo":"assets/photos/ANDORRA.jpg","variants":[{"title":"130 м²","m2":130,"mat":9910875,"rab":2600000,"otd":2300000,"inzh":1600000,"fund":325000,"dost":300000,"plan":"assets/plans/ANDORRA_130_p30R.png"}]}];
+const DATA = [{"name":"ЗАРЯ","factory":"Country","photo":"assets/photos/render_3.jpg","variants":[{"title":"16 м²","m2":16,"mat":1178000,"rab":320000,"otd":290000,"inzh":190000,"fund":56250,"plan":null},{"title":"20 м²","m2":20,"mat":1440500,"rab":400000,"otd":350000,"inzh":250000,"fund":56250,"plan":null},{"title":"24 м²","m2":24,"mat":1753000,"rab":480000,"otd":470000,"inzh":250000,"fund":56250,"plan":null}]},{"name":"ЗЕНИТ","factory":"Chalet","photo":"assets/photos/render_2.jpg","variants":[{"title":"36 м²","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"assets/plans/CHALET_36_p4R.png"},{"title":"36 м² · с сауной","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"assets/plans/CHALET_SAUNA_36_p5R.png"},{"title":"42 м²","m2":42,"mat":2748938,"rab":840000,"otd":750000,"inzh":510000,"fund":100000,"plan":"assets/plans/CHALET_42_p5L.png"}]},{"name":"ПИК","factory":"A-Frame","photo":"assets/photos/render_1.jpg","variants":[{"title":"44 м²","m2":44,"mat":2679750,"rab":880000,"otd":690000,"inzh":630000,"fund":100000,"plan":"assets/plans/A-FRAME_44_p9R.png"}]},{"name":"МОНБЛАН","factory":"Mont Blanc","photo":"assets/photos/render_4.jpg","variants":[{"title":"54 м²","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"assets/plans/MONT_BLANC_54_p13R.png"},{"title":"54 м² · с сауной","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"assets/plans/MONT_BLANC_54_p14R.png"}]},{"name":"РАССВЕТ","factory":"Alpine Barn","photo":"assets/photos/render_5.jpg","variants":[{"title":"54 м²","m2":54,"mat":3613781,"rab":1080000,"otd":990000,"inzh":630000,"fund":125000,"plan":"assets/plans/ALPINE_BARN_54_p21R.png"},{"title":"72 м²","m2":72,"mat":4662703,"rab":1440000,"otd":1290000,"inzh":870000,"fund":156250,"plan":"assets/plans/ALPINE_BARN_72_p22L.png"},{"title":"93 м²","m2":93,"mat":6017625,"rab":1860000,"otd":1850000,"inzh":940000,"fund":218750,"plan":"assets/plans/ALPINE_BARN_93_p22R.png"}]},{"name":"ПРОСТОР","factory":"Nordic","photo":"assets/photos/render_6.jpg","variants":[{"title":"65 м²","m2":65,"mat":3643781,"rab":1300000,"otd":1290000,"inzh":660000,"fund":193750,"plan":"assets/plans/NORDIC_65_p3L.png"},{"title":"75 м²","m2":75,"mat":3999281,"rab":1500000,"otd":1350000,"inzh":900000,"fund":212500,"plan":"assets/plans/NORDIC_75_p2R.png"},{"title":"82 м² · с сауной","m2":82,"mat":4299281,"rab":1640000,"otd":1470000,"inzh":990000,"fund":237500,"plan":"assets/plans/NORDIC_SAUNA_75_p3R.png"}]},{"name":"ГОРИЗОНТ","factory":"Manhattan","photo":"assets/photos/render_7.jpg","variants":[{"title":"69 м²","m2":69,"mat":5424469,"rab":1380000,"otd":1300000,"inzh":770000,"fund":150000,"plan":"assets/plans/MANHATTAN_69_p27R.png"},{"title":"82 м² · с навесом для машины","m2":82,"mat":6308719,"rab":1640000,"otd":1500000,"inzh":960000,"fund":168750,"plan":"assets/plans/MANHATTAN_82_p29L.png"},{"title":"82 м²","m2":82,"mat":6421219,"rab":1640000,"otd":1500000,"inzh":960000,"fund":287500,"plan":"assets/plans/MANHATTAN_82_p28L.png"},{"title":"89 м²","m2":89,"mat":6990750,"rab":1780000,"otd":1650000,"inzh":1020000,"fund":187500,"plan":"assets/plans/MANHATTAN_89_p28R.png"}]},{"name":"ВЕРШИНА","factory":"Barn","photo":"assets/photos/render_8.jpg","variants":[{"title":"72 м²","m2":72,"mat":4653000,"rab":1440000,"otd":1290000,"inzh":870000,"fund":100000,"plan":"assets/plans/BARN_72_p15R.png"},{"title":"102 м²","m2":102,"mat":6526125,"rab":2040000,"otd":1990000,"inzh":1070000,"fund":175000,"plan":"assets/plans/BARN_102_p16L.png"},{"title":"108 м²","m2":108,"mat":6942938,"rab":2160000,"otd":2150000,"inzh":1090000,"fund":150000,"plan":"assets/plans/BARN_108_p16R.png"}]},{"name":"РАССВЕТ XL","factory":"Alpine Barn","photo":"assets/photos/render_5.jpg","variants":[{"title":"96 м²","m2":96,"mat":6186516,"rab":1920000,"otd":1900000,"inzh":980000,"fund":218750,"plan":"assets/plans/ALPINE_BARN_96_p23L.png"},{"title":"117 м²","m2":117,"mat":7486172,"rab":2340000,"otd":2190000,"inzh":1320000,"fund":250000,"plan":"assets/plans/ALPINE_BARN_117_p23R.png"},{"title":"142 м²","m2":142,"mat":9006750,"rab":2840000,"otd":2750000,"inzh":1510000,"fund":312500,"plan":"assets/plans/ALPINE_BARN_142_p24L.png"}]},{"name":"НЕБОСВОД","factory":"Open Space","photo":"assets/photos/render_4.jpg","variants":[{"title":"112 м² · 3 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p25R.png"},{"title":"112 м² · 4 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p26R.png"},{"title":"112 м² · 3 спальни + сауна","m2":112,"mat":7345669,"rab":2240000,"otd":2050000,"inzh":1310000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p26L.png"}]},{"name":"МЕРИДИАН","factory":"Brooklyn","photo":"assets/photos/render_5.jpg","variants":[{"title":"117 м²","m2":117,"mat":7439906,"rab":2340000,"otd":2290000,"inzh":1220000,"fund":250000,"plan":null},{"title":"240 м²","m2":240,"mat":17468438,"rab":4800000,"otd":4290000,"inzh":2910000,"fund":600000,"plan":"assets/plans/BROOKLYN_240_p31R.png"}]},{"name":"ВЫСОТА","factory":"Boston","photo":"assets/photos/render_8.jpg","variants":[{"title":"125 м²","m2":125,"mat":8926500,"rab":2500000,"otd":2500000,"inzh":1250000,"fund":187500,"plan":"assets/plans/BOSTON_125_p32R.png"},{"title":"222 м²","m2":222,"mat":15129675,"rab":4440000,"otd":4500000,"inzh":2160000,"fund":262500,"plan":"assets/plans/BOSTON_222_p33R.png"}]},{"name":"АЗИМУТ","factory":"Andorra","photo":"assets/photos/render_9.jpg","variants":[{"title":"130 м²","m2":130,"mat":9910875,"rab":2600000,"otd":2300000,"inzh":1600000,"fund":325000,"plan":"assets/plans/ANDORRA_130_p30R.png"}]}];
 
 const PKG = [
   {id:'dk', n:'Домокомплект', d:'Утеплённые панели пола, стен и кровли, окна и двери, фасадная доска, фальц кровли. Собирается на вашем фундаменте своими силами.', parts:['mat']},
@@ -278,7 +288,9 @@ const LINES = [
   {k:'otd',n:'Чистовая отделка'},{k:'inzh',n:'Инженерные системы'},{k:'dost',n:'Доставка, предварительно'}
 ];
 
-let sel = {m:0, v:0, p:'pk', dost:false};
+const DOST = {base:150000, perKm:700, perM2:50, maxKm:1000};
+
+let sel = {m:0, v:0, p:'dk', km:''};
 const rub = n => new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽';
 const $ = id => document.getElementById(id);
 const plural=(n,a,b,c)=>{const m=n%100,k=n%10;return m>=11&&m<=14?c:k===1?a:k>=2&&k<=4?b:c;};
@@ -286,7 +298,16 @@ const turnkey = v => v.mat+v.rab+v.fund+v.otd+v.inzh;
 const variant = () => DATA[sel.m].variants[sel.v];
 const pkg = () => PKG.find(x=>x.id===sel.p);
 const pkgSum = p => p.parts.reduce((s,k)=>s+variant()[k],0);
-const total = () => pkgSum(pkg()) + (sel.dost ? variant().dost : 0);
+
+// доставка: (база + ставка за км) × кратность по площади, каждые 50 м² — отдельная машина
+function delivery(){
+  const mult = Math.ceil(variant().m2 / DOST.perM2);
+  const km = parseInt(String(sel.km).replace(/\D/g,''),10);
+  if(!sel.km || isNaN(km)) return {ok:false, cost:0, mult, km:null, far:false};
+  if(km > DOST.maxKm)     return {ok:false, cost:0, mult, km, far:true};
+  return {ok:true, cost:(DOST.base + DOST.perKm*km) * mult, mult, km, far:false};
+}
+const total = () => pkgSum(pkg()) + delivery().cost;
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function sqLabel(m){const a=m.variants.map(v=>v.m2),lo=Math.min(...a),hi=Math.max(...a);return (lo===hi?lo:lo+'–'+hi)+' м²';}
@@ -331,20 +352,37 @@ function renderPackages(){
       <span class="pk-p">${rub(pkgSum(p))}<small>${rub(pkgSum(p)/v.m2)} / м²</small></span>
     </button>`).join('');
   document.querySelectorAll('.pkrow').forEach(b=>b.onclick=()=>{sel.p=b.dataset.id;render();});
+
+  const d = delivery();
+  const note = d.far
+    ? `<span class="dost-far">Больше ${DOST.maxKm} км — укажите город в заявке, посчитаем маршрут отдельно и заложим в график.</span>`
+    : d.ok
+      ? `<span class="dost-calc">${rub(DOST.base)} база + ${rub(DOST.perKm)} × ${d.km} км, ×${d.mult} ${plural(d.mult,'машина','машины','машин')} на ${variant().m2} м²</span>`
+      : `<span class="dost-calc">База ${rub(DOST.base)} + ${rub(DOST.perKm)} за километр. Каждые ${DOST.perM2} м² — отдельная машина, у этого дома ×${d.mult}.</span>`;
   $('extras').innerHTML =
-    `<button class="exrow" aria-pressed="${sel.dost}" id="exd">
-      <span class="box"></span>
-      <span class="pk-b"><span class="pk-n">Доставка на участок</span><span class="pk-d">Предварительная оценка от производства в Молодечно. Точная сумма зависит от адреса и подъездных путей.</span></span>
-      <span class="pk-p">${rub(v.dost)}</span>
-    </button>`;
-  $('exd').onclick=()=>{sel.dost=!sel.dost;render();};
+    `<div class="exrow">
+      <span class="pk-b">
+        <span class="pk-n">Доставка на участок</span>
+        <span class="pk-d">Укажите удалённость участка от Москвы — расчёт появится сразу.</span>
+        <span class="dost-in"><input id="km" type="text" inputmode="numeric" placeholder="0" value="${sel.km}" aria-label="Километров от Москвы"><span>км от Москвы</span></span>
+        ${note}
+      </span>
+      <span class="pk-p">${d.ok ? rub(d.cost) : '—'}</span>
+    </div>`;
+  const el=$('km');
+  el.oninput = e => { sel.km = e.target.value.replace(/\D/g,''); const p=e.target.selectionStart; render(); const n=$('km'); n.focus(); n.setSelectionRange(p,p); };
 }
 
 function renderSummary(){
-  const m=DATA[sel.m], v=variant(), p=pkg();
+  const m=DATA[sel.m], v=variant(), p=pkg(), d=delivery();
   $('sObj').innerHTML = `${esc(m.name)}, ${esc(v.title)}<span>${p.n}</span>`;
   $('lines').innerHTML = LINES.map(l=>{
-    const on = l.k==='dost' ? sel.dost : p.parts.includes(l.k);
+    if(l.k==='dost'){
+      const lbl = d.ok ? `Доставка · ${d.km} км · ×${d.mult}` : 'Доставка';
+      const val = d.ok ? rub(d.cost) : (d.far ? 'по запросу' : 'не указана');
+      return `<div class="ln${d.ok?'':' off'}"><span>${lbl}</span><b>${val}</b></div>`;
+    }
+    const on = p.parts.includes(l.k);
     return `<div class="ln${on?'':' off'}"><span>${l.n}</span><b>${rub(v[l.k])}</b></div>`;
   }).join('');
   $('sTotal').textContent = rub(total());
@@ -353,10 +391,12 @@ function renderSummary(){
 const render = () => { renderModels(); renderVariants(); renderPackages(); renderSummary(); };
 
 function summaryText(){
-  const m=DATA[sel.m], v=variant(), p=pkg(), f=id=>$(id).value.trim();
-  const rows = LINES.filter(l=> l.k==='dost' ? sel.dost : p.parts.includes(l.k)).map(l=>`  ${l.n}: ${rub(v[l.k])}`).join('\n');
+  const m=DATA[sel.m], v=variant(), p=pkg(), d=delivery(), f=id=>$(id).value.trim();
+  let rows = LINES.filter(l=>l.k!=='dost' && p.parts.includes(l.k)).map(l=>`  ${l.n}: ${rub(v[l.k])}`);
+  if(d.ok) rows.push(`  Доставка (${d.km} км от Москвы, ×${d.mult}): ${rub(d.cost)}`);
+  else if(d.far) rows.push(`  Доставка: свыше ${DOST.maxKm} км — расчёт индивидуальный`);
   return [`РАСЧЁТ СТОИМОСТИ`,`Модель: ${m.name} (${m.factory})`,`Планировка: ${v.title}`,`Площадь: ${v.m2} м²`,
-    `Комплектация: ${p.n}`,``,rows,``,`ИТОГО: ${rub(total())}  (${rub(total()/v.m2)} за м²)`,``,
+    `Комплектация: ${p.n}`,``,rows.join('\n'),``,`ИТОГО: ${rub(total())}  (${rub(total()/v.m2)} за м²)`,``,
     `Имя: ${f('fn')||'—'}`,`Телефон: ${f('fp')||'—'}`,`Участок: ${f('fc')||'—'}`,`Комментарий: ${f('fm')||'—'}`].join('\n');
 }
 
