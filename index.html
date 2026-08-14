@@ -140,9 +140,15 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:500;letter-spacing:-.025em;line-he
 .pkrow,.exrow{background:var(--paper);border:0;text-align:left;font:inherit;color:inherit;cursor:pointer;
   padding:22px;display:flex;gap:18px;align-items:flex-start;transition:background .14s;width:100%}
 .pkrow:hover{background:var(--tint)}
-.dot{flex:0 0 auto;width:16px;height:16px;border:1px solid #c4c4c4;border-radius:50%;margin-top:3px;position:relative;background:#fff}
-.pkrow[aria-pressed="true"] .dot{border-color:var(--ink);background:var(--ink)}
-.pkrow[aria-pressed="true"] .dot::after{content:"";position:absolute;inset:3px;background:var(--lime);border-radius:50%}
+/* независимые чекбоксы: каждый этап включается сам по себе */
+.box{flex:0 0 auto;width:18px;height:18px;border:1px solid #c4c4c4;margin-top:2px;position:relative;background:#fff}
+.box.empty{visibility:hidden}
+.pkrow[aria-pressed="true"] .box,.box.on{background:var(--ink);border-color:var(--ink)}
+.pkrow[aria-pressed="true"] .box::after,.box.on::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:10px;
+  border:solid var(--lime);border-width:0 2px 2px 0;transform:rotate(43deg)}
+.box.fixed{opacity:.45}
+.pkrow.locked{cursor:default;background:var(--tint)}
+.always{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-left:10px;font-weight:400}
 .pk-b{flex:1 1 auto;min-width:0}
 .pk-n{display:block;font-size:16px;font-weight:500;letter-spacing:-.01em}
 .pk-d{display:block;font-size:13.5px;color:var(--mute);margin-top:6px;line-height:1.5}
@@ -182,6 +188,9 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:500;letter-spacing:-.025em;line-he
   width:100%;background:none;border:0;font-family:inherit;text-align:left;cursor:pointer}
 .addrow:hover{color:var(--ink)}
 .addrow b{font-weight:400;white-space:nowrap}
+.addrow.dost{cursor:default;color:var(--mute)}
+.addrow.dost b{color:var(--mute)}
+.lines .star{color:var(--mute)}
 .addrow:hover b{color:var(--ink)}
 .addnote{font-size:11.5px;color:var(--mute);line-height:1.5;margin-top:8px}
 .sum-note{font-size:12px;color:var(--mute);line-height:1.55;margin-top:16px;padding:14px 0 20px;border-top:1px solid var(--line-2)}
@@ -288,7 +297,7 @@ footer .v{color:#b8b8b8;margin-top:10px;display:block}
     <section class="step" id="s3">
       <div class="step-hd"><span class="step-no">03</span><span class="step-t">Комплектация</span></div>
       <h2>Уровень готовности</h2>
-      <p class="hint">Можно взять только домокомплект и собрать его самостоятельно, а монтаж, отделку и инженерию заказать у нас позже — отдельными этапами.</p>
+      <p class="hint">Домокомплект входит всегда. Остальное отмечайте по отдельности: можно взять только контур и собрать его самостоятельно, а монтаж, отделку и инженерию заказать у нас позже — этапами.</p>
       <div class="pk" id="packages"></div>
       <div class="ex" id="extras"></div>
       <div class="notes">
@@ -344,33 +353,44 @@ footer .v{color:#b8b8b8;margin-top:10px;display:block}
 </div></footer>
 
 <script>
-const VERSION = '1.4';
+const VERSION = '1.5';
 const DATA = [{"name":"ЗАКАТ","factory":"Chalet","photo":"assets/photos/render_2.jpg","variants":[{"title":"36 м²","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"assets/plans/CHALET_36_p4R.jpg"},{"title":"36 м² · с сауной","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"assets/plans/CHALET_SAUNA_36_p5R.jpg"},{"title":"42 м²","m2":42,"mat":2748938,"rab":840000,"otd":750000,"inzh":510000,"fund":100000,"plan":"assets/plans/CHALET_42_p5L.jpg"}]},{"name":"ПИК","factory":"A-Frame","photo":"assets/photos/render_1.jpg","variants":[{"title":"44 м²","m2":44,"mat":2679750,"rab":880000,"otd":690000,"inzh":630000,"fund":100000,"plan":"assets/plans/A-FRAME_44_p9R.jpg"}]},{"name":"МОНБЛАН","factory":"Mont Blanc","photo":"assets/photos/render_6.jpg","variants":[{"title":"54 м²","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"assets/plans/MONT_BLANC_54_p13R.jpg"},{"title":"54 м² · с сауной","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"assets/plans/MONT_BLANC_54_p14R.jpg"}]},{"name":"РАССВЕТ","factory":"Alpine Barn","photo":"assets/photos/render_5.jpg","variants":[{"title":"54 м²","m2":54,"mat":3613781,"rab":1080000,"otd":990000,"inzh":630000,"fund":125000,"plan":"assets/plans/ALPINE_BARN_54_p21R.jpg"},{"title":"72 м²","m2":72,"mat":4662703,"rab":1440000,"otd":1290000,"inzh":870000,"fund":156250,"plan":"assets/plans/ALPINE_BARN_72_p22L.jpg"},{"title":"93 м²","m2":93,"mat":6017625,"rab":1860000,"otd":1850000,"inzh":940000,"fund":218750,"plan":"assets/plans/ALPINE_BARN_93_p22R.jpg"}]},{"name":"ПРОСТОР","factory":"Nordic","photo":"assets/photos/render_4.jpg","variants":[{"title":"65 м²","m2":65,"mat":3643781,"rab":1300000,"otd":1290000,"inzh":660000,"fund":193750,"plan":"assets/plans/NORDIC_65_p3L.jpg"},{"title":"75 м²","m2":75,"mat":3999281,"rab":1500000,"otd":1350000,"inzh":900000,"fund":212500,"plan":"assets/plans/NORDIC_75_p2R.jpg"},{"title":"82 м² · с сауной","m2":82,"mat":4299281,"rab":1640000,"otd":1470000,"inzh":990000,"fund":237500,"plan":"assets/plans/NORDIC_SAUNA_75_p3R.jpg"}]},{"name":"ГОРИЗОНТ","factory":"Manhattan","photo":"assets/photos/render_7.jpg","variants":[{"title":"69 м²","m2":69,"mat":5424469,"rab":1380000,"otd":1300000,"inzh":770000,"fund":150000,"plan":"assets/plans/MANHATTAN_69_p27R.jpg"},{"title":"82 м² · с навесом для машины","m2":82,"mat":6308719,"rab":1640000,"otd":1500000,"inzh":960000,"fund":168750,"plan":"assets/plans/MANHATTAN_82_p29L.jpg"},{"title":"82 м²","m2":82,"mat":6421219,"rab":1640000,"otd":1500000,"inzh":960000,"fund":287500,"plan":"assets/plans/MANHATTAN_82_p28L.jpg"},{"title":"89 м²","m2":89,"mat":6990750,"rab":1780000,"otd":1650000,"inzh":1020000,"fund":187500,"plan":"assets/plans/MANHATTAN_89_p28R.jpg"}]},{"name":"ВЕРШИНА","factory":"Barn","photo":"assets/photos/render_8.jpg","variants":[{"title":"72 м²","m2":72,"mat":4653000,"rab":1440000,"otd":1290000,"inzh":870000,"fund":100000,"plan":"assets/plans/BARN_72_p15R.jpg"},{"title":"102 м²","m2":102,"mat":6526125,"rab":2040000,"otd":1990000,"inzh":1070000,"fund":175000,"plan":"assets/plans/BARN_102_p16L.jpg"},{"title":"108 м²","m2":108,"mat":6942938,"rab":2160000,"otd":2150000,"inzh":1090000,"fund":150000,"plan":"assets/plans/BARN_108_p16R.jpg"}]},{"name":"РАССВЕТ XL","factory":"Alpine Barn","photo":"assets/photos/render_5.jpg","variants":[{"title":"96 м²","m2":96,"mat":6186516,"rab":1920000,"otd":1900000,"inzh":980000,"fund":218750,"plan":"assets/plans/ALPINE_BARN_96_p23L.jpg"},{"title":"117 м²","m2":117,"mat":7486172,"rab":2340000,"otd":2190000,"inzh":1320000,"fund":250000,"plan":"assets/plans/ALPINE_BARN_117_p23R.jpg"},{"title":"142 м²","m2":142,"mat":9006750,"rab":2840000,"otd":2750000,"inzh":1510000,"fund":312500,"plan":"assets/plans/ALPINE_BARN_142_p24L.jpg"}]},{"name":"ДАЛЬ","factory":"Open Space","photo":"assets/photos/render_3.jpg","variants":[{"title":"112 м² · 3 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p25R.jpg"},{"title":"112 м² · 4 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p26R.jpg"},{"title":"112 м² · 3 спальни + сауна","m2":112,"mat":7345669,"rab":2240000,"otd":2050000,"inzh":1310000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p26L.jpg"}]},{"name":"ВЫСОТА","factory":"Boston","photo":"assets/photos/render_9.jpg","variants":[{"title":"125 м²","m2":125,"mat":8926500,"rab":2500000,"otd":2500000,"inzh":1250000,"fund":187500,"plan":"assets/plans/BOSTON_125_p32R.jpg"},{"title":"222 м²","m2":222,"mat":15129675,"rab":4440000,"otd":4500000,"inzh":2160000,"fund":262500,"plan":"assets/plans/BOSTON_222_p33R.jpg"}]},{"name":"ПОЛДЕНЬ","factory":"Andorra","photo":"assets/photos/render_9.jpg","variants":[{"title":"130 м²","m2":130,"mat":9910875,"rab":2600000,"otd":2300000,"inzh":1600000,"fund":325000,"plan":"assets/plans/ANDORRA_130_p30R.jpg"}]},{"name":"МЕРИДИАН","factory":"Brooklyn","photo":"assets/photos/render_8.jpg","variants":[{"title":"240 м²","m2":240,"mat":17468438,"rab":4800000,"otd":4290000,"inzh":2910000,"fund":600000,"plan":"assets/plans/BROOKLYN_240_p31R.jpg"}]}];
 
-const PKG = [
-  {id:'dk', n:'Домокомплект внешнего контура с кровлей и окнами', star:false,
-   d:'Утеплённые панели пола, стен и кровли, окна и двери, фасадная доска, фальц кровли. Собирается на вашем фундаменте — своими силами или нашей бригадой.', parts:['mat']},
-  {id:'ch', n:'Под чистовую отделку с монтажом', star:true,
-   d:'Домокомплект + свайный фундамент + монтаж бригадой на участке. Снаружи дом полностью готов, внутри — черновой пол и обрешётка.', parts:['mat','rab','fund']},
-  {id:'pk', n:'Под ключ с монтажом', star:true,
-   d:'Всё перечисленное + чистовая отделка, электрика, сантехника, отопление. Остаётся завезти кухню и мебель.', parts:['mat','rab','fund','otd','inzh']}
+// база — домокомплект, она включена всегда. Остальное добавляется независимо, чекбоксами
+const BASE = {k:'mat', n:'Домокомплект внешнего контура',
+  d:'Утеплённые панели пола, стен и кровли, окна и двери, фасадная доска, фальц кровли. Приезжает на участок готовым к сборке.'};
+const ADDONS = [
+  {k:'rab',  n:'Монтаж домокомплекта', star:true,
+   d:'Сборка бригадой на вашем участке: контур, кровля, окна, фасад. За 7–10 дней.'},
+  {k:'fund', n:'Свайный фундамент', star:true,
+   d:'Винтовые сваи с обвязкой. Нужен, если фундамента на участке ещё нет.'},
+  {k:'otd',  n:'Чистовая отделка', star:true,
+   d:'Полы, стены, потолки, двери, санузел под ключ. Остаётся завезти кухню и мебель.'},
+  {k:'inzh', n:'Инженерные системы', star:true,
+   d:'Электрика, водоснабжение, канализация, отопление — разводка и подключение.'}
 ];
 const LINES = [
-  {k:'mat',n:'Домокомплект, материалы'},{k:'rab',n:'Монтаж и СМР'},{k:'fund',n:'Свайный фундамент'},
+  {k:'mat',n:'Домокомплект'},{k:'rab',n:'Монтаж домокомплекта'},{k:'fund',n:'Свайный фундамент'},
   {k:'otd',n:'Чистовая отделка'},{k:'inzh',n:'Инженерные системы'}
 ];
-// какой уровень готовности включает эту статью — чтобы из «можно добавить» перейти одним кликом
-const NEEDS = {rab:'ch', fund:'ch', otd:'pk', inzh:'pk'};
 
-let sel = {m:0, v:0, p:'dk', city:'', slide:0};
+let sel = {m:0, v:0, add:{rab:false,fund:false,otd:false,inzh:false}, city:'', slide:0};
 const rub = n => new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽';
 const $ = id => document.getElementById(id);
 const plural=(n,a,b,c)=>{const m=n%100,k=n%10;return m>=11&&m<=14?c:k===1?a:k>=2&&k<=4?b:c;};
 const kit = v => v.mat;
 const variant = () => DATA[sel.m].variants[sel.v];
-const pkg = () => PKG.find(x=>x.id===sel.p);
-const pkgSum = p => p.parts.reduce((s,k)=>s+variant()[k],0);
-const total = () => pkgSum(pkg());
+const chosen = () => ADDONS.filter(a=>sel.add[a.k]);
+const total = () => variant().mat + chosen().reduce((s,a)=>s+variant()[a.k],0);
+const hasStar = () => chosen().some(a=>a.star);
+// как называется получившийся набор — для подписи в смете
+function levelName(){
+  const on = k => sel.add[k];
+  if(on('rab')&&on('fund')&&on('otd')&&on('inzh')) return 'Под ключ с монтажом';
+  if(on('rab')&&on('fund')&&!on('otd')&&!on('inzh')) return 'Под чистовую отделку с монтажом';
+  if(!chosen().length) return 'Только домокомплект';
+  return 'Своя комплектация';
+}
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function sqLabel(m){const a=m.variants.map(v=>v.m2),lo=Math.min(...a),hi=Math.max(...a);return (lo===hi?lo:lo+'–'+hi)+' м²';}
 const minKit = m => Math.min(...m.variants.map(kit));
@@ -447,53 +467,68 @@ function renderVariants(){
 
 function renderPackages(){
   const v = variant();
-  $('packages').innerHTML = PKG.map(p=>
-    `<button class="pkrow" aria-pressed="${p.id===sel.p}" data-id="${p.id}">
-      <span class="dot"></span>
-      <span class="pk-b"><span class="pk-n">${p.n}${p.star?'<span class="star"> *</span>':''}</span><span class="pk-d">${p.d}</span></span>
-      <span class="pk-p">${rub(pkgSum(p))}<small>${rub(pkgSum(p)/v.m2)} / м²</small></span>
+  const base = `<div class="pkrow locked">
+      <span class="box on fixed"></span>
+      <span class="pk-b"><span class="pk-n">${BASE.n}<span class="always">включено</span></span><span class="pk-d">${BASE.d}</span></span>
+      <span class="pk-p">${rub(v.mat)}<small>${rub(v.mat/v.m2)} / м²</small></span>
+    </div>`;
+  const rows = ADDONS.map(a=>
+    `<button class="pkrow" aria-pressed="${!!sel.add[a.k]}" data-k="${a.k}">
+      <span class="box"></span>
+      <span class="pk-b"><span class="pk-n">${a.n}${a.star?'<span class="star"> *</span>':''}</span><span class="pk-d">${a.d}</span></span>
+      <span class="pk-p">от ${rub(v[a.k])}<small>${rub(v[a.k]/v.m2)} / м²</small></span>
     </button>`).join('');
-  document.querySelectorAll('.pkrow').forEach(b=>b.onclick=()=>{sel.p=b.dataset.id;render();});
+  $('packages').innerHTML = base + rows;
+  document.querySelectorAll('.pkrow[data-k]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k; sel.add[k]=!sel.add[k]; render();
+  });
   $('extras').innerHTML =
     `<div class="exrow">
+      <span class="box empty"></span>
       <span class="pk-b">
         <span class="pk-n">Доставка на участок</span>
-        <span class="pk-d">Считаем индивидуально по маршруту от производства. Укажите город и область — вернёмся со стоимостью доставки, разгрузки и выезда бригады.</span>
+        <span class="pk-d">Стоимость зависит от маршрута, подъездных путей и количества машин. Укажите город и область — посчитаем и добавим в расчёт.</span>
         <label class="city-in"><input id="city" type="text" placeholder="Город и область" value="${esc(sel.city)}" aria-label="Город и область"></label>
       </span>
-      <span class="pk-p">по запросу</span>
+      <span class="pk-p">${sel.city.trim() ? 'посчитаем' : 'уточните регион'}</span>
     </div>`;
-  $('city').oninput = e => { sel.city = e.target.value; $('fc').value = e.target.value; };
+  $('city').oninput = e => { sel.city = e.target.value; $('fc').value = e.target.value; renderSummary(); };
 }
 
 function renderSummary(){
-  const m=DATA[sel.m], v=variant(), p=pkg();
-  $('sObj').innerHTML = `${esc(m.name)}, ${esc(v.title)}<span>${esc(p.n)}</span>`;
-  $('lines').innerHTML = LINES.filter(l=>p.parts.includes(l.k))
-    .map(l=>`<div class="ln"><span>${l.n}</span><b>${rub(v[l.k])}</b></div>`).join('');
-  const rest = LINES.filter(l=>!p.parts.includes(l.k));
-  $('addBlock').innerHTML = rest.length
-    ? `<div class="addhd">Можно добавить</div>` +
-      rest.map(l=>`<button class="addrow" data-to="${NEEDS[l.k]}"><span>${l.n}</span><b>+ ${rub(v[l.k])}</b></button>`).join('') +
-      `<div class="addrow" style="cursor:default"><span>Доставка</span><b>по запросу</b></div>` +
-      `<div class="addnote">Эти работы можно заказать сразу или позже, отдельными этапами. Нажмите на строку, чтобы включить в расчёт.</div>`
-    : `<div class="addhd">Можно добавить</div><div class="addrow" style="cursor:default"><span>Доставка</span><b>по запросу</b></div>`;
-  document.querySelectorAll('.addrow[data-to]').forEach(b=>b.onclick=()=>{sel.p=b.dataset.to;render();});
-  $('sTotal').textContent = rub(total()) + (p.star ? ' *' : '');
-  $('sPerM').textContent = rub(total()/v.m2) + ' за м² · ' + v.m2 + ' м²';
+  const m=DATA[sel.m], v=variant();
+  $('sObj').innerHTML = `${esc(m.name)}, ${esc(v.title)}<span>${levelName()}</span>`;
+  const inSet = ['mat', ...chosen().map(a=>a.k)];
+  $('lines').innerHTML = LINES.filter(l=>inSet.includes(l.k)).map(l=>{
+    const a = ADDONS.find(x=>x.k===l.k);
+    return `<div class="ln"><span>${l.n}${a&&a.star?' <span class="star">*</span>':''}</span><b>${rub(v[l.k])}</b></div>`;
+  }).join('');
+  const rest = ADDONS.filter(a=>!sel.add[a.k]);
+  const city = sel.city.trim();
+  $('addBlock').innerHTML =
+    `<div class="addhd">Можно добавить</div>` +
+    rest.map(a=>`<button class="addrow" data-k="${a.k}"><span>${a.n}</span><b>от ${rub(v[a.k])}</b></button>`).join('') +
+    `<div class="addrow dost"><span>Доставка</span><b>${city ? 'посчитаем по ' + esc(city) : 'уточните регион'}</b></div>` +
+    (rest.length ? `<div class="addnote">Нажмите на строку, чтобы включить в расчёт. Любой этап можно заказать позже — отдельно от домокомплекта.</div>` : '');
+  document.querySelectorAll('.addrow[data-k]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.k; sel.add[k]=true; render();
+  });
+  $('sTotal').textContent = 'от ' + rub(total()) + (hasStar() ? ' *' : '');
+  $('sPerM').textContent = 'от ' + rub(total()/v.m2) + ' за м² · ' + v.m2 + ' м²';
 }
 const render = () => { renderModels(); renderVariants(); renderPackages(); renderSummary(); };
 
 function summaryText(){
-  const m=DATA[sel.m], v=variant(), p=pkg(), f=id=>$(id).value.trim();
-  const rows = LINES.filter(l=>p.parts.includes(l.k)).map(l=>`  ${l.n}: ${rub(v[l.k])}`).join('\n');
-  const rest = LINES.filter(l=>!p.parts.includes(l.k)).map(l=>`  ${l.n}: + ${rub(v[l.k])}`);
+  const m=DATA[sel.m], v=variant(), f=id=>$(id).value.trim();
+  const inSet = ['mat', ...chosen().map(a=>a.k)];
+  const rows = LINES.filter(l=>inSet.includes(l.k)).map(l=>`  ${l.n}: ${rub(v[l.k])}`).join('\n');
+  const rest = ADDONS.filter(a=>!sel.add[a.k]).map(a=>`  ${a.n}: от ${rub(v[a.k])}`);
   const out=[`РАСЧЁТ СТОИМОСТИ · Skyframe ${VERSION}`,`Модель: ${m.name} (${m.factory})`,`Планировка: ${v.title}`,
-    `Площадь: ${v.m2} м²`,`Комплектация: ${p.n}`,``,rows,``,
-    `ИТОГО: ${rub(total())}  (${rub(total()/v.m2)} за м²)`];
+    `Площадь: ${v.m2} м²`,`Комплектация: ${levelName()}`,``,rows,``,
+    `ИТОГО от ${rub(total())}  (от ${rub(total()/v.m2)} за м²)`];
   if(rest.length) out.push(``,`Можно добавить:`,rest.join('\n'));
-  out.push(`Доставка: считается отдельно по региону`);
-  if(p.star) out.push(`* Ориентир по ЦФО, до 250 км от Москвы. По другим регионам — уточняется.`);
+  out.push(`Доставка: ${f('fc') ? 'посчитаем по адресу ' + f('fc') : 'уточните регион'}`);
+  if(hasStar()) out.push(`* Ориентир по ЦФО, до 250 км от Москвы. По другим регионам — уточняется.`);
   out.push(`** Не является публичной офертой.`,``,
     `Имя: ${f('fn')||'—'}`,`Телефон: ${f('fp')||'—'}`,`Город и область: ${f('fc')||'—'}`,`Комментарий: ${f('fm')||'—'}`);
   return out.join('\n');
