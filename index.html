@@ -72,7 +72,10 @@ h1{font-size:clamp(30px,4.4vw,50px);line-height:1.05;font-weight:500;letter-spac
   .dots{left:20px;top:16px}.counter{right:20px;top:14px}
 }
 
-.hero-meta{display:flex;gap:52px;margin:44px 0 0;flex-wrap:wrap;padding-bottom:56px;border-bottom:1px solid var(--line)}
+.catline{margin-top:26px;font-size:14px}
+.catline a{color:var(--ink);text-decoration:none;border-bottom:2px solid var(--lime);padding-bottom:2px}
+.catline a:hover{border-color:var(--ink)}
+.hero-meta{display:flex;gap:52px;margin:34px 0 0;flex-wrap:wrap;padding-bottom:56px;border-bottom:1px solid var(--line)}
 .hero-meta b{display:block;font-size:26px;font-weight:500;letter-spacing:-.02em}
 .hero-meta span{font-size:13px;color:var(--mute);display:block;max-width:20ch}
 @media(max-width:760px){.hero-meta{gap:26px 34px;margin-top:34px;padding-bottom:40px}}
@@ -201,20 +204,34 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:500;letter-spacing:-.025em;line-he
 .sum-cta{display:block;width:100%;margin-top:16px;background:var(--lime);color:var(--ink);border:0;padding:15px;font:inherit;font-size:15px;font-weight:500;cursor:pointer;transition:background .12s}
 .sum-cta:hover{background:var(--lime-dk)}
 .toggle{display:none}
+.sheet-hd{display:none}
+body.lock{overflow:hidden}
 @media(max-width:1080px){
-  .sum{position:fixed;left:0;right:0;bottom:0;top:auto;margin:0;z-index:35;border:0;border-top:1px solid var(--ink);
-       max-height:88vh;box-shadow:0 -10px 30px rgba(0,0,0,.09);padding-bottom:env(safe-area-inset-bottom)}
-  .sum-top{display:none;max-height:52vh;padding:22px 20px 0}
-  .sum.open .sum-top{display:block}
-  .sum-bot{border-top:0;padding:12px 20px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:end}
-  .sum.open .sum-bot{border-top:1px solid var(--line)}
-  .total{grid-column:1;grid-row:1;flex-direction:column;align-items:flex-start;gap:2px}
+  .sum{position:fixed;left:0;right:0;bottom:0;top:auto;margin:0;z-index:60;border:0;border-top:1px solid var(--ink);
+       max-height:none;box-shadow:0 -10px 30px rgba(0,0,0,.09);padding-bottom:env(safe-area-inset-bottom)}
+  /* открытая смета — полноэкранный лист: страница под ним не скроллится, закрывается крестиком */
+  .sum.open{top:0;height:100dvh;padding-bottom:0}
+  .sum.open .sheet-hd{display:flex;align-items:center;justify-content:space-between;gap:16px;
+       flex:0 0 auto;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .sheet-hd b{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:400}
+  .sheet-x{width:38px;height:38px;border:0;background:var(--tint);font-size:22px;line-height:1;color:var(--ink);
+       cursor:pointer;display:grid;place-items:center;margin:-6px -6px -6px 0}
+  .sum-top{display:none;padding:20px 20px 0;overflow-x:hidden}
+  .sum.open .sum-top{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;padding-bottom:20px}
+  .sum.open .sum-hd{display:none}
+  .sum-bot{border-top:0;padding:12px 20px calc(14px + env(safe-area-inset-bottom));
+       display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:end}
+  .sum.open .sum-bot{border-top:1px solid var(--line);padding-bottom:14px}
+  .total{grid-column:1;grid-row:1;flex-direction:column;align-items:flex-start;gap:2px;min-width:0}
   .t-l{display:none}
-  .t-v{font-size:24px;box-shadow:inset 0 -8px 0 var(--lime)}
-  .sum-cta{grid-column:2;grid-row:1;width:auto;margin:0;padding:13px 22px}
+  .t-v{font-size:22px;box-shadow:inset 0 -8px 0 var(--lime)}
+  .sum-cta{grid-column:2;grid-row:1;width:auto;margin:0;padding:13px 20px;font-size:14px}
   .perm{display:none}
   .toggle{display:block;grid-column:1/-1;grid-row:2;justify-self:start;background:none;border:0;font:inherit;
           font-size:12.5px;color:var(--mute);cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:2px 0}
+  .sum.open .toggle{display:none}
+  .ln,.addrow{gap:10px}
+  .ln span,.addrow span{min-width:0;overflow-wrap:anywhere}
 }
 
 .form{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -233,6 +250,7 @@ h2{font-size:clamp(23px,3vw,32px);font-weight:500;letter-spacing:-.025em;line-he
 .btn-p:hover{background:var(--lime-dk)}
 .btn-s{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn-s:hover{border-color:var(--ink)}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .err{border-color:#d33 !important}
 .done{border:1px solid var(--ink);padding:26px 24px;margin-top:24px;display:none}
 .done.on{display:block}
@@ -270,6 +288,7 @@ footer .v{color:#b8b8b8;margin-top:10px;display:block}
     <button class="nav next" id="next" aria-label="Следующая модель">›</button>
   </div>
 
+  <div class="catline"><a href="katalog-skyframe.pdf" download>Скачать каталог: 12 моделей, 29 планировок и цены — PDF</a></div>
   <div class="hero-meta">
     <div><b id="mCount">—</b><span>моделей</span></div>
     <div><b id="vCount">—</b><span>вариантов планировок</span></div>
@@ -318,9 +337,11 @@ footer .v{color:#b8b8b8;margin-top:10px;display:block}
       </div>
       <label class="agree"><input type="checkbox" id="agree" checked><span>Согласен на обработку персональных данных</span></label>
       <div class="actions">
-        <button class="btn btn-p" id="send">Отправить расчёт</button>
-        <button class="btn btn-s" id="print">Сохранить в PDF</button>
+        <button class="btn btn-p" id="send">Отправить заявку</button>
+        <button class="btn btn-s" id="print">Скачать этот расчёт · PDF</button>
+        <a class="btn btn-s" id="cat" href="katalog-skyframe.pdf" download>Скачать каталог всех моделей · PDF</a>
       </div>
+      <p class="hint" style="margin:14px 0 0">Заявка уходит менеджеру с вашей комплектацией. PDF расчёта — то же самое, но для себя. Каталог — все 12 моделей с планировками и ценами, одним файлом.</p>
       <div class="done" id="done">
         <h3>Расчёт собран</h3>
         <p>Прототип работает автономно — почта и CRM пока не подключены. Скопируйте расчёт или сохраните в PDF.</p>
@@ -331,6 +352,7 @@ footer .v{color:#b8b8b8;margin-top:10px;display:block}
   </div>
 
   <aside class="sum" id="sum">
+    <div class="sheet-hd"><b>Ваш расчёт</b><button class="sheet-x" id="closeSum" aria-label="Закрыть смету">×</button></div>
     <div class="sum-top">
       <div class="sum-hd">Ваш расчёт</div>
       <div class="sum-obj" id="sObj">—</div>
@@ -353,7 +375,7 @@ footer .v{color:#b8b8b8;margin-top:10px;display:block}
 </div></footer>
 
 <script>
-const VERSION = '1.5';
+const VERSION = '1.6';
 const DATA = [{"name":"ЗАКАТ","factory":"Chalet","photo":"assets/photos/render_2.jpg","variants":[{"title":"36 м²","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"assets/plans/CHALET_36_p4R.jpg"},{"title":"36 м² · с сауной","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"assets/plans/CHALET_SAUNA_36_p5R.jpg"},{"title":"42 м²","m2":42,"mat":2748938,"rab":840000,"otd":750000,"inzh":510000,"fund":100000,"plan":"assets/plans/CHALET_42_p5L.jpg"}]},{"name":"ПИК","factory":"A-Frame","photo":"assets/photos/render_1.jpg","variants":[{"title":"44 м²","m2":44,"mat":2679750,"rab":880000,"otd":690000,"inzh":630000,"fund":100000,"plan":"assets/plans/A-FRAME_44_p9R.jpg"}]},{"name":"МОНБЛАН","factory":"Mont Blanc","photo":"assets/photos/render_6.jpg","variants":[{"title":"54 м²","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"assets/plans/MONT_BLANC_54_p13R.jpg"},{"title":"54 м² · с сауной","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"assets/plans/MONT_BLANC_54_p14R.jpg"}]},{"name":"РАССВЕТ","factory":"Alpine Barn","photo":"assets/photos/render_5.jpg","variants":[{"title":"54 м²","m2":54,"mat":3613781,"rab":1080000,"otd":990000,"inzh":630000,"fund":125000,"plan":"assets/plans/ALPINE_BARN_54_p21R.jpg"},{"title":"72 м²","m2":72,"mat":4662703,"rab":1440000,"otd":1290000,"inzh":870000,"fund":156250,"plan":"assets/plans/ALPINE_BARN_72_p22L.jpg"},{"title":"93 м²","m2":93,"mat":6017625,"rab":1860000,"otd":1850000,"inzh":940000,"fund":218750,"plan":"assets/plans/ALPINE_BARN_93_p22R.jpg"}]},{"name":"ПРОСТОР","factory":"Nordic","photo":"assets/photos/render_4.jpg","variants":[{"title":"65 м²","m2":65,"mat":3643781,"rab":1300000,"otd":1290000,"inzh":660000,"fund":193750,"plan":"assets/plans/NORDIC_65_p3L.jpg"},{"title":"75 м²","m2":75,"mat":3999281,"rab":1500000,"otd":1350000,"inzh":900000,"fund":212500,"plan":"assets/plans/NORDIC_75_p2R.jpg"},{"title":"82 м² · с сауной","m2":82,"mat":4299281,"rab":1640000,"otd":1470000,"inzh":990000,"fund":237500,"plan":"assets/plans/NORDIC_SAUNA_75_p3R.jpg"}]},{"name":"ГОРИЗОНТ","factory":"Manhattan","photo":"assets/photos/render_7.jpg","variants":[{"title":"69 м²","m2":69,"mat":5424469,"rab":1380000,"otd":1300000,"inzh":770000,"fund":150000,"plan":"assets/plans/MANHATTAN_69_p27R.jpg"},{"title":"82 м² · с навесом для машины","m2":82,"mat":6308719,"rab":1640000,"otd":1500000,"inzh":960000,"fund":168750,"plan":"assets/plans/MANHATTAN_82_p29L.jpg"},{"title":"82 м²","m2":82,"mat":6421219,"rab":1640000,"otd":1500000,"inzh":960000,"fund":287500,"plan":"assets/plans/MANHATTAN_82_p28L.jpg"},{"title":"89 м²","m2":89,"mat":6990750,"rab":1780000,"otd":1650000,"inzh":1020000,"fund":187500,"plan":"assets/plans/MANHATTAN_89_p28R.jpg"}]},{"name":"ВЕРШИНА","factory":"Barn","photo":"assets/photos/render_8.jpg","variants":[{"title":"72 м²","m2":72,"mat":4653000,"rab":1440000,"otd":1290000,"inzh":870000,"fund":100000,"plan":"assets/plans/BARN_72_p15R.jpg"},{"title":"102 м²","m2":102,"mat":6526125,"rab":2040000,"otd":1990000,"inzh":1070000,"fund":175000,"plan":"assets/plans/BARN_102_p16L.jpg"},{"title":"108 м²","m2":108,"mat":6942938,"rab":2160000,"otd":2150000,"inzh":1090000,"fund":150000,"plan":"assets/plans/BARN_108_p16R.jpg"}]},{"name":"РАССВЕТ XL","factory":"Alpine Barn","photo":"assets/photos/render_5.jpg","variants":[{"title":"96 м²","m2":96,"mat":6186516,"rab":1920000,"otd":1900000,"inzh":980000,"fund":218750,"plan":"assets/plans/ALPINE_BARN_96_p23L.jpg"},{"title":"117 м²","m2":117,"mat":7486172,"rab":2340000,"otd":2190000,"inzh":1320000,"fund":250000,"plan":"assets/plans/ALPINE_BARN_117_p23R.jpg"},{"title":"142 м²","m2":142,"mat":9006750,"rab":2840000,"otd":2750000,"inzh":1510000,"fund":312500,"plan":"assets/plans/ALPINE_BARN_142_p24L.jpg"}]},{"name":"ДАЛЬ","factory":"Open Space","photo":"assets/photos/render_3.jpg","variants":[{"title":"112 м² · 3 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p25R.jpg"},{"title":"112 м² · 4 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p26R.jpg"},{"title":"112 м² · 3 спальни + сауна","m2":112,"mat":7345669,"rab":2240000,"otd":2050000,"inzh":1310000,"fund":250000,"plan":"assets/plans/OPEN_SPACE_112_p26L.jpg"}]},{"name":"ВЫСОТА","factory":"Boston","photo":"assets/photos/render_9.jpg","variants":[{"title":"125 м²","m2":125,"mat":8926500,"rab":2500000,"otd":2500000,"inzh":1250000,"fund":187500,"plan":"assets/plans/BOSTON_125_p32R.jpg"},{"title":"222 м²","m2":222,"mat":15129675,"rab":4440000,"otd":4500000,"inzh":2160000,"fund":262500,"plan":"assets/plans/BOSTON_222_p33R.jpg"}]},{"name":"ПОЛДЕНЬ","factory":"Andorra","photo":"assets/photos/render_9.jpg","variants":[{"title":"130 м²","m2":130,"mat":9910875,"rab":2600000,"otd":2300000,"inzh":1600000,"fund":325000,"plan":"assets/plans/ANDORRA_130_p30R.jpg"}]},{"name":"МЕРИДИАН","factory":"Brooklyn","photo":"assets/photos/render_8.jpg","variants":[{"title":"240 м²","m2":240,"mat":17468438,"rab":4800000,"otd":4290000,"inzh":2910000,"fund":600000,"plan":"assets/plans/BROOKLYN_240_p31R.jpg"}]}];
 
 // база — домокомплект, она включена всегда. Остальное добавляется независимо, чекбоксами
@@ -412,7 +434,7 @@ function buildSlider(){
   $('dots').innerHTML = DATA.map((m,i)=>`<i data-i="${i}" class="${i===sel.slide?'on':''}" title="${esc(m.name)}"></i>`).join('');
   document.querySelectorAll('.dots i').forEach(d=>d.onclick=()=>go(+d.dataset.i));
   document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{
-    sel.m=+b.dataset.i; sel.v=0; render();
+    pickModel(+b.dataset.i);
     $('s2').scrollIntoView({block:'start'});
   });
   paintSlider();
@@ -451,7 +473,7 @@ function renderModels(){
         <span class="pr"><i>домокомплект от</i><b>${rub(minKit(m))}</b></span>
       </span></button>`;
   }).join('');
-  document.querySelectorAll('.mcard').forEach(b=>b.onclick=()=>{ sel.m=+b.dataset.i; sel.v=0; sel.slide=+b.dataset.i; render(); paintSlider(); });
+  document.querySelectorAll('.mcard').forEach(b=>b.onclick=()=>{ pickModel(+b.dataset.i); paintSlider(); });
 }
 
 function renderVariants(){
@@ -517,6 +539,8 @@ function renderSummary(){
   $('sPerM').textContent = 'от ' + rub(total()/v.m2) + ' за м² · ' + v.m2 + ' м²';
 }
 const render = () => { renderModels(); renderVariants(); renderPackages(); renderSummary(); };
+// смена модели начинает расчёт с чистого листа
+function pickModel(i){ sel.m=i; sel.v=0; sel.slide=i; sel.add={rab:false,fund:false,otd:false,inzh:false}; render(); }
 
 function summaryText(){
   const m=DATA[sel.m], v=variant(), f=id=>$(id).value.trim();
@@ -549,10 +573,13 @@ $('copy').onclick = e => {
 };
 $('print').onclick = () => window.print();
 $('cta').onclick = () => { $('s4').scrollIntoView({block:'start'}); setTimeout(()=>$('fn').focus({preventScroll:true}),400); };
-$('toggle').onclick = e => {
-  const open = $('sum').classList.toggle('open');
-  e.target.textContent = open ? 'Свернуть смету' : 'Показать смету';
+const setSheet = open => {
+  $('sum').classList.toggle('open', open);
+  document.body.classList.toggle('lock', open);
 };
+$('toggle').onclick = () => setSheet(true);
+$('closeSum').onclick = () => setSheet(false);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') setSheet(false); });
 $('fc').oninput = e => { sel.city = e.target.value; const c=$('city'); if(c) c.value = e.target.value; };
 
 const allM2 = DATA.flatMap(m=>m.variants.map(v=>v.m2));
