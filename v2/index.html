@@ -371,11 +371,18 @@ function swGroup(title,arr,cur,fn){
     `<button aria-pressed="${i===cur}" onclick="${fn}(${i})"><i style="background:${c}"></i><em>${n}</em></button>`).join('')+`</div></div>`;
 }
 
+let booted=false;
+function centerStrip(){
+  const st=$('strip'), el=st&&st.children[S.m];
+  if(!el) return;
+  // двигаем только горизонтальный скролл ленты; вертикаль страницы не трогаем
+  st.scrollTo({left: el.offsetLeft - (st.clientWidth - el.clientWidth)/2, behavior: booted ? 'smooth' : 'auto'});
+}
 function renderModels(){
   $('strip').innerHTML=DATA.map((m,i)=>`<button class="sil" aria-pressed="${i===S.m}" onclick="pick(${i})">
       <svg viewBox="0 0 100 54" fill="none" stroke="${i===S.m?'#0b0b0b':'#c8c8c8'}" stroke-width="3">${silSvg(m.name)}</svg>
       <div class="n">${esc(m.name)}</div><div class="q">${sq(m)}</div></button>`).join('');
-  const el=$('strip').children[S.m]; if(el) el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+  centerStrip();
   const m=M();
   $('mImg').src=m.photo; $('mImg').alt=m.name;
   $('mSil').innerHTML=silSvg(m.name);
@@ -469,13 +476,6 @@ document.addEventListener('keydown',e=>{
   if(S.sec===1&&e.key==='ArrowRight')stepModel(1);
 });
 $('rail').innerHTML=secs.map((_,i)=>`<button aria-current="${i===0}" onclick="goto(${i})" aria-label="Шаг ${i}"></button>`).join('');
-new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
-  S.sec=secs.indexOf(e.target);
-  [...$('rail').children].forEach((b,i)=>b.setAttribute('aria-current',i===S.sec));
-  $('hd').classList.toggle('dark',S.sec===0);
-  $('rail').classList.toggle('dark',S.sec===0);
-  renderBar();
-}})},{threshold:.55}).observe;
 secs.forEach(s=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
   S.sec=secs.indexOf(e.target);
   [...$('rail').children].forEach((b,i)=>b.setAttribute('aria-current',i===S.sec));
@@ -490,6 +490,16 @@ $('fV').textContent=DATA.reduce((s,m)=>s+m.variants.length,0);
 $('fS').textContent=Math.min(...allM2)+'–'+Math.max(...allM2);
 $('heroImg').src=DATA[Math.min(4,DATA.length-1)].photo;
 render();
+// первый кадр — жёстко наверх, без анимации и без снапа, чтобы ничего не утащило
+const deck=$('deck');
+deck.style.scrollSnapType='none';
+deck.scrollTop=0;
+requestAnimationFrame(()=>{
+  deck.scrollTop=0;
+  deck.style.scrollSnapType='';
+  booted=true;
+});
+window.addEventListener('load',()=>{if(!booted)deck.scrollTop=0;});
 </script>
 </body>
 </html>
