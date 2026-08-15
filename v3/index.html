@@ -52,7 +52,8 @@ header .cat{border-bottom:1px solid var(--lime);padding-bottom:2px}
 .app.on{display:grid}
 .stage{position:relative;background:var(--dark);overflow:hidden;display:flex;flex-direction:column}
 .view{flex:1 1 auto;position:relative;min-height:0;background:#161616}
-.view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .22s ease}
+.view img.ld{opacity:0}
 .view.contain{background:#fff}
 .view.contain img{object-fit:contain;padding:clamp(14px,2.4vh,36px)}
 .shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,0) 44%)}
@@ -61,7 +62,7 @@ header .cat{border-bottom:1px solid var(--lime);padding-bottom:2px}
   filter:invert(1);opacity:.92;pointer-events:none}
 .view.contain .sil-o{display:none}
 .cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,2.2vh,30px) clamp(18px,2.2vw,34px);color:#fff;pointer-events:none}
-.view.contain .cap{position:static;color:var(--ink);padding:12px clamp(18px,2.2vw,34px);background:#fff;border-top:1px solid var(--line)}
+.view.contain .cap{color:var(--ink);background:linear-gradient(to top,rgba(255,255,255,.96) 55%,rgba(255,255,255,0))}
 .cap h2{font-size:clamp(24px,3vw,42px);font-weight:500;letter-spacing:-.035em;line-height:1}
 .view.contain .cap h2{font-size:17px;letter-spacing:-.02em}
 .cap .m{font-size:12.5px;margin-top:8px;color:rgba(255,255,255,.78)}
@@ -283,7 +284,7 @@ function renderStage(){
   }else if(st===3){ src=INT[S.inIdx]||m.photo;
     meta=`Интерьер: <b>${esc(MODES[S.mode][0])}</b>${S.mode>=2?` · ${FLR[S.flr][1].toLowerCase()}, стены ${WAL[S.wal][1].toLowerCase()}`:''}`;
   }else{ meta=`${esc(v.title)} · ${esc(lvl().toLowerCase())} · <b>от ${rub(total())}</b>`; }
-  $('vImg').src=src; $('vImg').alt=name;
+  swapImg($('vImg'),src,name);
   $('vSil').src=SIL[S.m];
   $('vName').textContent=name; $('vMeta').innerHTML=meta;
   const arrows = st===0? M().variants.length>1 : st===1 ? EX.length>1 : st===3 ? INT.length>1 : false;
@@ -296,6 +297,16 @@ function renderStage(){
     rail.innerHTML=INT.map((s,i)=>`<button aria-pressed="${i===S.inIdx}" data-i="${i}"><img src="${s}" alt=""></button>`).join('');
     rail.querySelectorAll('button').forEach(b=>b.onclick=()=>{S.inIdx=+b.dataset.i;render()});
   }else{ rail.className='thumbrail'; rail.innerHTML=''; }
+}
+// старый кадр остаётся на экране, пока новый не догрузится — без миганий и прыжков
+function swapImg(el,src,alt){
+  if(el.dataset.cur===src){el.alt=alt;return}
+  el.dataset.cur=src;
+  const t=new Image();
+  t.onload=()=>{ if(el.dataset.cur!==src) return; el.classList.add('ld');
+    setTimeout(()=>{el.src=src;el.alt=alt;el.classList.remove('ld')},110); };
+  t.onerror=()=>{ if(el.dataset.cur===src){el.src=src;el.alt=alt;} };
+  t.src=src;
 }
 function stageArrow(d){
   if(S.step===0){ S.v=(S.v+d+M().variants.length)%M().variants.length; }
@@ -404,6 +415,13 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowRight')stageArrow(1);
 });
 render();
+// греем кэш: обложки, планировки, кровля, интерьеры, силуэты
+(function(){
+  const all=[...DATA.map(m=>m.photo),...DATA.flatMap(m=>m.variants.map(v=>v.plan)),...EX,...INT,...SIL];
+  let i=0;
+  (function next(){ if(i>=all.length) return;
+    const im=new Image(); im.onload=im.onerror=()=>setTimeout(next,30); im.src=all[i++]; })();
+})();
 </script>
 </body>
 </html>
