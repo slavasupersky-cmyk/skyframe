@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skyframe 3.0 — конфигуратор</title>
+<meta name="description" content="Дом всегда на экране, конфигурация собирается в панели справа.">
+<meta name="theme-color" content="#111111">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230b0b0b'/><rect x='9' y='13' width='14' height='9' fill='%23c9f24e'/><path d='M7 13 16 6l9 7' stroke='%23c9f24e' stroke-width='2.4' fill='none'/></svg>">
+<style>
+:root{--ink:#0b0b0b;--paper:#fff;--line:#e6e6e6;--tint:#f7f7f5;--mute:#8a8a8a;--mute2:#5a5a5a;
+      --lime:#c9f24e;--lime-dk:#aede2f;--dark:#111;--hd:62px;--pan:clamp(380px,32vw,560px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--dark);color:var(--ink);font:400 16px/1.5 -apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue","Segoe UI",Arial,sans-serif;
+     -webkit-font-smoothing:antialiased;letter-spacing:-.011em;overflow:hidden}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+/* шапка поверх кадра */
+header{position:fixed;top:0;left:0;right:0;height:var(--hd);z-index:40;display:flex;align-items:center;
+       justify-content:space-between;padding:0 clamp(18px,2.4vw,40px);background:var(--dark);color:#fff}
+header b{font-size:16px;letter-spacing:.02em}
+header em{font-style:normal;color:#8a8a8a;font-size:12px;margin-left:10px}
+nav{display:flex;gap:clamp(14px,1.8vw,32px);overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{font-size:12.5px;color:#8f8f8f;padding:20px 0 18px;position:relative;white-space:nowrap;transition:color .16s}
+nav button:hover{color:#d8d8d8}
+nav button[aria-current="true"]{color:#fff;font-weight:500}
+nav button[aria-current="true"]::after{content:"";position:absolute;left:0;right:0;bottom:12px;height:3px;background:var(--lime)}
+header .r{display:flex;align-items:center;gap:18px;font-size:12.5px;color:#c8c8c8}
+header .r a{color:inherit;text-decoration:none}
+header .r .cat{border-bottom:1px solid var(--lime);padding-bottom:2px}
+@media(max-width:1080px){nav{display:none}header em{display:none}}
+
+/* каркас: слева закреплённый кадр, справа прокручиваемая панель */
+.app{position:fixed;inset:var(--hd) 0 0 0;display:grid;grid-template-columns:minmax(0,1fr) var(--pan)}
+.stage{position:relative;background:var(--dark);overflow:hidden;display:flex;flex-direction:column}
+.view{flex:1 1 auto;position:relative;min-height:0}
+.view img{width:100%;height:100%;object-fit:cover;transition:opacity .35s}
+.view.plan{background:#fff;padding:clamp(16px,2.6vh,40px)}
+.view.plan img{object-fit:contain;height:100%;width:100%}
+.view::after{content:"";position:absolute;inset:0;pointer-events:none;transition:opacity .3s;
+  background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,0) 42%)}
+.view.plan::after{opacity:0}
+.sv{position:absolute;top:22px;left:clamp(18px,2.2vw,34px);z-index:3;width:120px;height:64px}
+.view.plan .sv{display:none}
+.cap{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:clamp(18px,2.4vh,32px) clamp(18px,2.2vw,34px);color:#fff}
+.view.plan .cap{color:var(--ink);background:linear-gradient(to top,#fff 60%,rgba(255,255,255,0))}
+.cap h2{font-size:clamp(26px,3.4vw,48px);font-weight:500;letter-spacing:-.035em;line-height:1}
+.cap .m{font-size:13px;margin-top:10px;color:rgba(255,255,255,.78)}
+.view.plan .cap .m{color:var(--mute)}
+.cap .m b{color:var(--lime);font-weight:500}
+.view.plan .cap .m b{color:var(--ink)}
+.arw{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:44px;height:44px;background:rgba(255,255,255,.92);
+     display:grid;place-items:center;font-size:20px;transition:.14s}
+.arw:hover{background:#fff}.arw.p{left:16px}.arw.n{right:16px}
+.view.plan .arw{display:none}
+.angles{flex:0 0 auto;display:flex;gap:8px;padding:10px clamp(18px,2.2vw,34px);background:var(--dark)}
+.angles button{flex:0 0 auto;width:clamp(76px,7vw,112px);aspect-ratio:16/10;overflow:hidden;opacity:.55;transition:.16s}
+.angles button:hover{opacity:.85}
+.angles button[aria-pressed="true"]{opacity:1;box-shadow:inset 0 0 0 3px var(--lime)}
+.angles img{width:100%;height:100%;object-fit:cover}
+
+/* панель */
+.panel{background:var(--paper);display:flex;flex-direction:column;border-left:1px solid var(--line);min-height:0}
+.ph{flex:0 0 auto;padding:18px clamp(18px,1.8vw,30px);border-bottom:1px solid var(--line);display:flex;
+    align-items:flex-start;justify-content:space-between;gap:16px}
+.ph .n{font-size:19px;font-weight:500;letter-spacing:-.02em}
+.ph .s{font-size:12px;color:var(--mute);margin-top:4px}
+.ph .pr{text-align:right;white-space:nowrap}
+.ph .pr b{font-size:18px;font-weight:500;letter-spacing:-.02em}
+.ph .pr span{display:block;font-size:10.5px;color:var(--mute);margin-top:3px}
+.pb{flex:1 1 auto;overflow-y:auto;padding:0 clamp(18px,1.8vw,30px) 24px;scroll-behavior:smooth}
+.pf{flex:0 0 auto;padding:16px clamp(18px,1.8vw,30px) 18px;border-top:2px solid var(--ink);background:#fff}
+.pf .row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.pf .k{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.pf .t{font-size:clamp(21px,1.8vw,27px);font-weight:500;letter-spacing:-.03em;box-shadow:inset 0 -9px 0 var(--lime);white-space:nowrap}
+.pf .go{display:block;width:100%;margin-top:12px;background:var(--lime);color:var(--ink);padding:15px;font-size:15px;font-weight:500;text-align:center}
+.pf .go:hover{background:var(--lime-dk)}
+
+.grp{padding:22px 0;border-bottom:1px solid var(--line);scroll-margin-top:8px}
+.grp:last-child{border-bottom:0}
+.gh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.gh .t{font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.gh .v{font-size:12px;color:var(--mute2)}
+.gh button{font-size:11.5px;color:var(--mute2);text-decoration:underline;text-underline-offset:3px}
+.gh button:hover{color:var(--ink)}
+
+/* выбор модели — сетка силуэтов */
+.mods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mods button{padding:10px 6px;text-align:center;box-shadow:inset 0 0 0 1px var(--line);transition:.14s}
+.mods button:hover{background:var(--tint)}
+.mods button[aria-pressed="true"]{background:var(--tint);box-shadow:inset 0 0 0 3px var(--lime)}
+.mods svg{width:100%;height:34px}
+.mods .n{font-size:10px;font-weight:500;margin-top:6px}
+.mods .q{font-size:9px;color:var(--mute)}
+
+.opt-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:11px 15px;font-size:13.5px;font-weight:500;box-shadow:inset 0 0 0 1px var(--line);transition:.14s}
+.pill:hover{background:var(--tint)}
+.pill[aria-pressed="true"]{background:var(--tint);box-shadow:inset 0 0 0 3px var(--lime)}
+.pill small{display:block;font-size:10.5px;color:var(--mute);font-weight:400;margin-top:3px}
+
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw button{width:54px;text-align:center}
+.sw i{display:block;width:54px;height:54px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);transition:.14s}
+.sw button[aria-pressed="true"] i{box-shadow:0 0 0 3px var(--lime)}
+.sw em{font-style:normal;display:block;font-size:9px;color:var(--mute);margin-top:6px;line-height:1.25}
+.sw button[aria-pressed="true"] em{color:var(--ink);font-weight:500}
+.sub{font-size:11.5px;color:var(--mute);margin-top:10px;line-height:1.5}
+
+.chk{display:flex;flex-direction:column;gap:1px;background:var(--line);box-shadow:inset 0 0 0 1px var(--line)}
+.chk .r{background:#fff;display:flex;gap:13px;align-items:flex-start;padding:13px 14px;text-align:left;width:100%;transition:.14s}
+.chk .r:hover{background:var(--tint)}
+.chk .r.fix{background:var(--tint);cursor:default}
+.bx{flex:0 0 auto;width:18px;height:18px;margin-top:2px;box-shadow:inset 0 0 0 1px #c2c2c2;background:#fff;position:relative}
+.chk .r[aria-pressed="true"] .bx,.bx.on{background:var(--ink);box-shadow:none}
+.chk .r[aria-pressed="true"] .bx::after,.bx.on::after{content:"";position:absolute;left:6px;top:3px;width:5px;height:9px;
+  border:solid var(--lime);border-width:0 2px 2px 0;transform:rotate(43deg)}
+.bx.on{opacity:.5}
+.chk .t{flex:1 1 auto;min-width:0}
+.chk .t b{display:block;font-size:13.5px;font-weight:500}
+.chk .t span{display:block;font-size:11.5px;color:var(--mute);margin-top:3px}
+.chk .p{flex:0 0 auto;font-size:13.5px;font-weight:500;white-space:nowrap}
+.always{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-left:8px;font-weight:400}
+input[type=text]{width:100%;padding:13px 14px;font:inherit;font-size:14.5px;box-shadow:inset 0 0 0 1px var(--line);outline:none}
+input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
+.fine{font-size:11px;color:var(--mute);line-height:1.55;margin-top:14px}
+.star{color:var(--mute);font-weight:400}
+
+/* мобильная раскладка: кадр сверху, панель под ним */
+@media(max-width:1080px){
+  body{overflow:auto}
+  .app{position:static;display:block;height:auto}
+  .stage{height:56vh;position:sticky;top:var(--hd);z-index:10}
+  .panel{border-left:0;border-top:1px solid var(--line)}
+  .pb{overflow:visible;padding-bottom:8px}
+  .pf{position:sticky;bottom:0;z-index:20}
+  .mods{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:560px){.mods{grid-template-columns:repeat(3,minmax(0,1fr))}.stage{height:44vh}}
+</style>
+</head>
+<body>
+
+<header>
+  <div><b>SKYFRAME</b><em>модульные дома</em></div>
+  <nav id="nav"></nav>
+  <div class="r">
+    <a class="cat" href="../katalog-skyframe.pdf" download>Каталог PDF</a>
+    <a href="tel:+74996477680">+7 (499) 647-76-80</a>
+  </div>
+</header>
+
+<div class="app">
+  <div class="stage">
+    <div class="view" id="view">
+      <img id="vImg" alt="">
+      <svg class="sv" id="vSil" viewBox="0 0 100 54" fill="none" stroke="#fff" stroke-width="2.6"></svg>
+      <button class="arw p" onclick="stepModel(-1)" aria-label="Предыдущая модель">‹</button>
+      <button class="arw n" onclick="stepModel(1)" aria-label="Следующая модель">›</button>
+      <div class="cap"><h2 id="vName"></h2><div class="m" id="vMeta"></div></div>
+    </div>
+    <div class="angles" id="angles"></div>
+  </div>
+
+  <aside class="panel">
+    <div class="ph">
+      <div><div class="n" id="hName"></div><div class="s" id="hSub"></div></div>
+      <div class="pr"><b id="hPrice"></b><span id="hNote"></span></div>
+    </div>
+    <div class="pb" id="pb">
+      <section class="grp" id="g0">
+        <div class="gh"><span class="t">Модель</span><span class="v" id="vMod"></span></div>
+        <div class="mods" id="mods"></div>
+      </section>
+
+      <section class="grp" id="g1">
+        <div class="gh"><span class="t">Планировка</span><button onclick="showPlan()">показать чертёж</button></div>
+        <div class="opt-row" id="vars"></div>
+        <div class="sub" id="varSub"></div>
+      </section>
+
+      <section class="grp" id="g2">
+        <div class="gh"><span class="t">Экстерьер</span><span class="v" id="vExt"></span></div>
+        <div id="ext"></div>
+      </section>
+
+      <section class="grp" id="g3">
+        <div class="gh"><span class="t">Интерьер</span><span class="v" id="vInt"></span></div>
+        <div class="opt-row" id="inMode" style="margin-bottom:16px"></div>
+        <div id="int"></div>
+      </section>
+
+      <section class="grp" id="g4">
+        <div class="gh"><span class="t">Уровень готовности</span><span class="v" id="vRdy"></span></div>
+        <div class="chk" id="chk"></div>
+      </section>
+
+      <section class="grp" id="g5">
+        <div class="gh"><span class="t">Доставка</span><span class="v">считаем по региону</span></div>
+        <input type="text" id="city" placeholder="Город и область">
+        <div class="fine">
+          <b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей России, уточним после указания региона.<br><br>
+          <b>**</b> Расчёт справочный и не является публичной офертой.
+        </div>
+      </section>
+    </div>
+    <div class="pf">
+      <div class="row">
+        <div><div class="k">Итого</div><div class="t" id="fTot">—</div></div>
+        <div style="text-align:right"><div class="k">за м²</div><div style="font-size:13px" id="fM2">—</div></div>
+      </div>
+      <button class="go" id="fGo">Рассчитать доставку на участок</button>
+    </div>
+  </aside>
+</div>
+
+<script>
+const VERSION='3.0';
+const DATA=[{"name":"ОБЛАКО","factory":"Country","photo":"../assets/models/oblako.jpg","variants":[{"title":"16 м²","m2":16,"mat":1178000,"rab":320000,"otd":290000,"inzh":190000,"fund":56250,"plan":"../assets/plans/OBLAKO_16.jpg"},{"title":"20 м²","m2":20,"mat":1440500,"rab":400000,"otd":350000,"inzh":250000,"fund":56250,"plan":"../assets/plans/OBLAKO_20.jpg"},{"title":"24 м²","m2":24,"mat":1753000,"rab":480000,"otd":470000,"inzh":250000,"fund":56250,"plan":"../assets/plans/OBLAKO_24.jpg"}]},{"name":"ЗАКАТ","factory":"Chalet","photo":"../assets/models/zakat.jpg","variants":[{"title":"36 м²","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"../assets/plans/CHALET_36_p4R.jpg"},{"title":"36 м² · с сауной","m2":36,"mat":2349000,"rab":720000,"otd":590000,"inzh":490000,"fund":100000,"plan":"../assets/plans/CHALET_SAUNA_36_p5R.jpg"},{"title":"42 м²","m2":42,"mat":2748938,"rab":840000,"otd":750000,"inzh":510000,"fund":100000,"plan":"../assets/plans/CHALET_42_p5L.jpg"}]},{"name":"ПИК","factory":"A-Frame","photo":"../assets/models/pik.jpg","variants":[{"title":"44 м²","m2":44,"mat":2679750,"rab":880000,"otd":690000,"inzh":630000,"fund":100000,"plan":"../assets/plans/A-FRAME_44_p9R.jpg"}]},{"name":"МОНБЛАН","factory":"Mont Blanc","photo":"../assets/models/monblan.jpg","variants":[{"title":"54 м²","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"../assets/plans/MONT_BLANC_54_p13R.jpg"},{"title":"54 м² · с сауной","m2":54,"mat":3849750,"rab":1080000,"otd":1090000,"inzh":530000,"fund":100000,"plan":"../assets/plans/MONT_BLANC_54_p14R.jpg"}]},{"name":"РАССВЕТ","factory":"Alpine Barn","photo":"../assets/models/rassvet.jpg","variants":[{"title":"54 м²","m2":54,"mat":3613781,"rab":1080000,"otd":990000,"inzh":630000,"fund":125000,"plan":"../assets/plans/ALPINE_BARN_54_p21R.jpg"},{"title":"72 м²","m2":72,"mat":4662703,"rab":1440000,"otd":1290000,"inzh":870000,"fund":156250,"plan":"../assets/plans/ALPINE_BARN_72_p22L.jpg"},{"title":"93 м²","m2":93,"mat":6017625,"rab":1860000,"otd":1850000,"inzh":940000,"fund":218750,"plan":"../assets/plans/ALPINE_BARN_93_p22R.jpg"},{"title":"96 м²","m2":96,"mat":6186516,"rab":1920000,"otd":1900000,"inzh":980000,"fund":218750,"plan":"../assets/plans/ALPINE_BARN_96_p23L.jpg"},{"title":"117 м²","m2":117,"mat":7486172,"rab":2340000,"otd":2190000,"inzh":1320000,"fund":250000,"plan":"../assets/plans/ALPINE_BARN_117_p23R.jpg"},{"title":"142 м²","m2":142,"mat":9006750,"rab":2840000,"otd":2750000,"inzh":1510000,"fund":312500,"plan":"../assets/plans/ALPINE_BARN_142_p24L.jpg"}]},{"name":"ПРОСТОР","factory":"Nordic","photo":"../assets/models/prostor.jpg","variants":[{"title":"65 м²","m2":65,"mat":3643781,"rab":1300000,"otd":1290000,"inzh":660000,"fund":193750,"plan":"../assets/plans/NORDIC_65_p3L.jpg"},{"title":"75 м²","m2":75,"mat":3999281,"rab":1500000,"otd":1350000,"inzh":900000,"fund":212500,"plan":"../assets/plans/NORDIC_75_p2R.jpg"},{"title":"82 м² · с сауной","m2":82,"mat":4299281,"rab":1640000,"otd":1470000,"inzh":990000,"fund":237500,"plan":"../assets/plans/NORDIC_SAUNA_75_p3R.jpg"}]},{"name":"ГОРИЗОНТ","factory":"Manhattan","photo":"../assets/models/gorizont.jpg","variants":[{"title":"69 м²","m2":69,"mat":5424469,"rab":1380000,"otd":1300000,"inzh":770000,"fund":150000,"plan":"../assets/plans/MANHATTAN_69_p27R.jpg"},{"title":"82 м² · с навесом для машины","m2":82,"mat":6308719,"rab":1640000,"otd":1500000,"inzh":960000,"fund":168750,"plan":"../assets/plans/MANHATTAN_82_p29L.jpg"},{"title":"82 м²","m2":82,"mat":6421219,"rab":1640000,"otd":1500000,"inzh":960000,"fund":287500,"plan":"../assets/plans/MANHATTAN_82_p28L.jpg"},{"title":"89 м²","m2":89,"mat":6990750,"rab":1780000,"otd":1650000,"inzh":1020000,"fund":187500,"plan":"../assets/plans/MANHATTAN_89_p28R.jpg"}]},{"name":"ВЕРШИНА","factory":"Barn","photo":"../assets/models/vershina.jpg","variants":[{"title":"72 м²","m2":72,"mat":4653000,"rab":1440000,"otd":1290000,"inzh":870000,"fund":100000,"plan":"../assets/plans/BARN_72_p15R.jpg"},{"title":"102 м²","m2":102,"mat":6526125,"rab":2040000,"otd":1990000,"inzh":1070000,"fund":175000,"plan":"../assets/plans/BARN_102_p16L.jpg"},{"title":"108 м²","m2":108,"mat":6942938,"rab":2160000,"otd":2150000,"inzh":1090000,"fund":150000,"plan":"../assets/plans/BARN_108_p16R.jpg"}]},{"name":"ДАЛЬ","factory":"Open Space","photo":"../assets/models/dal.jpg","variants":[{"title":"112 м² · 3 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"../assets/plans/OPEN_SPACE_112_p25R.jpg"},{"title":"112 м² · 4 спальни","m2":112,"mat":7345669,"rab":2240000,"otd":2100000,"inzh":1260000,"fund":250000,"plan":"../assets/plans/OPEN_SPACE_112_p26R.jpg"},{"title":"112 м² · 3 спальни + сауна","m2":112,"mat":7345669,"rab":2240000,"otd":2050000,"inzh":1310000,"fund":250000,"plan":"../assets/plans/OPEN_SPACE_112_p26L.jpg"}]},{"name":"ВЫСОТА","factory":"Boston","photo":"../assets/models/vysota.jpg","variants":[{"title":"125 м²","m2":125,"mat":8926500,"rab":2500000,"otd":2500000,"inzh":1250000,"fund":187500,"plan":"../assets/plans/BOSTON_125_p32R.jpg"},{"title":"222 м²","m2":222,"mat":15129675,"rab":4440000,"otd":4500000,"inzh":2160000,"fund":262500,"plan":"../assets/plans/BOSTON_222_p33R.jpg"}]},{"name":"ПОЛДЕНЬ","factory":"Andorra","photo":"../assets/models/polden.jpg","variants":[{"title":"130 м²","m2":130,"mat":9910875,"rab":2600000,"otd":2300000,"inzh":1600000,"fund":325000,"plan":"../assets/plans/ANDORRA_130_p30R.jpg"}]},{"name":"МЕРИДИАН","factory":"Brooklyn","photo":"../assets/models/meridian.jpg","variants":[{"title":"240 м²","m2":240,"mat":17468438,"rab":4800000,"otd":4290000,"inzh":2910000,"fund":600000,"plan":"../assets/plans/BROOKLYN_240_p31R.jpg"}]}], EX=["assets/roof_0.jpg", "assets/roof_1.jpg", "assets/roof_2.jpg", "assets/roof_3.jpg", "assets/roof_4.jpg"], INT=["assets/int_0.jpg", "assets/int_1.jpg", "assets/int_2.jpg", "assets/int_3.jpg", "assets/int_4.jpg", "assets/int_5.jpg"];
+const SIL={
+ 'ПИК':[[[50,2],[94,52],[6,52]],[[34,52],[34,33],[66,33],[66,52]]],
+ 'ЗАКАТ':[[[10,25],[50,7],[90,25]],[[13,25],[13,52],[87,52],[87,25]]],
+ 'МОНБЛАН':[[[6,18],[94,18],[94,52],[6,52]],[[42,52],[42,32],[62,32],[62,52]]],
+ 'РАССВЕТ':[[[14,22],[50,8],[86,22]],[[18,22],[18,52],[82,52],[82,22]],[[18,38],[82,38]]],
+ 'ПРОСТОР':[[[2,24],[98,19]],[[8,24],[8,52],[92,52],[92,20]],[[30,52],[30,34],[56,34],[56,52]]],
+ 'ГОРИЗОНТ':[[[2,20],[98,20]],[[8,20],[8,52],[60,52],[60,20]],[[66,52],[66,20]],[[92,52],[92,20]]],
+ 'ВЕРШИНА':[[[16,23],[50,3],[84,23]],[[20,23],[20,52],[80,52],[80,23]]],
+ 'ДАЛЬ':[[[2,19],[98,19]],[[6,19],[6,52],[94,52],[94,19]],[[24,19],[24,52]],[[62,19],[62,52]]],
+ 'МЕРИДИАН':[[[6,19],[50,4],[94,19]],[[10,19],[10,52],[90,52],[90,19]],[[10,36],[90,36]]],
+ 'ВЫСОТА':[[[14,21],[50,3],[86,21]],[[18,21],[18,52],[82,52],[82,21]],[[18,37],[82,37]]],
+ 'ПОЛДЕНЬ':[[[1,18],[99,18]],[[10,18],[10,52],[90,52],[90,18]],[[34,52],[34,32],[60,32],[60,52]]],
+ 'ОБЛАКО':[[[12,20],[50,9],[88,20]],[[16,20],[16,52],[84,52],[84,20]]]};
+const ADDONS=[{k:'rab',n:'Монтаж домокомплекта',d:'Сборка бригадой за 7–10 дней.'},
+ {k:'fund',n:'Свайный фундамент',d:'Винтовые сваи с обвязкой.'},
+ {k:'otd',n:'Чистовая отделка',d:'Полы, стены, потолки, санузел.'},
+ {k:'inzh',n:'Инженерные системы',d:'Электрика, вода, канализация, отопление.'}];
+const LINES={mat:'Домокомплект',rab:'Монтаж домокомплекта',fund:'Свайный фундамент',otd:'Чистовая отделка',inzh:'Инженерные системы'};
+const ROOF=[['#b0543a','Терракота'],['#3a4048','Графит'],['#8a2a2c','Вишня'],['#7a8082','Серебро'],['#5c2c34','Бордо']];
+const FAC=[['#c6a67a','Натур'],['#96744e','Орех'],['#5c5046','Кофе'],['#2e2e2e','Уголь'],['#ded6c8','Лён']];
+const PRO=[['#242424','Чёрный'],['#6e6e6e','Графит'],['#ececec','Белый'],['#7e603c','Дуб']];
+const FLR=[['#c4a680','Дуб светлый'],['#8c6642','Дуб тёмный'],['#b2b0ac','Бетон'],['#54504e','Графит']];
+const WAL=[['#f2f0ec','Белый'],['#ded8cc','Тёплый'],['#c4c4c0','Серый'],['#ceb496','Дерево']];
+const KIT=[['#eeece8','Белый'],['#96744e','Орех'],['#3c423e','Хвоя'],['#282828','Графит']];
+const MODES=[['Без отделки','черновой пол'],['Под чистовую','стены под финиш'],['Светлый','дуб, белый'],['Тёплый','орех'],['Графит','тёмный пол']];
+const NAV=['Модель','Планировка','Экстерьер','Интерьер','Готовность','Доставка'];
+
+let S={m:2,v:0,add:{rab:false,fund:false,otd:false,inzh:false},city:'',
+       roof:1,fac:0,pro:0,mode:0,flr:0,wal:0,kit:1,ang:1,int:0,plan:false,grp:0};
+const $=i=>document.getElementById(i);
+const rub=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽';
+const pl=(n,a,b,c)=>{const m=n%100,k=n%10;return m>=11&&m<=14?c:k===1?a:k>=2&&k<=4?b:c};
+const M=()=>DATA[S.m], V=()=>M().variants[S.v];
+const on=()=>ADDONS.filter(a=>S.add[a.k]);
+const total=()=>V().mat+on().reduce((s,a)=>s+V()[a.k],0);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sq=m=>{const a=m.variants.map(v=>v.m2),lo=Math.min(...a),hi=Math.max(...a);return (lo===hi?lo:lo+'–'+hi)+' м²'};
+const svg=n=>(SIL[n]||[]).map(p=>`<polyline points="${p.map(q=>q.join(',')).join(' ')}"/>`).join('');
+const lvl=()=>{const o=k=>S.add[k];
+  if(o('rab')&&o('fund')&&o('otd')&&o('inzh'))return'Под ключ с монтажом';
+  if(o('rab')&&o('fund')&&!o('otd')&&!o('inzh'))return'Под чистовую с монтажом';
+  return on().length?'Своя комплектация':'Только домокомплект'};
+const swg=(arr,cur,fn)=>`<div class="sw">`+arr.map(([c,n],i)=>
+  `<button aria-pressed="${i===cur}" onclick="${fn}(${i})"><i style="background:${c}"></i><em>${n}</em></button>`).join('')+`</div>`;
+
+function view(){
+  const v=$('view'), m=M();
+  v.classList.toggle('plan',S.plan);
+  if(S.plan){
+    $('vImg').src=V().plan; $('vName').textContent='Планировка · '+V().title;
+    $('vMeta').innerHTML=`${esc(m.name)} · высота потолка до 3,2 м · производство 30–120 дней`;
+  }else{
+    $('vImg').src=(S.grp===2&&EX[S.ang])?EX[S.ang]:(S.grp===3?INT[S.int]:m.photo);
+    $('vName').textContent=m.name;
+    $('vMeta').innerHTML=`${esc(m.factory).toUpperCase()} · ${sq(m)} · ${m.variants.length} ${pl(m.variants.length,'конфигурация','конфигурации','конфигураций')} · домокомплект от <b>${rub(Math.min(...m.variants.map(x=>x.mat)))}</b>`;
+  }
+  $('vSil').innerHTML=svg(m.name);
+  const src = S.grp===3 ? INT : EX;
+  $('angles').innerHTML=src.slice(0,5).map((s,i)=>
+    `<button aria-pressed="${i===(S.grp===3?S.int:S.ang)}" onclick="${S.grp===3?'setInt':'setAng'}(${i})"><img src="${s}" alt=""></button>`).join('');
+}
+function panel(){
+  const m=M(),v=V();
+  $('hName').textContent=m.name; $('hSub').textContent=`${v.m2} м² · ${lvl().toLowerCase()}`;
+  $('hPrice').textContent='от '+rub(total()); $('hNote').textContent=on().length?'* ориентир по ЦФО':'домокомплект';
+  $('vMod').textContent=m.name; $('vExt').textContent=`${ROOF[S.roof][1].toLowerCase()} / ${FAC[S.fac][1].toLowerCase()}`;
+  $('vInt').textContent=MODES[S.mode][0]; $('vRdy').textContent=lvl();
+  $('mods').innerHTML=DATA.map((x,i)=>`<button aria-pressed="${i===S.m}" onclick="pick(${i})">
+    <svg viewBox="0 0 100 54" fill="none" stroke="${i===S.m?'#0b0b0b':'#c9c9c9'}" stroke-width="3.4">${svg(x.name)}</svg>
+    <div class="n">${esc(x.name)}</div><div class="q">${sq(x)}</div></button>`).join('');
+  $('vars').innerHTML=m.variants.map((x,i)=>
+    `<button class="pill" aria-pressed="${i===S.v}" onclick="pickV(${i})">${esc(x.title)}<small>домокомплект ${rub(x.mat)}</small></button>`).join('');
+  $('varSub').textContent='Планировку можно адаптировать: перенести перегородки, изменить состав санузлов.';
+  $('ext').innerHTML=`<div class="gh" style="margin:0 0 10px"><span class="t">Кровля</span></div>${swg(ROOF,S.roof,'setRoof')}
+    <div class="gh" style="margin:18px 0 10px"><span class="t">Фасадная доска</span></div>${swg(FAC,S.fac,'setFac')}
+    <div class="gh" style="margin:18px 0 10px"><span class="t">Оконный профиль</span></div>${swg(PRO,S.pro,'setPro')}
+    <div class="sub">Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.</div>`;
+  $('inMode').innerHTML=MODES.map(([t,s],i)=>
+    `<button class="pill" aria-pressed="${i===S.mode}" onclick="setMode(${i})">${t}<small>${s}</small></button>`).join('');
+  $('int').innerHTML=S.mode<2
+    ? `<div class="sub">${MODES[S.mode][1]}. Материалы выбираются, когда добавлена чистовая отделка.</div>`
+    : `<div class="gh" style="margin:0 0 10px"><span class="t">Пол</span></div>${swg(FLR,S.flr,'setFlr')}
+       <div class="gh" style="margin:18px 0 10px"><span class="t">Стены</span></div>${swg(WAL,S.wal,'setWal')}
+       <div class="gh" style="margin:18px 0 10px"><span class="t">Мебельные фасады</span></div>${swg(KIT,S.kit,'setKit')}`;
+  $('chk').innerHTML=`<div class="r fix"><span class="bx on"></span><span class="t">
+      <b>Домокомплект внешнего контура<span class="always">включено</span></b>
+      <span>Панели пола, стен и кровли, окна и двери, фасадная доска.</span></span>
+      <span class="p">${rub(v.mat)}</span></div>`+
+    ADDONS.map(a=>`<button class="r" aria-pressed="${!!S.add[a.k]}" onclick="tog('${a.k}')">
+      <span class="bx"></span><span class="t"><b>${a.n} <span class="star">*</span></b><span>${a.d}</span></span>
+      <span class="p">от ${rub(v[a.k])}</span></button>`).join('');
+  $('fTot').textContent='от '+rub(total())+(on().length?' *':'');
+  $('fM2').textContent='от '+rub(total()/v.m2);
+}
+const render=()=>{view();panel()};
+
+function pick(i){S.m=i;S.v=0;S.add={rab:false,fund:false,otd:false,inzh:false};S.plan=false;render()}
+function pickV(i){S.v=i;render()}
+function stepModel(d){pick((S.m+d+DATA.length)%DATA.length)}
+function tog(k){S.add[k]=!S.add[k];render()}
+function setRoof(i){S.roof=i;S.ang=Math.min(i,EX.length-1);S.plan=false;render()}
+function setFac(i){S.fac=i;render()}
+function setPro(i){S.pro=i;render()}
+function setAng(i){S.ang=i;S.plan=false;render()}
+function setMode(i){S.mode=i;render()}
+function setInt(i){S.int=i;S.plan=false;render()}
+function setFlr(i){S.flr=i;render()}
+function setWal(i){S.wal=i;render()}
+function setKit(i){S.kit=i;render()}
+function showPlan(){S.plan=!S.plan;render()}
+$('city').oninput=e=>{S.city=e.target.value;panel()};
+$('fGo').onclick=()=>{go(5);$('city').focus()};
+
+const groups=[...document.querySelectorAll('.grp')];
+$('nav').innerHTML=NAV.map((n,i)=>`<button onclick="go(${i})" aria-current="${i===0}">${n}</button>`).join('');
+function go(i){groups[i].scrollIntoView({block:'start'})}
+groups.forEach((g,i)=>new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){
+    S.grp=i;
+    [...$('nav').children].forEach((b,k)=>b.setAttribute('aria-current',k===i));
+    if(i!==1) S.plan=false;
+    if(i===1) S.plan=true;
+    view();
+  }
+}),{root:$('pb'),threshold:.4}).observe(g));
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='ArrowLeft')stepModel(-1);
+  if(e.key==='ArrowRight')stepModel(1);
+});
+render();
+</script>
+</body>
+</html>
