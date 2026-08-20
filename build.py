@@ -87,11 +87,15 @@ def collect(brand_key, brand, rows):
     if not roof:
         problems.append('options/roof: нет ни одной картинки кровли')
 
+    # site/ — картинки витрины (разрез, процесс, объекты). Ключ = имя файла без расширения.
+    site = {os.path.splitext(os.path.basename(f))[0]: f
+            for f in _ls(os.path.join(mroot, 'site'))}
+
     out = [models[k] for k in order]
     for m in out:
         m['variants'].sort(key=lambda v: v['mat'])
     out.sort(key=lambda m: min(v['mat'] for v in m['variants']))
-    return out, roof, inter, problems
+    return out, roof, inter, site, problems
 
 
 def _ls(d):
@@ -108,7 +112,7 @@ def build(brand_key, check_only=False):
     brand = json.load(open(os.path.join(bdir, 'brand.json'), encoding='utf-8'))
     cdir = os.path.join(CONTENT, brand.get('catalog_from', brand_key))
     rows = read_catalog(os.path.join(cdir, 'catalog.xlsx'))
-    models, roof, inter, problems = collect(brand_key, brand, rows)
+    models, roof, inter, site, problems = collect(brand_key, brand, rows)
 
     print(f"\n■ {brand_key}: {len(models)} моделей, {sum(len(m['variants']) for m in models)} конфигураций")
     for p in problems:
@@ -138,12 +142,14 @@ def build(brand_key, check_only=False):
                          for v in m['variants']]})
     ex = [put(p) for p in roof]
     it = [put(p) for p in inter]
+    st = {k: put(v) for k, v in sorted(site.items())}
 
     engine = open(os.path.join(ENGINES, brand.get('engine', 'wizard') + '.html'), encoding='utf-8').read()
     j = lambda x: json.dumps(x, ensure_ascii=False, separators=(',', ':'))
     html = (engine
             .replace('__DATA__', j(data)).replace('__EX__', j(ex))
             .replace('__INT__', j(it)).replace('__SIL__', j(sils))
+            .replace('__SITE__', j(st))
             .replace('__TITLE__', brand['title']).replace('__PHONE__', brand['phone'])
             .replace('__PHONE_HREF__', brand['phone_href'])
             .replace('__CATALOG__', brand.get('catalog_pdf') or '#')
