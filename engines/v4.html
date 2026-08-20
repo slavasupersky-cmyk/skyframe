@@ -10,7 +10,7 @@
 <style>
 :root{--ink:#0b0b0b;--paper:#fff;--line:#e7e7e7;--tint:#f7f7f5;--mute:#8a8a8a;--mute2:#5a5a5a;
       --lime:__ACCENT__;--lime-dk:#aede2f;--dark:#0f0f0f;--dark2:#181818;
-      --hd:60px;--bar:88px;--pan:clamp(380px,31vw,540px)}
+      --hd:60px;--bar:88px;--cb:46px}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{background:var(--dark);color:var(--ink);
@@ -47,7 +47,6 @@ a{color:inherit;text-decoration:none}
 .btn{padding:15px 26px;font-size:15px;font-weight:500;transition:.14s;display:inline-flex;align-items:center;gap:8px}
 .btn-l{background:var(--lime);color:var(--ink)}.btn-l:hover{background:var(--lime-dk)}
 .btn-g{background:rgba(255,255,255,.14);color:#fff;backdrop-filter:blur(6px)}.btn-g:hover{background:rgba(255,255,255,.26)}
-.btn-o{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);color:#fff}.btn-o:hover{box-shadow:inset 0 0 0 1px #fff}
 
 /* герой */
 #hero{min-height:min(94vh,900px);display:flex;flex-direction:column;justify-content:flex-end;
@@ -69,7 +68,7 @@ h2{font-size:clamp(25px,3.3vw,44px);font-weight:500;letter-spacing:-.033em;line-
 .lead{margin-top:16px;font-size:clamp(14px,1.15vw,17px);max-width:58ch;color:var(--mute2);line-height:1.55}
 .sc:not(.light):not(.tint) .lead{color:rgba(255,255,255,.74)}
 
-/* 01 технология: текст + разрез */
+/* 01 технология */
 .split{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(28px,4vw,80px);align-items:start}
 @media(max-width:940px){.split{grid-template-columns:minmax(0,1fr);gap:36px}}
 .ghd{font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);
@@ -85,7 +84,7 @@ figure{margin:0}
 .cut img{width:100%;height:auto;object-fit:contain}
 figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin-top:12px}
 
-/* 02 процесс: фото + шаги */
+/* 02 процесс */
 .shots{display:grid;grid-template-columns:1fr 1fr 1.9fr;gap:14px;margin-top:clamp(26px,4vh,44px)}
 @media(max-width:940px){.shots{grid-template-columns:1fr 1fr}.shots figure:last-child{grid-column:span 2}}
 @media(max-width:560px){.shots{grid-template-columns:1fr}.shots figure:last-child{grid-column:auto}}
@@ -109,7 +108,7 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 @media(max-width:940px){.objs{grid-template-columns:1fr 1fr}.objs figure:first-child{grid-column:span 2}}
 @media(max-width:560px){.objs{grid-template-columns:1fr}.objs figure:first-child{grid-column:auto}}
 
-/* плитка моделей */
+/* 04 плитка моделей */
 #models h2{font-size:clamp(26px,3.4vw,44px);font-weight:500;letter-spacing:-.032em;line-height:1.05}
 #models .sub{font-size:13.5px;color:#9a9a9a;margin:12px 0 0;max-width:74ch}
 .resume{display:inline-flex;gap:10px;align-items:center;margin-top:20px;background:var(--dark2);
@@ -131,51 +130,82 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .foot{margin-top:clamp(28px,4vh,48px);padding-top:20px;border-top:1px solid rgba(255,255,255,.12);
       font-size:11.5px;color:#6f6f6f;line-height:1.6;max-width:90ch}
 
-/* ══════ КОНФИГУРАТОР ══════ */
-#cfg{position:fixed;inset:var(--hd) 0 var(--bar) 0;z-index:30;display:none;
-     grid-template-columns:minmax(0,1fr) var(--pan);background:var(--dark)}
-#cfg.on{display:grid}
-#cfg.solo{grid-template-columns:minmax(0,1fr)}
-#cfg.solo .panel{display:none}
+/* ══════ КОНФИГУРАТОР — свой скролл сверху вниз ══════ */
+#cfg{position:fixed;inset:var(--hd) 0 var(--bar) 0;z-index:30;display:none;background:var(--paper);
+     overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth}
+#cfg.on{display:block}
 
-.stage{position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;background:var(--dark)}
-.view{position:relative;flex:1 1 auto;min-height:0;background:#121212;overflow:hidden}
+/* липкая полоска: модель и разделы */
+.cbar{position:sticky;top:0;z-index:20;height:var(--cb);display:flex;align-items:center;gap:14px;
+      padding:0 clamp(14px,2.2vw,36px);background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line)}
+.cbar .back{font-size:12.5px;color:var(--mute2);white-space:nowrap}
+.cbar .back:hover{color:var(--ink)}
+.cbar .mn{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:500;white-space:nowrap}
+.cbar .mn img{width:30px;height:19px;object-fit:contain}
+.cbar nav{display:flex;margin-left:auto;overflow-x:auto;scrollbar-width:none;height:100%}
+.cbar nav::-webkit-scrollbar{display:none}
+.cbar nav button{position:relative;padding:0 clamp(8px,1vw,14px);font-size:12px;color:var(--mute);white-space:nowrap;transition:.14s}
+.cbar nav button:hover{color:var(--mute2)}
+.cbar nav button i{font-style:normal;font-size:10px;margin-right:5px;color:var(--line)}
+.cbar nav button.done i{color:var(--lime-dk)}
+.cbar nav button[aria-current="true"]{color:var(--ink);font-weight:500}
+.cbar nav button[aria-current="true"] i{color:var(--ink)}
+.cbar nav button[aria-current="true"]::after{content:"";position:absolute;left:8px;right:8px;bottom:0;height:2px;background:var(--lime)}
+@media(max-width:900px){.cbar .mn,.cbar nav button i{display:none}}
+
+/* блок шага — примерно на экран, но переход обычным скроллом */
+.st{min-height:calc(100dvh - var(--hd) - var(--bar) - var(--cb));
+    padding:clamp(22px,3.2vh,42px) clamp(16px,2.4vw,40px) clamp(28px,4.6vh,58px);
+    display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.st:first-of-type{border-top:0}
+#st0{padding:0;border-top:0;background:var(--dark)}
+.sthd{flex:0 0 auto;margin-bottom:clamp(12px,1.8vh,22px)}
+.sthd .eyebrow{margin-bottom:10px}
+.sthd h3{font-size:clamp(19px,2.3vw,30px);font-weight:500;letter-spacing:-.03em;line-height:1.1}
+.sthd p{font-size:13px;color:var(--mute);margin-top:8px;max-width:74ch;line-height:1.5}
+.two{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.86fr);
+     gap:clamp(16px,2.2vw,38px);flex:1 1 auto;min-height:0}
+.two>*{min-width:0;min-height:0;display:flex;flex-direction:column}
+.two .col{overflow-y:auto}
+@media(max-width:980px){.two{grid-template-columns:minmax(0,1fr)}.two .col{overflow:visible}}
+
+/* кадр в блоке */
+.view{position:relative;flex:1 1 auto;min-height:clamp(230px,40vh,520px);background:#121212;overflow:hidden}
 .view img.main{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;
   padding:clamp(8px,1.4vh,22px);transition:opacity .22s ease}
 .view img.main.ld{opacity:0}
 /* подложка — тот же кадр, размытый: дом влезает целиком, а поле не выглядит дырой */
 .view img.bgfill{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;padding:0;z-index:0;
   filter:blur(30px) saturate(.72) brightness(.46);transform:scale(1.05)}
-.view.contain{background:#fff}
-.view.contain img.bgfill{display:none}
-.view.contain img.main{padding:clamp(14px,2.4vh,34px)}
 .view .shade{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:linear-gradient(to top,rgba(0,0,0,.84) 0%,rgba(0,0,0,.3) 26%,rgba(0,0,0,0) 52%)}
-.view.contain .shade{display:none}
-.silo{position:absolute;z-index:3;top:18px;left:clamp(18px,2.2vw,32px);width:98px;height:54px;
+.view .silo{position:absolute;z-index:3;top:18px;left:clamp(16px,2vw,30px);width:94px;height:52px;
   object-fit:contain;filter:invert(1);opacity:.9;pointer-events:none}
-.view.contain .silo{display:none}
-.cnt{position:absolute;z-index:3;top:22px;right:clamp(18px,2.2vw,32px);font-size:12px;letter-spacing:.08em;color:rgba(255,255,255,.78)}
-.view.contain .cnt{color:var(--mute)}
-.cap{position:absolute;z-index:3;left:0;right:0;bottom:0;color:#fff;
-     padding:clamp(16px,2.4vh,32px) clamp(18px,2.2vw,34px);
-     display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.view.contain .cap{color:var(--ink);background:linear-gradient(to top,rgba(255,255,255,.97) 58%,rgba(255,255,255,0))}
-.cap h3{font-size:clamp(22px,3vw,40px);font-weight:500;letter-spacing:-.033em;line-height:1.02}
-.view.contain .cap h3{font-size:clamp(17px,1.7vw,22px)}
-.cap .m{font-size:12.5px;margin-top:8px;color:rgba(255,255,255,.76)}
-.view.contain .cap .m{color:var(--mute)}
-.cap .m b{color:var(--lime);font-weight:500}
-.view.contain .cap .m b{color:var(--ink)}
-.arw{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:44px;height:44px;
-     background:rgba(255,255,255,.9);color:var(--ink);display:grid;place-items:center;font-size:20px;transition:.14s}
+.view .cnt{position:absolute;z-index:3;top:22px;right:clamp(16px,2vw,30px);font-size:12px;
+  letter-spacing:.08em;color:rgba(255,255,255,.78)}
+.view .cap{position:absolute;z-index:3;left:0;right:0;bottom:0;color:#fff;
+     padding:clamp(14px,2.2vh,30px) clamp(16px,2vw,32px);
+     display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.view .cap h4{font-size:clamp(21px,2.8vw,38px);font-weight:500;letter-spacing:-.033em;line-height:1.02}
+.view .cap .m{font-size:12.5px;margin-top:8px;color:rgba(255,255,255,.78)}
+.view .cap .m b{color:var(--lime);font-weight:500}
+.arw{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:42px;height:42px;
+     background:rgba(255,255,255,.9);color:var(--ink);display:grid;place-items:center;font-size:19px;transition:.14s}
 .arw:hover{background:#fff}.arw.p{left:14px}.arw.n{right:14px}
+#st0 .view{min-height:0}
 
-/* лента: силуэты моделей (шаг «Дом») или превью кадров */
-.rail{flex:0 0 auto;display:none;gap:9px;overflow-x:auto;padding:10px clamp(14px,2vw,28px);
+/* планировка — на белом, целиком */
+.frame{flex:1 1 auto;min-height:clamp(230px,40vh,520px);background:var(--tint);position:relative;
+       display:flex;align-items:center;justify-content:center;overflow:hidden;padding:clamp(10px,1.6vh,22px)}
+.frame img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.frame .tag{position:absolute;left:0;bottom:0;padding:10px 14px;font-size:12px;color:var(--mute2);background:rgba(255,255,255,.9)}
+
+/* ленты превью и силуэтов */
+.rail{flex:0 0 auto;display:flex;gap:9px;overflow-x:auto;padding:10px clamp(14px,2vw,28px);
       background:var(--dark2);scrollbar-width:thin}
-.rail.on{display:flex}
-.rail .sil{flex:0 0 auto;width:clamp(104px,9vw,140px);padding:9px 6px;text-align:center;transition:.14s}
+.rail.lite{background:transparent;padding:10px 0 0}
+.rail .sil{flex:0 0 auto;width:clamp(102px,9vw,138px);padding:9px 6px;text-align:center;transition:.14s}
 .rail .sil img{width:100%;height:clamp(26px,3vh,38px);object-fit:contain;filter:invert(1);opacity:.5}
 .rail .sil .n{display:block;font-size:10.5px;font-weight:500;margin-top:7px;color:#8f8f8f}
 .rail .sil .q{display:block;font-size:9.5px;color:#6f6f6f;margin-top:2px}
@@ -183,43 +213,22 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .rail .sil[aria-pressed="true"] img{opacity:1}
 .rail .sil[aria-pressed="true"] .n{color:#fff}
 .rail .sil[aria-pressed="true"] .q{color:var(--lime)}
-.rail .th{flex:0 0 auto;width:clamp(78px,7vw,108px);aspect-ratio:16/10;overflow:hidden;opacity:.45;transition:.16s}
-.rail .th:hover{opacity:.8}
+.rail .th{flex:0 0 auto;width:clamp(76px,7vw,110px);aspect-ratio:16/10;overflow:hidden;opacity:.45;transition:.16s}
+.rail.lite .th{opacity:.55;box-shadow:inset 0 0 0 1px var(--line)}
+.rail .th:hover{opacity:.85}
 .rail .th img{width:100%;height:100%;object-fit:cover}
 .rail .th[aria-pressed="true"]{opacity:1;box-shadow:inset 0 0 0 3px var(--lime)}
 
-/* панель шагов */
-.panel{background:var(--paper);display:flex;flex-direction:column;min-height:0;min-width:0}
-.crumb{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:11px clamp(16px,1.7vw,28px);border-bottom:1px solid var(--line)}
-.crumb .back{font-size:12px;color:var(--mute2);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
-.crumb .back:hover{color:var(--ink)}
-.crumb .mn{font-size:14px;font-weight:500;margin-left:auto}
-.crumb img{width:36px;height:22px;object-fit:contain}
-.prog{flex:0 0 auto;display:flex;gap:2px;padding:12px clamp(16px,1.7vw,28px) 0;overflow-x:auto;scrollbar-width:none}
-.prog::-webkit-scrollbar{display:none}
-.prog button{flex:1 1 0;min-width:52px;text-align:center;padding-bottom:11px;position:relative;transition:.15s}
-.prog i{display:block;width:22px;height:22px;margin:0 auto;border-radius:50%;font-style:normal;
-  font-size:11px;line-height:22px;font-weight:500;color:var(--mute);box-shadow:inset 0 0 0 1px var(--line);transition:.15s}
-.prog em{font-style:normal;display:block;font-size:9.5px;letter-spacing:.03em;text-transform:uppercase;
-  color:var(--mute);margin-top:7px;white-space:nowrap}
-.prog button.done i{background:var(--lime);color:var(--ink);box-shadow:none}
-.prog button[aria-current="true"] i{background:var(--ink);color:#fff;box-shadow:none}
-.prog button[aria-current="true"] em{color:var(--ink);font-weight:500}
-.prog button::after{content:"";position:absolute;left:8%;right:8%;bottom:0;height:2px;background:transparent}
-.prog button[aria-current="true"]::after{background:var(--ink)}
-.prog .cn{position:absolute;top:11px;left:calc(50% + 16px);right:calc(-50% + 16px);height:1px;background:var(--line)}
-
-.pb{flex:1 1 auto;overflow-y:auto;min-height:0;padding:20px clamp(16px,1.7vw,28px) 26px;border-top:1px solid var(--line)}
-.step-t{font-size:20px;font-weight:500;letter-spacing:-.025em}
-.step-s{font-size:12.5px;color:var(--mute);margin:5px 0 18px;line-height:1.5}
+/* элементы управления */
 .gh{font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin:20px 0 12px}
 .gh:first-child{margin-top:0}
-.skip{display:inline-block;margin-top:18px;font-size:12.5px;color:var(--mute2);text-decoration:underline;text-underline-offset:3px}
-.skip:hover{color:var(--ink)}
 .note{font-size:12px;color:var(--mute2);background:var(--tint);padding:12px 14px;margin-top:18px;line-height:1.5}
 .fine{font-size:11.5px;color:var(--mute);line-height:1.55;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
 .star{color:var(--mute);font-weight:400}
-
+.chips{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:clamp(12px,1.8vh,20px);flex:0 0 auto}
+.chip{padding:11px 16px;font-size:14px;font-weight:500;box-shadow:inset 0 0 0 1px var(--line);transition:.14s}
+.chip:hover{background:var(--tint)}
+.chip[aria-pressed="true"]{background:var(--tint);box-shadow:inset 0 0 0 2px var(--lime)}
 .rows{display:flex;flex-direction:column;gap:1px;background:var(--line);box-shadow:inset 0 0 0 1px var(--line)}
 .rows button,.rows .r{background:#fff;display:flex;gap:13px;align-items:flex-start;padding:14px;text-align:left;width:100%;transition:.14s}
 .rows button:hover{background:var(--tint)}
@@ -227,28 +236,34 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .rows .t b{display:block;font-size:14.5px;font-weight:500}
 .rows .t span{display:block;font-size:12px;color:var(--mute);margin-top:3px;line-height:1.45}
 .rows .p{flex:0 0 auto;font-size:14px;font-weight:500;white-space:nowrap}
-.rows button[aria-pressed="true"]{background:var(--tint);box-shadow:inset 0 0 0 2px var(--ink)}
 .bx{flex:0 0 auto;width:18px;height:18px;margin-top:2px;box-shadow:inset 0 0 0 1px #c2c2c2;background:#fff;position:relative}
 .rows button[aria-pressed="true"] .bx,.bx.on{background:var(--ink);box-shadow:none}
 .rows button[aria-pressed="true"] .bx::after,.bx.on::after{content:"";position:absolute;left:6px;top:3px;width:4px;height:9px;
   border:solid var(--lime);border-width:0 2px 2px 0;transform:rotate(43deg)}
 .bx.on{opacity:.55}
 .always{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-left:8px;font-weight:400}
-
 .sw{display:flex;gap:11px;flex-wrap:wrap}
 .sw button{width:56px;text-align:center}
 .sw i{display:block;width:56px;height:56px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);transition:.14s}
 .sw button[aria-pressed="true"] i{box-shadow:0 0 0 3px var(--lime)}
 .sw em{font-style:normal;display:block;font-size:9.5px;color:var(--mute);margin-top:6px;line-height:1.25}
 .sw button[aria-pressed="true"] em{color:var(--ink);font-weight:500}
-.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pills{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}
 .pill{padding:10px 14px;font-size:13px;font-weight:500;text-align:left;box-shadow:inset 0 0 0 1px var(--line);transition:.14s}
 .pill small{display:block;font-size:10.5px;font-weight:400;color:var(--mute);margin-top:2px}
 .pill[aria-pressed="true"]{background:var(--tint);box-shadow:inset 0 0 0 2px var(--lime)}
+.spec{border-top:1px solid var(--line)}
+.spec div{display:flex;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid var(--line);font-size:14px}
+.spec span{color:var(--mute2)}.spec b{font-weight:500}
 .ln{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:9px 0;color:var(--mute2);border-bottom:1px solid var(--line)}
 .ln b{font-weight:500;color:var(--ink);white-space:nowrap}
+.add{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:9px 0;color:var(--mute);
+     width:100%;text-align:left;border-bottom:1px solid var(--line)}
+.add:hover{color:var(--ink)}
 input[type=text]{width:100%;padding:13px 15px;font:inherit;font-size:14.5px;box-shadow:inset 0 0 0 1px var(--line);outline:none;background:#fff}
 input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
+.send{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.hint{margin-top:14px;font-size:12px;color:var(--mute);display:flex;align-items:center;gap:8px}
 
 /* ══════ нижняя полоса с ценой ══════ */
 .bar{position:fixed;left:0;right:0;bottom:0;height:var(--bar);z-index:65;background:var(--ink);color:#fff;
@@ -263,14 +278,10 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
   box-shadow:inset 0 -8px 0 var(--lime);white-space:nowrap}
 .bar .est{padding:13px 17px;font-size:13px;box-shadow:inset 0 0 0 1px #4a4a4a;flex:0 0 auto}
 .bar .est:hover{box-shadow:inset 0 0 0 1px #8a8a8a}
-.bar .prev{padding:13px 14px;font-size:13px;color:#8a8a8a;flex:0 0 auto;white-space:nowrap}
-.bar .prev:hover{color:#fff}
-.bar .prev .pl{margin-left:6px}
 .bar .go{background:var(--lime);color:var(--ink);padding:13px 20px;font-size:14px;font-weight:500;flex:0 0 auto;white-space:nowrap}
 .bar .go:hover{background:var(--lime-dk)}
 @media(max-width:1000px){.bar .inc{display:none}}
-@media(max-width:700px){.bar{gap:8px}.bar .est,.bar .prev .pl{display:none}.bar .obj .v{font-size:12.5px}
-  .bar .prev{font-size:16px;padding:13px 10px}}
+@media(max-width:700px){.bar{gap:8px}.bar .est{display:none}.bar .obj .v{font-size:12.5px}}
 
 /* ══════ смета ══════ */
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.44);z-index:70;opacity:0;pointer-events:none;transition:opacity .28s}
@@ -285,8 +296,6 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 .db{flex:1 1 auto;overflow-y:auto;padding:22px}
 .db h4{font-size:19px;font-weight:500;letter-spacing:-.02em}
 .db .cfg2{font-size:12.5px;color:var(--mute);margin-top:6px}
-.add{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:9px 0;color:var(--mute);width:100%;text-align:left;border-bottom:1px solid var(--line)}
-.add:hover{color:var(--ink)}
 .dfoot{flex:0 0 auto;padding:18px 22px;border-top:1px solid var(--ink)}
 .dfoot .row{display:flex;justify-content:space-between;align-items:flex-end}
 .dfoot .s{font-size:26px;font-weight:500;letter-spacing:-.03em;box-shadow:inset 0 -8px 0 var(--lime)}
@@ -296,13 +305,12 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 @media(max-width:900px){
   .sc{padding:44px 18px 52px}
   #hero{min-height:76vh;padding-top:calc(var(--hd) + 90px)}
-  #cfg{overflow-y:auto}
-  #cfg.on,#cfg.solo{display:block}
-  .stage{height:auto}
-  .view{aspect-ratio:16/10;flex:0 0 auto}
-  .panel{border-top:1px solid var(--line)}
-  .pb{overflow:visible}
   .cut{position:static}
+  .st{min-height:auto;padding:26px 16px 34px}
+  #st0{min-height:auto}
+  #st0 .view{min-height:0;aspect-ratio:16/10}
+  .view{min-height:0;aspect-ratio:16/10}
+  .frame{min-height:0;aspect-ratio:4/3}
 }
 </style>
 </head>
@@ -331,7 +339,7 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
     </div>
   </section>
 
-  <!-- ── 01 технология ── тексты взяты из презентации, правятся прямо здесь ── -->
+  <!-- ── 01 технология ── тексты из презентации, правятся прямо здесь ── -->
   <section class="sc light" id="tech">
     <div class="wrap split">
       <div>
@@ -411,34 +419,134 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 
 </main>
 
-<!-- ══════ КОНФИГУРАТОР ══════ -->
+<!-- ══════ КОНФИГУРАТОР: шаги идут сверху вниз ══════ -->
 <div id="cfg">
-  <div class="stage">
-    <div class="view" id="view">
-      <img class="bgfill" id="vBg" alt="" aria-hidden="true">
-      <img class="main" id="vImg" alt="">
-      <div class="shade"></div>
-      <img class="silo" id="vSil" alt="" aria-hidden="true">
-      <div class="cnt" id="vCnt"></div>
-      <button class="arw p" id="aPrev" aria-label="Предыдущий кадр">‹</button>
-      <button class="arw n" id="aNext" aria-label="Следующий кадр">›</button>
-      <div class="cap">
-        <div><h3 id="vName"></h3><div class="m" id="vMeta"></div></div>
-        <button class="btn btn-l" id="vCta">Это мой дом →</button>
-      </div>
-    </div>
-    <div class="rail" id="rail"></div>
+
+  <div class="cbar">
+    <button class="back" id="toStart">‹ все модели</button>
+    <span class="mn"><img id="cSil" alt=""><span id="cName"></span></span>
+    <nav id="nav"></nav>
   </div>
 
-  <aside class="panel" id="panel">
-    <div class="crumb">
-      <button class="back" id="toStart">‹ все модели</button>
-      <span class="mn" id="cName"></span>
-      <img id="cSil" alt="">
+  <!-- 0 дом -->
+  <section class="st" id="st0">
+    <div class="view" id="v0">
+      <img class="bgfill" id="v0bg" alt="" aria-hidden="true">
+      <img class="main" id="v0img" alt="">
+      <div class="shade"></div>
+      <img class="silo" id="v0sil" alt="" aria-hidden="true">
+      <div class="cnt" id="v0cnt"></div>
+      <button class="arw p" id="a0p" aria-label="Предыдущая модель">‹</button>
+      <button class="arw n" id="a0n" aria-label="Следующая модель">›</button>
+      <div class="cap">
+        <div><h4 id="v0name"></h4><div class="m" id="v0meta"></div></div>
+        <button class="btn btn-l" id="v0cta">Собрать этот дом ↓</button>
+      </div>
     </div>
-    <div class="prog" id="prog"></div>
-    <div class="pb" id="pb"></div>
-  </aside>
+    <div class="rail" id="rail0"></div>
+  </section>
+
+  <!-- 1 планировка -->
+  <section class="st" id="st1">
+    <div class="sthd">
+      <div class="eyebrow"><span class="no">01</span><span class="lbl">Планировка</span></div>
+      <h3>Габариты вашего будущего дома и состав помещений</h3>
+    </div>
+    <div class="chips" id="chips1"></div>
+    <div class="two">
+      <div>
+        <div class="frame"><img id="planImg" alt=""><div class="tag" id="planTag"></div></div>
+      </div>
+      <div class="col">
+        <div class="gh">Состав</div>
+        <div class="spec" id="spec1"></div>
+        <div class="note">Планировку можно адаптировать: перенести перегородки, изменить состав санузлов. Обсуждается с архитектором до запуска в производство.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 экстерьер -->
+  <section class="st" id="st2">
+    <div class="sthd">
+      <div class="eyebrow"><span class="no">02</span><span class="lbl">Экстерьер</span></div>
+      <h3>Кровля, фасадная доска и оконный профиль</h3>
+    </div>
+    <div class="two">
+      <div>
+        <div class="view" id="v2">
+          <img class="bgfill" id="v2bg" alt="" aria-hidden="true">
+          <img class="main" id="v2img" alt="">
+          <div class="shade"></div>
+          <button class="arw p" id="a2p" aria-label="Предыдущий кадр">‹</button>
+          <button class="arw n" id="a2n" aria-label="Следующий кадр">›</button>
+          <div class="cap"><div><div class="m" id="v2meta"></div></div></div>
+        </div>
+        <div class="rail lite" id="rail2"></div>
+      </div>
+      <div class="col" id="opt2"></div>
+    </div>
+  </section>
+
+  <!-- 3 комплектация -->
+  <section class="st" id="st3">
+    <div class="sthd">
+      <div class="eyebrow"><span class="no">03</span><span class="lbl">Комплектация</span></div>
+      <h3>Уровень готовности</h3>
+      <p>Домокомплект внешнего контура входит всегда. Остальное отмечайте по отдельности — любой этап можно заказать позже.</p>
+    </div>
+    <div class="two">
+      <div class="col"><div class="rows" id="rows3"></div></div>
+      <div class="col">
+        <div class="gh">Что получится</div>
+        <div id="side3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 интерьер -->
+  <section class="st" id="st4">
+    <div class="sthd">
+      <div class="eyebrow"><span class="no">04</span><span class="lbl">Интерьер</span></div>
+      <h3>Отделка внутри <span style="font-size:13px;color:var(--mute);font-weight:400">· по желанию</span></h3>
+      <p>Можно выбрать сейчас, а можно вернуться к этому после договора.</p>
+    </div>
+    <div class="pills" id="pills4"></div>
+    <div class="two" style="margin-top:clamp(12px,1.8vh,20px)">
+      <div>
+        <div class="view" id="v4">
+          <img class="bgfill" id="v4bg" alt="" aria-hidden="true">
+          <img class="main" id="v4img" alt="">
+          <div class="shade"></div>
+          <button class="arw p" id="a4p" aria-label="Предыдущий кадр">‹</button>
+          <button class="arw n" id="a4n" aria-label="Следующий кадр">›</button>
+          <div class="cap"><div><div class="m" id="v4meta"></div></div></div>
+        </div>
+        <div class="rail lite" id="rail4"></div>
+      </div>
+      <div class="col" id="opt4"></div>
+    </div>
+  </section>
+
+  <!-- 5 заявка -->
+  <section class="st" id="st5">
+    <div class="sthd">
+      <div class="eyebrow"><span class="no">05</span><span class="lbl">Заявка</span></div>
+      <h3>Ваш расчёт</h3>
+      <p id="sumHead"></p>
+    </div>
+    <div class="two">
+      <div class="col" id="sum5"></div>
+      <div class="col">
+        <div class="gh">Доставка и связь</div>
+        <input type="text" id="city" placeholder="Город и область">
+        <div class="send"><button class="btn btn-l" id="send">Отправить заявку</button></div>
+        <div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей территории РФ.<br>
+        <b>**</b> Расчёт справочный и не является публичной офертой.<br>
+        Сборка сохраняется в этом браузере автоматически.</div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
 <div class="bar" id="bar">
@@ -446,8 +554,7 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
   <div class="inc"><div class="k">Включено</div><div class="v" id="bInc">—</div></div>
   <div class="tot"><div class="k">Итого</div><div class="s" id="bTot">—</div></div>
   <button class="est" id="bEst">Смета ▸</button>
-  <button class="prev" id="bPrev" aria-label="Назад">‹</button>
-  <button class="go" id="bNext">Далее →</button>
+  <button class="go" id="bNext">Далее ↓</button>
 </div>
 
 <div class="scrim" id="scrim"></div>
@@ -462,7 +569,7 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 
 <script>
 'use strict';
-const VERSION='4.0';
+const VERSION='4.1';
 const DATA = __DATA__, EX = __EX__, INT = __INT__, SIL = __SIL__;
 // картинки витрины из папки content/<бренд>/site/ — ключ равен имени файла
 const SITE = __SITE__;
@@ -482,25 +589,17 @@ const WAL =[['#f2f0ec','Белый'],['#ded8cc','Тёплый'],['#c4c4c0','Се
 const KIT =[['#eeece8','Белый'],['#96744e','Орех'],['#3c423e','Хвоя'],['#282828','Графит']];
 const MODES=[['Без отделки','черновой пол и обрешётка'],['Под чистовую','стены под финиш'],
  ['Светлый','дуб, белые стены'],['Тёплый','орех, тёплый белый'],['Графит','тёмный пол, хвоя']];
-
-/* шаги: 0 — подтверждение дома на весь экран, дальше сборка */
-const STEPS=[
- {t:'Дом',    full:true},
- {t:'План',   full:false},
- {t:'Фасад',  full:false},
- {t:'Пакет',  full:false},
- {t:'Внутри', full:false},
- {t:'Смета',  full:false}];
-const STEPFULL=['Дом','Планировка','Экстерьер','Комплектация','Интерьер','Заявка'];
+const STEPS=['Дом','Планировка','Экстерьер','Комплектация','Интерьер','Заявка'];
 
 let S={screen:'show',step:0,m:0,v:0,add:{rab:false,fund:false,otd:false,inzh:false},
        roof:1,fac:0,pro:0,mode:0,flr:0,wal:0,kit:1,exIdx:1,inIdx:0,city:'',
        visited:[false,false,false,false,false,false],touched:false};
 try{const sv=JSON.parse(localStorage.getItem('skyframe4')||'null');
-    if(sv&&sv.v===VERSION&&DATA[sv.S&&sv.S.m]) S=Object.assign(S,sv.S,{screen:'show'});}catch(e){}
+    if(sv&&sv.v===VERSION&&DATA[sv.S&&sv.S.m]) S=Object.assign(S,sv.S,{screen:'show',step:0});}catch(e){}
 const persist=()=>{try{localStorage.setItem('skyframe4',JSON.stringify({v:VERSION,S}))}catch(e){}};
 
 const $=id=>document.getElementById(id);
+const qsa=(el,s)=>Array.prototype.slice.call(el.querySelectorAll(s));
 const rub=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽';
 const pl=(n,a,b,c)=>{const m=n%100,k=n%10;return m>=11&&m<=14?c:k===1?a:k>=2&&k<=4?b:c};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -516,6 +615,19 @@ const lvl=()=>{const o=k=>S.add[k];
   if(o('rab')&&o('fund')&&!o('otd')&&!o('inzh'))return'Под чистовую с монтажом';
   return chosen().length?'Своя комплектация':'Только домокомплект'};
 const extName=()=>ROOF[S.roof][1]+' / '+FAC[S.fac][1].toLowerCase()+' / '+PRO[S.pro][1].toLowerCase();
+const sw=(arr,cur,key)=>'<div class="sw">'+arr.map((x,i)=>
+  '<button aria-pressed="'+(i===cur)+'" data-sw="'+key+'" data-i="'+i+'">'+
+  '<i style="background:'+x[0]+'"></i><em>'+x[1]+'</em></button>').join('')+'</div>';
+// старый кадр держится на экране, пока новый не догрузится — без миганий
+function swapImg(el,src,alt){
+  if(el.dataset.cur===src){el.alt=alt;return}
+  el.dataset.cur=src;
+  const t=new Image();
+  t.onload=()=>{ if(el.dataset.cur!==src)return; el.classList.add('ld');
+    setTimeout(()=>{el.src=src;el.alt=alt;el.classList.remove('ld')},110); };
+  t.onerror=()=>{ if(el.dataset.cur===src){el.src=src;el.alt=alt;} };
+  t.src=src;
+}
 
 /* ═══════════ ВИТРИНА ═══════════ */
 function renderFacts(){
@@ -523,7 +635,7 @@ function renderFacts(){
   const f=[[DATA.length,'моделей'],
            [DATA.reduce((s,m)=>s+m.variants.length,0),'конфигураций'],
            [Math.min.apply(null,all)+'–'+Math.max.apply(null,all),'м² площадь'],
-           ['30–120','дней производство'],['R 5.88','норма 3.2']];
+           ['30–90','дней производство'],['R 5.88','норма 3.2']];
   $('facts').innerHTML=f.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
   $('heroImg').src=DATA[Math.min(4,DATA.length-1)].photo;
 }
@@ -539,7 +651,7 @@ function renderGrid(){
   $('mSub').innerHTML=DATA.length+' '+pl(DATA.length,'модель','модели','моделей')+' · '+
     DATA.reduce((s,m)=>s+m.variants.length,0)+' конфигураций · домокомплект от '+
     rub(Math.min.apply(null,DATA.map(minKit)))+
-    '. Кликните по дому — и соберите его по шагам: планировка, экстерьер, комплектация.';
+    '. Кликните по дому — и соберите его, листая экран вниз: планировка, экстерьер, комплектация.';
   $('grid').innerHTML=DATA.map((m,i)=>
     '<button class="card" data-i="'+i+'">'+
       '<span class="go">Собрать →</span>'+
@@ -549,7 +661,7 @@ function renderGrid(){
         '<span><span class="n">'+esc(m.name)+'</span>'+
         '<span class="q">'+sq(m)+' · '+cfgWord(m)+'<br>домокомплект <b>от '+rub(minKit(m))+'</b></span></span>'+
       '</span></button>').join('');
-  Array.prototype.forEach.call($('grid').querySelectorAll('.card'),b=>b.onclick=()=>enter(+b.dataset.i));
+  qsa($('grid'),'.card').forEach(b=>b.onclick=()=>enter(+b.dataset.i));
 }
 function renderResume(){
   const r=$('resume');
@@ -557,222 +669,192 @@ function renderResume(){
   r.hidden=false;
   r.innerHTML='Продолжить сборку: <b>'+esc(M().name)+', '+V().m2+' м² · от '+rub(total())+'</b> →';
 }
-function scrollTo_(id){
+function scrollPage(id){
   const el=$(id); if(!el) return;
-  const hd=$('hdr') ? $('hdr').offsetHeight : 60;
-  const y=el.getBoundingClientRect().top+(window.pageYOffset||0)-hd;
+  const y=el.getBoundingClientRect().top+(window.pageYOffset||0)-($('hdr')?$('hdr').offsetHeight:60);
   window.scrollTo({top:Math.max(0,y),behavior:'smooth'});
 }
 
-/* ═══════════ СЦЕНА ═══════════ */
-function swapImg(el,src,alt){
-  if(el.dataset.cur===src){el.alt=alt;return}
-  el.dataset.cur=src;
-  const t=new Image();
-  t.onload=()=>{ if(el.dataset.cur!==src)return; el.classList.add('ld');
-    setTimeout(()=>{el.src=src;el.alt=alt;el.classList.remove('ld')},110); };
-  t.onerror=()=>{ if(el.dataset.cur===src){el.src=src;el.alt=alt;} };
-  t.src=src;
-}
-function renderStage(){
-  const m=M(), v=V(), st=S.step, view=$('view');
-  view.classList.toggle('contain', st===1);
-  let src=m.photo, name=m.name, meta='', cnt='';
-
-  if(st===0){
-    meta=esc(m.factory).toUpperCase()+' · '+sq(m)+' · '+cfgWord(m)+' · домокомплект от <b>'+rub(minKit(m))+'</b>';
-    cnt=String(S.m+1).padStart(2,'0')+' / '+String(DATA.length).padStart(2,'0');
-  }else if(st===1){
-    src=v.plan; name='Планировка · '+v.title;
-    meta=esc(m.name)+' · '+v.m2+' м² · потолок до 3,2 м · производство 30–120 дней';
-    cnt=String(S.v+1).padStart(2,'0')+' / '+String(m.variants.length).padStart(2,'0');
-  }else if(st===2){
-    src=EX[S.exIdx]||m.photo;
-    meta='Экстерьер: <b>'+esc(extName())+'</b> — не меняет стоимость домокомплекта';
-  }else if(st===3){
-    meta=esc(v.title)+' · <b>'+esc(lvl())+'</b>';
-  }else if(st===4){
-    src=INT[S.inIdx]||m.photo;
-    meta='Интерьер: <b>'+esc(MODES[S.mode][0])+'</b>'+(S.mode>=2?' · '+FLR[S.flr][1].toLowerCase()+', стены '+WAL[S.wal][1].toLowerCase():'');
-  }else{
-    meta=esc(v.title)+' · '+esc(lvl().toLowerCase())+' · <b>от '+rub(total())+'</b>';
-  }
-
-  swapImg($('vImg'),src,name);
-  $('vBg').src=src;
-  $('vSil').src=SIL[S.m];
-  $('vName').textContent=name;
-  $('vMeta').innerHTML=meta;
-  $('vCnt').textContent=cnt;
-  $('vCta').style.display = st===0 ? 'inline-flex' : 'none';
-
-  const arrows = st===0 ? DATA.length>1 : st===1 ? m.variants.length>1 : st===2 ? EX.length>1 : st===4 ? INT.length>1 : false;
-  $('aPrev').style.display=$('aNext').style.display=arrows?'grid':'none';
-
-  const rail=$('rail');
-  if(st===0){
-    rail.className='rail on';
-    rail.innerHTML=DATA.map((x,i)=>
-      '<button class="sil" aria-pressed="'+(i===S.m)+'" data-m="'+i+'">'+
-        '<img src="'+SIL[i]+'" alt="" aria-hidden="true">'+
-        '<span class="n">'+esc(x.name)+'</span><span class="q">от '+rub(minKit(x))+'</span></button>').join('');
-    Array.prototype.forEach.call(rail.querySelectorAll('[data-m]'),b=>b.onclick=()=>pickModel(+b.dataset.m));
-    const cur=rail.children[S.m];
-    if(cur){ const x=cur.offsetLeft-(rail.clientWidth-cur.clientWidth)/2;
-      // двигаем только ленту по горизонтали; вертикаль страницы не трогаем
-      if(rail.scrollTo) rail.scrollTo({left:x,behavior:booted?'smooth':'auto'}); else rail.scrollLeft=x; }
-  }else if(st===2||st===4){
-    const arr = st===2?EX:INT, key = st===2?'exIdx':'inIdx';
-    rail.className='rail on';
-    rail.innerHTML=arr.map((s,i)=>
-      '<button class="th" aria-pressed="'+(i===S[key])+'" data-i="'+i+'"><img src="'+s+'" alt=""></button>').join('');
-    Array.prototype.forEach.call(rail.querySelectorAll('[data-i]'),b=>b.onclick=()=>{
-      S[key]=+b.dataset.i; if(st===2) S.roof=Math.min(S.exIdx,ROOF.length-1); render(); });
-  }else{ rail.className='rail'; rail.innerHTML=''; }
-}
-function stageArrow(d){
-  if(S.step===0){ pickModel((S.m+d+DATA.length)%DATA.length); return; }
-  if(S.step===1){ S.v=(S.v+d+M().variants.length)%M().variants.length; }
-  else if(S.step===2){ S.exIdx=(S.exIdx+d+EX.length)%EX.length; S.roof=Math.min(S.exIdx,ROOF.length-1); }
-  else if(S.step===4){ S.inIdx=(S.inIdx+d+INT.length)%INT.length; }
-  render();
+/* ═══════════ ШАГ 0 · ДОМ ═══════════ */
+function renderHouse(){
+  const m=M();
+  swapImg($('v0img'),m.photo,m.name);
+  $('v0bg').src=m.photo;
+  $('v0sil').src=SIL[S.m];
+  $('v0name').textContent=m.name;
+  $('v0meta').innerHTML=esc(m.factory).toUpperCase()+' · '+sq(m)+' · '+cfgWord(m)+
+    ' · домокомплект от <b>'+rub(minKit(m))+'</b>';
+  $('v0cnt').textContent=String(S.m+1).padStart(2,'0')+' / '+String(DATA.length).padStart(2,'0');
+  const rail=$('rail0');
+  rail.innerHTML=DATA.map((x,i)=>
+    '<button class="sil" aria-pressed="'+(i===S.m)+'" data-m="'+i+'">'+
+      '<img src="'+SIL[i]+'" alt="" aria-hidden="true">'+
+      '<span class="n">'+esc(x.name)+'</span><span class="q">от '+rub(minKit(x))+'</span></button>').join('');
+  qsa(rail,'[data-m]').forEach(b=>b.onclick=()=>pickModel(+b.dataset.m));
+  const cur=rail.children[S.m];
+  if(cur){ const x=cur.offsetLeft-(rail.clientWidth-cur.clientWidth)/2;
+    if(rail.scrollTo) rail.scrollTo({left:x,behavior:booted?'smooth':'auto'}); else rail.scrollLeft=x; }
 }
 
-/* ═══════════ ПАНЕЛЬ ═══════════ */
-const sw=(arr,cur,key)=>'<div class="sw">'+arr.map((x,i)=>
-  '<button aria-pressed="'+(i===cur)+'" data-sw="'+key+'" data-i="'+i+'">'+
-  '<i style="background:'+x[0]+'"></i><em>'+x[1]+'</em></button>').join('')+'</div>';
-
-function stepHtml(){
+/* ═══════════ ШАГ 1 · ПЛАНИРОВКА ═══════════ */
+function renderPlan(){
   const m=M(), v=V();
-  switch(S.step){
-  case 1: return '<div class="step-t">Планировка и площадь</div>'+
-    '<div class="step-s">Габариты будущего дома и состав помещений. Чертёж — слева, перегородки и санузлы можно адаптировать.</div>'+
-    '<div class="rows">'+m.variants.map((x,i)=>
-      '<button aria-pressed="'+(i===S.v)+'" data-var="'+i+'">'+
-      '<span class="t"><b>'+esc(x.title)+'</b><span>домокомплект '+rub(x.mat)+'</span></span>'+
-      '<span class="p">'+x.m2+' м²</span></button>').join('')+'</div>';
+  $('chips1').innerHTML=m.variants.map((x,i)=>
+    '<button class="chip" aria-pressed="'+(i===S.v)+'" data-var="'+i+'">'+esc(x.title)+'</button>').join('');
+  qsa($('chips1'),'[data-var]').forEach(b=>b.onclick=()=>{S.v=+b.dataset.var;render()});
+  swapImg($('planImg'),v.plan,'Планировка '+m.name+', '+v.title);
+  $('planTag').textContent=m.name+' · '+esc(v.title);
+  $('spec1').innerHTML=[['Площадь',v.m2+' м²'],['Конфигурация',v.title],['Домокомплект',rub(v.mat)],
+    ['Высота потолка','до 3,2 м'],['Производство','30–90 дней'],['Монтаж контура','2–15 дней']]
+    .map(x=>'<div><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>').join('');
+}
 
-  case 2: return '<div class="step-t">Экстерьер</div>'+
-    '<div class="step-s">Цвет кровли меняет кадр слева. Фасадная доска и оконный профиль — образцами.</div>'+
-    '<div class="gh">Цвет кровли</div>'+sw(ROOF,S.roof,'roof')+
+/* ═══════════ ШАГ 2 · ЭКСТЕРЬЕР ═══════════ */
+function renderExt(){
+  const src=EX[S.exIdx]||M().photo;
+  swapImg($('v2img'),src,'Экстерьер');
+  $('v2bg').src=src;
+  $('v2meta').innerHTML='Экстерьер: <b>'+esc(extName())+'</b> — не меняет стоимость домокомплекта';
+  const rail=$('rail2');
+  rail.innerHTML=EX.map((s,i)=>
+    '<button class="th" aria-pressed="'+(i===S.exIdx)+'" data-i="'+i+'"><img src="'+s+'" alt=""></button>').join('');
+  qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{S.exIdx=+b.dataset.i;S.roof=Math.min(S.exIdx,ROOF.length-1);render()});
+  $('opt2').innerHTML='<div class="gh">Цвет кровли</div>'+sw(ROOF,S.roof,'roof')+
     '<div class="gh">Фасадная доска</div>'+sw(FAC,S.fac,'fac')+
     '<div class="gh">Оконный профиль</div>'+sw(PRO,S.pro,'pro')+
     '<div class="note">Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.</div>';
+  bindSw($('opt2'));
+}
 
-  case 3: return '<div class="step-t">Уровень готовности</div>'+
-    '<div class="step-s">Домокомплект входит всегда. Остальное отмечайте по отдельности — любой этап можно заказать позже.</div>'+
-    '<div class="rows"><div class="r"><span class="bx on"></span>'+
-      '<span class="t"><b>Домокомплект внешнего контура<span class="always">включено</span></b>'+
-      '<span>Утеплённые панели пола, стен и кровли, окна, двери, фасадная доска.</span></span>'+
-      '<span class="p">'+rub(v.mat)+'</span></div>'+
+/* ═══════════ ШАГ 3 · КОМПЛЕКТАЦИЯ ═══════════ */
+function renderPack(){
+  const v=V();
+  $('rows3').innerHTML='<div class="r"><span class="bx on"></span>'+
+    '<span class="t"><b>Домокомплект внешнего контура<span class="always">включено</span></b>'+
+    '<span>Утеплённые панели пола, стен и кровли, окна, двери, фасадная доска.</span></span>'+
+    '<span class="p">'+rub(v.mat)+'</span></div>'+
     ADDONS.map(a=>'<button data-chk="'+a.k+'" aria-pressed="'+(!!S.add[a.k])+'">'+
       '<span class="bx"></span><span class="t"><b>'+a.n+' <span class="star">*</span></b>'+
-      '<span>'+a.d+'</span></span><span class="p">от '+rub(v[a.k])+'</span></button>').join('')+'</div>'+
+      '<span>'+a.d+'</span></span><span class="p">от '+rub(v[a.k])+'</span></button>').join('');
+  qsa($('rows3'),'[data-chk]').forEach(b=>b.onclick=()=>{S.add[b.dataset.chk]=!S.add[b.dataset.chk];render()});
+  const inc=['mat'].concat(chosen().map(a=>a.k));
+  $('side3').innerHTML='<div style="font-size:17px;font-weight:500;letter-spacing:-.02em">'+esc(lvl())+'</div>'+
+    '<div style="margin-top:14px">'+
+    inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?' <span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
+    '</div>'+
+    '<div class="ln" style="border-bottom:0;padding-top:14px"><span>Итого</span><b style="font-size:18px">от '+rub(total())+'</b></div>'+
     '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей территории РФ.</div>';
-
-  case 4: return '<div class="step-t">Интерьер <span style="font-size:12px;color:var(--mute);font-weight:400">· по желанию</span></div>'+
-    '<div class="step-s">Можно выбрать сейчас, а можно вернуться к этому после договора.</div>'+
-    '<div class="pills">'+MODES.map((x,i)=>
-      '<button class="pill" aria-pressed="'+(i===S.mode)+'" data-mode="'+i+'">'+x[0]+'<small>'+x[1]+'</small></button>').join('')+'</div>'+
-    (S.mode<2
-      ? '<div class="note">'+MODES[S.mode][1]+'. Материалы выбираются, когда добавлена чистовая отделка на шаге «Комплектация».</div>'
-      : '<div class="gh">Пол</div>'+sw(FLR,S.flr,'flr')+
-        '<div class="gh">Стены</div>'+sw(WAL,S.wal,'wal')+
-        '<div class="gh">Мебельные фасады</div>'+sw(KIT,S.kit,'kit'))+
-    '<button class="skip" data-skip>Пропустить — сразу к смете →</button>';
-
-  case 5: {
-    const inc=['mat'].concat(chosen().map(a=>a.k));
-    return '<div class="step-t">Ваш расчёт</div>'+
-      '<div class="step-s">'+esc(m.name)+', '+esc(v.title)+' · '+esc(lvl().toLowerCase())+' · '+esc(extName().toLowerCase())+'</div>'+
-      inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?' <span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
-      ADDONS.filter(a=>!S.add[a.k]).map(a=>
-        '<div class="ln" style="opacity:.45"><span>'+a.n+' — не выбрано</span><b>от '+rub(v[a.k])+'</b></div>').join('')+
-      '<div class="gh" style="margin-top:22px">Доставка</div>'+
-      '<input type="text" id="city" placeholder="Город и область" value="'+esc(S.city)+'">'+
-      '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы.<br>'+
-      '<b>**</b> Расчёт справочный и не является публичной офертой.<br>'+
-      'Сборка сохраняется в этом браузере автоматически.</div>';
-  }
-  default: return '';
-  }
 }
-function bindStep(){
-  const pb=$('pb'), q=s=>Array.prototype.slice.call(pb.querySelectorAll(s));
-  q('[data-var]').forEach(b=>b.onclick=()=>{S.v=+b.dataset.var;render()});
-  q('[data-sw]').forEach(b=>b.onclick=()=>{
+
+/* ═══════════ ШАГ 4 · ИНТЕРЬЕР ═══════════ */
+function renderInt(){
+  $('pills4').innerHTML=MODES.map((x,i)=>
+    '<button class="pill" aria-pressed="'+(i===S.mode)+'" data-mode="'+i+'">'+x[0]+'<small>'+x[1]+'</small></button>').join('');
+  qsa($('pills4'),'[data-mode]').forEach(b=>b.onclick=()=>{S.mode=+b.dataset.mode;render()});
+  const src=INT[S.inIdx]||M().photo;
+  swapImg($('v4img'),src,'Интерьер');
+  $('v4bg').src=src;
+  $('v4meta').innerHTML='Интерьер: <b>'+esc(MODES[S.mode][0])+'</b>'+
+    (S.mode>=2?' · '+FLR[S.flr][1].toLowerCase()+', стены '+WAL[S.wal][1].toLowerCase():'');
+  const rail=$('rail4');
+  rail.innerHTML=INT.map((s,i)=>
+    '<button class="th" aria-pressed="'+(i===S.inIdx)+'" data-i="'+i+'"><img src="'+s+'" alt=""></button>').join('');
+  qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{S.inIdx=+b.dataset.i;render()});
+  $('opt4').innerHTML = S.mode<2
+    ? '<div class="note">'+MODES[S.mode][1]+'. Материалы выбираются, когда добавлена чистовая отделка на шаге «Комплектация».</div>'
+    : '<div class="gh">Пол</div>'+sw(FLR,S.flr,'flr')+
+      '<div class="gh">Стены</div>'+sw(WAL,S.wal,'wal')+
+      '<div class="gh">Мебельные фасады</div>'+sw(KIT,S.kit,'kit');
+  bindSw($('opt4'));
+}
+function bindSw(root){
+  qsa(root,'[data-sw]').forEach(b=>b.onclick=()=>{
     const k=b.dataset.sw,i=+b.dataset.i;
     if(k==='roof'){S.roof=i;S.exIdx=Math.min(i,EX.length-1)}
     else if(k==='fac')S.fac=i; else if(k==='pro')S.pro=i;
     else if(k==='flr')S.flr=i; else if(k==='wal')S.wal=i; else S.kit=i;
     render();
   });
-  q('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=+b.dataset.mode;render()});
-  q('[data-chk]').forEach(b=>b.onclick=()=>{S.add[b.dataset.chk]=!S.add[b.dataset.chk];render()});
-  const sk=pb.querySelector('[data-skip]'); if(sk) sk.onclick=()=>go(5);
-  const c=pb.querySelector('#city'); if(c) c.oninput=e=>{S.city=e.target.value;persist()};
-}
-function renderPanel(){
-  $('cName').textContent=M().name;
-  $('cSil').src=SIL[S.m];
-  $('prog').innerHTML=STEPS.map((s,i)=>
-    '<button aria-current="'+(i===S.step)+'" class="'+(S.visited[i]&&i!==S.step?'done':'')+'" '+
-    'data-tab="'+i+'" title="'+STEPFULL[i]+'">'+
-    (i<STEPS.length-1?'<span class="cn"></span>':'')+
-    '<i>'+String(i+1).padStart(2,'0')+'</i><em>'+s.t+'</em></button>').join('');
-  Array.prototype.forEach.call($('prog').querySelectorAll('[data-tab]'),b=>b.onclick=()=>go(+b.dataset.tab));
-  $('pb').innerHTML=stepHtml();
-  bindStep();
 }
 
-/* ═══════════ НИЖНЯЯ ПОЛОСА И СМЕТА ═══════════ */
+/* ═══════════ ШАГ 5 · ЗАЯВКА ═══════════ */
 function sumHtml(){
   const v=V(), inc=['mat'].concat(chosen().map(a=>a.k)), rest=ADDONS.filter(a=>!S.add[a.k]);
-  return '<h4>'+esc(M().name)+', '+esc(v.title)+'</h4>'+
-    '<div class="cfg2">'+esc(lvl())+' · '+esc(extName().toLowerCase())+'</div>'+
-    '<div style="margin-top:16px">'+
-    inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?' <span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
-    '</div>'+(rest.length?'<div class="gh">Можно добавить</div>':'')+
+  return inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?' <span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
+    '<div class="ln" style="border-bottom:0;padding-top:14px"><span>Итого</span><b style="font-size:19px">от '+rub(total())+'</b></div>'+
+    (rest.length?'<div class="gh">Можно добавить</div>':'')+
     rest.map(a=>'<button class="add" data-add="'+a.k+'"><span>'+a.n+'</span><b>от '+rub(v[a.k])+'</b></button>').join('')+
     '<div class="add" style="cursor:default"><span>Доставка</span><b>'+
-      (S.city.trim()?'посчитаем по '+esc(S.city):'уточните регион')+'</b></div>'+
-    '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей территории РФ.<br>'+
-    '<b>**</b> Расчёт справочный и не является публичной офертой.</div>';
+      (S.city.trim()?'посчитаем по '+esc(S.city):'уточните регион')+'</b></div>';
 }
+function renderSum(){
+  const m=M(), v=V();
+  $('sumHead').textContent=m.name+', '+v.title+' · '+lvl().toLowerCase()+' · '+extName().toLowerCase();
+  $('sum5').innerHTML=sumHtml();
+  qsa($('sum5'),'[data-add]').forEach(b=>b.onclick=()=>{S.add[b.dataset.add]=true;render()});
+  if($('city').value!==S.city) $('city').value=S.city;
+}
+
+/* ═══════════ ПОЛОСА ЦЕНЫ И СМЕТА ═══════════ */
 function renderBar(){
   const v=V(), star=chosen().length?' *':'';
   $('bObj').textContent=M().name+' · '+v.m2+' м² · '+ROOF[S.roof][1].toLowerCase()+' / '+FAC[S.fac][1].toLowerCase();
   $('bInc').textContent=lvl();
   $('bTot').textContent='от '+rub(total())+star;
   $('dTot').textContent='от '+rub(total())+star;
-  $('bNext').textContent = S.step===STEPS.length-1 ? 'Оставить заявку' : 'Далее · '+STEPFULL[S.step+1];
-  $('bPrev').innerHTML = '‹<span class="pl">'+(S.step===0?'все модели':esc(STEPFULL[S.step-1]))+'</span>';
-  $('dBody').innerHTML=sumHtml();
-  Array.prototype.forEach.call($('dBody').querySelectorAll('[data-add]'),b=>
-    b.onclick=()=>{S.add[b.dataset.add]=true;render()});
+  $('bNext').textContent = S.step>=STEPS.length-1 ? 'Оставить заявку' : 'Далее · '+STEPS[S.step+1]+' ↓';
+  $('dBody').innerHTML='<h4>'+esc(M().name)+', '+esc(v.title)+'</h4>'+
+    '<div class="cfg2">'+esc(lvl())+' · '+esc(extName().toLowerCase())+'</div>'+
+    '<div style="margin-top:16px">'+sumHtml()+'</div>'+
+    '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы.<br>'+
+    '<b>**</b> Расчёт справочный и не является публичной офертой.</div>';
+  qsa($('dBody'),'[data-add]').forEach(b=>b.onclick=()=>{S.add[b.dataset.add]=true;render()});
 }
 const openDrawer =()=>{$('drawer').classList.add('on');$('scrim').classList.add('on')};
 const closeDrawer=()=>{$('drawer').classList.remove('on');$('scrim').classList.remove('on')};
 
-/* ═══════════ ПЕРЕХОДЫ ═══════════ */
-let backTo=0; // куда вернуть страницу, когда выйдем из конфигуратора
+/* ═══════════ НАВИГАЦИЯ ПО ШАГАМ ═══════════ */
+function syncNav(){
+  $('nav').innerHTML=STEPS.map((t,i)=>
+    '<button data-go="'+i+'" aria-current="'+(i===S.step)+'" class="'+(S.visited[i]&&i!==S.step?'done':'')+'">'+
+    '<i>'+(S.visited[i]&&i!==S.step?'✓':String(i+1).padStart(2,'0'))+'</i>'+t+'</button>').join('');
+  qsa($('nav'),'[data-go]').forEach(b=>b.onclick=()=>goStep(+b.dataset.go));
+}
+function goStep(i){
+  const el=$('st'+Math.max(0,Math.min(STEPS.length-1,i))); if(!el) return;
+  const cb=document.querySelector('.cbar').offsetHeight||46;
+  $('cfg').scrollTo({top:Math.max(0,el.offsetTop-cb),behavior:'smooth'});
+}
+function onCfgScroll(){
+  const cb=document.querySelector('.cbar').offsetHeight||46;
+  const top=$('cfg').scrollTop+cb+40;
+  let cur=0;
+  for(let i=0;i<STEPS.length;i++){ const el=$('st'+i); if(el&&el.offsetTop<=top) cur=i; }
+  if(cur!==S.step){ S.step=cur; S.visited[cur]=true; syncNav(); renderBar(); persist(); }
+}
+
+/* ═══════════ ОБЩЕЕ ═══════════ */
+let booted=false, backTo=0;
 function render(){
   const app = S.screen==='app';
   $('cfg').classList.toggle('on',app);
-  $('cfg').classList.toggle('solo',app&&STEPS[S.step].full);
   $('bar').classList.toggle('on',app);
   $('show').classList.toggle('hide',app);
   document.body.classList.toggle('locked',app);
-  if(app){ renderStage(); if(!STEPS[S.step].full) renderPanel(); renderBar(); }
-  else { renderResume(); }
+  if(app){
+    $('cName').textContent=M().name; $('cSil').src=SIL[S.m];
+    renderHouse(); renderPlan(); renderExt(); renderPack(); renderInt(); renderSum();
+    syncNav(); renderBar();
+  } else renderResume();
   persist();
 }
 function enter(i){
   if(i!==S.m){ S.m=i;S.v=0;S.add={rab:false,fund:false,otd:false,inzh:false};
                S.visited=[false,false,false,false,false,false]; }
   backTo=window.pageYOffset||0;
-  S.screen='app'; S.step=0; S.visited[0]=true; S.touched=true; render();
+  S.screen='app'; S.step=0; S.visited[0]=true; S.touched=true;
+  render();
+  $('cfg').scrollTop=0;
 }
 function pickModel(i){
   if(i===S.m) return;
@@ -780,41 +862,41 @@ function pickModel(i){
   S.visited=[true,false,false,false,false,false];
   render();
 }
-function go(i){
-  S.step=Math.max(0,Math.min(STEPS.length-1,i));
-  S.visited[S.step]=true; render();
-  const pb=$('pb'); if(pb) pb.scrollTop=0;
-}
 // возвращаемся туда же, откуда ушли, — страница не «прыгает» наверх
 function leave(){ S.screen='show'; render(); window.scrollTo(0,backTo); }
 
+function arrow(step,d){
+  if(step===0){ pickModel((S.m+d+DATA.length)%DATA.length); }
+  else if(step===2){ S.exIdx=(S.exIdx+d+EX.length)%EX.length; S.roof=Math.min(S.exIdx,ROOF.length-1); render(); }
+  else if(step===4){ S.inIdx=(S.inIdx+d+INT.length)%INT.length; render(); }
+}
+
 /* ═══════════ СОБЫТИЯ ═══════════ */
-$('logo').onclick   =()=>{ if(S.screen==='app') leave(); else scrollTo_('hero'); };
+$('logo').onclick   =()=>{ if(S.screen==='app') leave(); else scrollPage('hero'); };
 $('toStart').onclick=leave;
-$('toModels').onclick=()=>scrollTo_('models');
-$('resume').onclick =()=>{ S.screen='app'; render(); };
-$('vCta').onclick   =()=>go(1);
-$('aPrev').onclick  =()=>stageArrow(-1);
-$('aNext').onclick  =()=>stageArrow(1);
-$('bPrev').onclick  =()=>{ S.step===0 ? leave() : go(S.step-1); };
-$('bNext').onclick  =()=>{
-  if(S.step===STEPS.length-1){ alert('Прототип: заявка пока не подключена к CRM.\nИтог: от '+rub(total())); return; }
-  go(S.step+1);
-};
+$('toModels').onclick=()=>scrollPage('models');
+$('resume').onclick =()=>{ backTo=window.pageYOffset||0; S.screen='app'; render(); };
+$('v0cta').onclick  =()=>goStep(1);
+$('a0p').onclick=()=>arrow(0,-1); $('a0n').onclick=()=>arrow(0,1);
+$('a2p').onclick=()=>arrow(2,-1); $('a2n').onclick=()=>arrow(2,1);
+$('a4p').onclick=()=>arrow(4,-1); $('a4n').onclick=()=>arrow(4,1);
+$('city').oninput=e=>{S.city=e.target.value;renderSum();renderBar();persist()};
+$('send').onclick=()=>alert('Прототип: заявка пока не подключена к CRM.\nИтог: от '+rub(total()));
+$('bNext').onclick=()=>{ S.step>=STEPS.length-1 ? $('send').click() : goStep(S.step+1); };
 $('bEst').onclick=openDrawer;
 $('dClose').onclick=closeDrawer;
 $('scrim').onclick=closeDrawer;
-$('dGo').onclick=()=>{ closeDrawer(); go(5); };
+$('dGo').onclick=()=>{ closeDrawer(); goStep(5); };
+$('cfg').addEventListener('scroll',onCfgScroll,{passive:true});
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){ closeDrawer(); return; }
   if(e.target.tagName==='INPUT') return;
   if(S.screen!=='app') return;
-  if(e.key==='ArrowLeft') stageArrow(-1);
-  if(e.key==='ArrowRight') stageArrow(1);
+  if(e.key==='ArrowLeft') arrow(S.step,-1);
+  if(e.key==='ArrowRight') arrow(S.step,1);
 });
 
 /* ═══════════ СТАРТ ═══════════ */
-let booted=false;
 renderFacts(); wireSite(); renderGrid(); render();
 requestAnimationFrame(()=>{ booted=true; });
 
