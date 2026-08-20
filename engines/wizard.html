@@ -52,16 +52,21 @@ header .cat{border-bottom:1px solid var(--lime);padding-bottom:2px}
 .app.on{display:grid}
 .stage{position:relative;background:var(--dark);overflow:hidden;display:flex;flex-direction:column}
 .view{flex:1 1 auto;position:relative;min-height:0;background:#161616}
-.view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .22s ease}
+.view img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .22s ease;z-index:1}
+/* подложка — тот же кадр, размытый и увеличенный: дом целиком, но поле не пустое */
+.view .bgfill{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;
+  filter:blur(28px) saturate(.75) brightness(.5);transform:scale(1.06);z-index:0;transition:opacity .22s ease}
+.view.contain .bgfill{display:none}
 .view img.ld{opacity:0}
 .view.contain{background:#fff}
-.view.contain img{object-fit:contain;padding:clamp(14px,2.4vh,36px)}
-.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,0) 44%)}
+.view img{padding:clamp(10px,1.6vh,26px)}
+.view.contain img{padding:clamp(14px,2.4vh,36px)}
+.shade{position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.25) 22%,rgba(0,0,0,0) 46%)}
 .view.contain .shade{display:none}
-.sil-o{position:absolute;top:20px;left:clamp(18px,2.2vw,34px);width:96px;height:56px;object-fit:contain;
+.sil-o{position:absolute;z-index:3;top:20px;left:clamp(18px,2.2vw,34px);width:96px;height:56px;object-fit:contain;
   filter:invert(1);opacity:.92;pointer-events:none}
 .view.contain .sil-o{display:none}
-.cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,2.2vh,30px) clamp(18px,2.2vw,34px);color:#fff;pointer-events:none}
+.cap{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:clamp(16px,2.2vh,30px) clamp(18px,2.2vw,34px);color:#fff;pointer-events:none}
 .view.contain .cap{color:var(--ink);background:linear-gradient(to top,rgba(255,255,255,.96) 55%,rgba(255,255,255,0))}
 .cap h2{font-size:clamp(24px,3vw,42px);font-weight:500;letter-spacing:-.035em;line-height:1}
 .view.contain .cap h2{font-size:17px;letter-spacing:-.02em}
@@ -173,6 +178,7 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 <div class="app" id="app">
   <div class="stage">
     <div class="view" id="view">
+      <img class="bgfill" id="vBg" alt="" aria-hidden="true">
       <img id="vImg" alt="">
       <div class="shade"></div>
       <img class="sil-o" id="vSil" alt="">
@@ -285,6 +291,7 @@ function renderStage(){
     meta=`Интерьер: <b>${esc(MODES[S.mode][0])}</b>${S.mode>=2?` · ${FLR[S.flr][1].toLowerCase()}, стены ${WAL[S.wal][1].toLowerCase()}`:''}`;
   }else{ meta=`${esc(v.title)} · ${esc(lvl().toLowerCase())} · <b>от ${rub(total())}</b>`; }
   swapImg($('vImg'),src,name);
+  $('vBg').src=src;
   $('vSil').src=SIL[S.m];
   $('vName').textContent=name; $('vMeta').innerHTML=meta;
   const arrows = st===0? M().variants.length>1 : st===1 ? EX.length>1 : st===3 ? INT.length>1 : false;

@@ -106,7 +106,8 @@ def _ls(d):
 def build(brand_key, check_only=False):
     bdir = os.path.join(CONTENT, brand_key)
     brand = json.load(open(os.path.join(bdir, 'brand.json'), encoding='utf-8'))
-    rows = read_catalog(os.path.join(bdir, 'catalog.xlsx'))
+    cdir = os.path.join(CONTENT, brand.get('catalog_from', brand_key))
+    rows = read_catalog(os.path.join(cdir, 'catalog.xlsx'))
     models, roof, inter, problems = collect(brand_key, brand, rows)
 
     print(f"\n■ {brand_key}: {len(models)} моделей, {sum(len(m['variants']) for m in models)} конфигураций")
