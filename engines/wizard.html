@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__ — конфигуратор</title>
+<meta name="description" content="Выберите модель на стартовом экране и соберите дом по шагам.">
+<meta name="theme-color" content="#111111">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230b0b0b'/><rect x='9' y='13' width='14' height='9' fill='%23c9f24e'/><path d='M7 13 16 6l9 7' stroke='%23c9f24e' stroke-width='2.4' fill='none'/></svg>">
+<style>
+:root{--ink:#0b0b0b;--paper:#fff;--line:#e6e6e6;--tint:#f7f7f5;--mute:#8a8a8a;--mute2:#5a5a5a;
+      --lime:__ACCENT__;--lime-dk:#aede2f;--dark:#111;--hd:60px;--pan:clamp(400px,33vw,560px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--dark);color:var(--ink);font:400 16px/1.5 -apple-system,BlinkMacSystemFont,"Inter","Helvetica Neue","Segoe UI",Arial,sans-serif;
+     -webkit-font-smoothing:antialiased;letter-spacing:-.011em;overflow:hidden}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+
+header{position:fixed;top:0;left:0;right:0;height:var(--hd);z-index:40;display:flex;align-items:center;
+       gap:clamp(16px,2vw,36px);padding:0 clamp(18px,2.4vw,40px);background:var(--dark);color:#fff}
+.logo{font-size:16px;font-weight:600;letter-spacing:.02em;white-space:nowrap;color:#fff}
+.logo em{font-style:normal;color:#8a8a8a;font-size:12px;margin-left:10px;font-weight:400}
+.logo:hover em{color:#c8c8c8}
+header .sp{flex:1 1 auto}
+header a{color:#c8c8c8;text-decoration:none;font-size:12.5px;white-space:nowrap}
+header .cat{border-bottom:1px solid var(--lime);padding-bottom:2px}
+@media(max-width:900px){.logo em,header .cat{display:none}}
+
+/* ═══ СТАРТ: все модели ═══ */
+#start{position:fixed;inset:var(--hd) 0 0 0;overflow-y:auto;background:var(--dark);color:#fff;
+       padding:clamp(22px,3.4vh,48px) clamp(18px,2.6vw,44px) 60px}
+#start .hd1{font-size:clamp(26px,3.4vw,44px);font-weight:500;letter-spacing:-.03em;line-height:1.05}
+#start .hd2{font-size:13.5px;color:#9a9a9a;margin:12px 0 26px;max-width:70ch}
+#start .resume{display:inline-flex;gap:10px;align-items:center;margin-bottom:22px;background:#1d1d1d;
+  padding:10px 16px;font-size:12.5px;color:#d8d8d8}
+#start .resume b{color:var(--lime);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{position:relative;text-align:left;background:#181818;overflow:hidden;transition:.15s}
+.card:hover{background:#202020}
+.card img.ph{width:100%;aspect-ratio:16/10;object-fit:cover}
+.card .in{padding:14px 16px 16px;display:flex;align-items:center;gap:12px}
+.card img.si{width:44px;height:30px;object-fit:contain;filter:invert(1);opacity:.9;flex:0 0 auto}
+.card .n{font-size:15px;font-weight:500}
+.card .q{font-size:11px;color:#9a9a9a;margin-top:3px}
+.card .go{position:absolute;top:12px;right:12px;background:var(--lime);color:var(--ink);
+  font-size:11.5px;font-weight:500;padding:7px 12px;opacity:0;transition:.15s}
+.card:hover .go{opacity:1}
+
+/* ═══ КОНФИГУРАТОР ═══ */
+.app{position:fixed;inset:var(--hd) 0 0 0;display:none;grid-template-columns:minmax(0,1fr) var(--pan)}
+.app.on{display:grid}
+.stage{position:relative;background:var(--dark);overflow:hidden;display:flex;flex-direction:column}
+.view{flex:1 1 auto;position:relative;min-height:0;background:#161616}
+.view img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .22s ease}
+.view img.ld{opacity:0}
+.view.contain{background:#fff}
+.view.contain img{object-fit:contain;padding:clamp(14px,2.4vh,36px)}
+.shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,0) 44%)}
+.view.contain .shade{display:none}
+.sil-o{position:absolute;top:20px;left:clamp(18px,2.2vw,34px);width:96px;height:56px;object-fit:contain;
+  filter:invert(1);opacity:.92;pointer-events:none}
+.view.contain .sil-o{display:none}
+.cap{position:absolute;left:0;right:0;bottom:0;padding:clamp(16px,2.2vh,30px) clamp(18px,2.2vw,34px);color:#fff;pointer-events:none}
+.view.contain .cap{color:var(--ink);background:linear-gradient(to top,rgba(255,255,255,.96) 55%,rgba(255,255,255,0))}
+.cap h2{font-size:clamp(24px,3vw,42px);font-weight:500;letter-spacing:-.035em;line-height:1}
+.view.contain .cap h2{font-size:17px;letter-spacing:-.02em}
+.cap .m{font-size:12.5px;margin-top:8px;color:rgba(255,255,255,.78)}
+.view.contain .cap .m{color:var(--mute);margin-top:3px}
+.cap .m b{color:var(--lime);font-weight:500}
+.view.contain .cap .m b{color:var(--ink)}
+.arw{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:44px;height:44px;background:rgba(255,255,255,.92);
+     display:grid;place-items:center;font-size:20px;transition:.14s}
+.arw:hover{background:#fff}.arw.p{left:16px}.arw.n{right:16px}
+.thumbrail{flex:0 0 auto;display:none;gap:8px;padding:10px clamp(18px,2.2vw,34px);background:var(--dark);overflow-x:auto}
+.thumbrail.on{display:flex}
+.thumbrail button{flex:0 0 auto;width:clamp(78px,7vw,110px);aspect-ratio:16/10;overflow:hidden;opacity:.5;transition:.16s}
+.thumbrail button:hover{opacity:.85}
+.thumbrail button[aria-pressed="true"]{opacity:1;box-shadow:inset 0 0 0 3px var(--lime)}
+.thumbrail img{width:100%;height:100%;object-fit:cover}
+
+.panel{background:var(--paper);display:flex;flex-direction:column;border-left:1px solid var(--line);min-height:0}
+.crumb{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:12px clamp(18px,1.8vw,30px);border-bottom:1px solid var(--line)}
+.crumb .back{font-size:12px;color:var(--mute2);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.crumb .back:hover{color:var(--ink)}
+.crumb .mn{font-size:14px;font-weight:500;margin-left:auto}
+.crumb img{width:38px;height:24px;object-fit:contain}
+.tabs{flex:0 0 auto;display:flex;border-bottom:1px solid var(--line)}
+.tabs button{flex:1 1 0;padding:12px 3px 10px;font-size:10px;letter-spacing:.03em;text-transform:uppercase;
+  color:var(--mute);position:relative;transition:color .15s}
+.tabs button b{display:block;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;margin-top:2px;color:var(--mute2)}
+.tabs button[aria-current="true"],.tabs button[aria-current="true"] b{color:var(--ink)}
+.tabs button[aria-current="true"]::after{content:"";position:absolute;left:8%;right:8%;bottom:-1px;height:3px;background:var(--lime)}
+.tabs button.done b::after{content:" ✓";color:var(--lime-dk);font-size:11px}
+
+.pb{flex:1 1 auto;overflow-y:auto;min-height:0;padding:20px clamp(18px,1.8vw,30px) 26px}
+.step-t{font-size:20px;font-weight:500;letter-spacing:-.025em;margin-bottom:4px}
+.step-s{font-size:12.5px;color:var(--mute);margin-bottom:18px;line-height:1.5}
+.gh{font-size:11px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin:20px 0 12px}
+.gh:first-of-type{margin-top:0}
+.skip{display:inline-block;margin-top:16px;font-size:12.5px;color:var(--mute2);text-decoration:underline;text-underline-offset:3px}
+.skip:hover{color:var(--ink)}
+
+.rows{display:flex;flex-direction:column;gap:1px;background:var(--line);box-shadow:inset 0 0 0 1px var(--line)}
+.rows button,.rows .r{background:#fff;display:flex;gap:13px;align-items:center;padding:14px;text-align:left;width:100%;transition:.14s}
+.rows button:hover{background:var(--tint)}
+.rows button[data-var][aria-pressed="true"]{background:var(--tint);box-shadow:inset 3px 0 0 var(--lime)}
+.rows .t{flex:1 1 auto;min-width:0}
+.rows .t b{display:block;font-size:14px;font-weight:500}
+.rows .t span{display:block;font-size:11.5px;color:var(--mute);margin-top:3px}
+.rows .p{flex:0 0 auto;font-size:13.5px;font-weight:500;white-space:nowrap}
+.bx{flex:0 0 auto;width:19px;height:19px;box-shadow:inset 0 0 0 1px #c2c2c2;background:#fff;position:relative}
+.rows button[data-chk][aria-pressed="true"] .bx,.bx.on{background:var(--ink);box-shadow:none}
+.rows button[data-chk][aria-pressed="true"] .bx::after,.bx.on::after{content:"";position:absolute;left:6px;top:3px;
+  width:5px;height:10px;border:solid var(--lime);border-width:0 2px 2px 0;transform:rotate(43deg)}
+.bx.on{opacity:.5}
+.always{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin-left:8px;font-weight:400}
+
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw button{width:56px;text-align:center}
+.sw i{display:block;width:56px;height:56px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);transition:.14s}
+.sw button[aria-pressed="true"] i{box-shadow:0 0 0 3px var(--lime)}
+.sw em{font-style:normal;display:block;font-size:9px;color:var(--mute);margin-top:6px;line-height:1.25}
+.sw button[aria-pressed="true"] em{color:var(--ink);font-weight:500}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:11px 15px;font-size:13.5px;font-weight:500;box-shadow:inset 0 0 0 1px var(--line);transition:.14s;text-align:left}
+.pill:hover{background:var(--tint)}
+.pill[aria-pressed="true"]{background:var(--tint);box-shadow:inset 0 0 0 3px var(--lime)}
+.pill small{display:block;font-size:10.5px;color:var(--mute);font-weight:400;margin-top:2px}
+.note{font-size:11.5px;color:var(--mute);background:var(--tint);padding:11px 13px;margin-top:14px;line-height:1.5}
+input[type=text]{width:100%;padding:13px 14px;font:inherit;font-size:14.5px;box-shadow:inset 0 0 0 1px var(--line);outline:none}
+input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
+.fine{font-size:11px;color:var(--mute);line-height:1.55;margin-top:14px}
+.star{color:var(--mute);font-weight:400}
+.ln{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;padding:8px 0;color:var(--mute2);border-bottom:1px solid var(--tint)}
+.ln b{font-weight:400;color:var(--ink);white-space:nowrap}
+
+.pf{flex:0 0 auto;padding:14px clamp(18px,1.8vw,30px) 16px;border-top:2px solid var(--ink);background:#fff}
+.pf .sumrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px}
+.pf .k{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute)}
+.pf .t{font-size:clamp(20px,1.7vw,25px);font-weight:500;letter-spacing:-.03em;box-shadow:inset 0 -8px 0 var(--lime);white-space:nowrap}
+.pf .m2{font-size:12px;color:var(--mute2);text-align:right}
+.pf .btns{display:flex;gap:10px}
+.pf .back2{flex:0 0 auto;padding:14px 18px;box-shadow:inset 0 0 0 1px var(--line);font-size:14px}
+.pf .back2:hover{box-shadow:inset 0 0 0 1px var(--ink)}
+.pf .next{flex:1 1 auto;background:var(--lime);padding:14px;font-size:14.5px;font-weight:500;text-align:center}
+.pf .next:hover{background:var(--lime-dk)}
+
+@media(max-width:1000px){
+  body{overflow:auto}
+  #start{position:static;min-height:calc(100dvh - var(--hd));margin-top:var(--hd)}
+  .app.on{position:static;display:block;height:auto;margin-top:var(--hd)}
+  .stage{position:sticky;top:var(--hd);z-index:10;height:42vh}
+  .thumbrail{display:none !important}
+  .panel{border-left:0}
+  .pb{overflow:visible}
+  .pf{position:sticky;bottom:0;z-index:20}
+  .arw{width:38px;height:38px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="logo" id="logo">SKYFRAME<em>модульные дома</em></button>
+  <div class="sp"></div>
+  <a class="cat" href="__CATALOG__" download>Каталог PDF</a>
+  <a href="__PHONE_HREF__">__PHONE__</a>
+</header>
+
+<div id="start"></div>
+
+<div class="app" id="app">
+  <div class="stage">
+    <div class="view" id="view">
+      <img id="vImg" alt="">
+      <div class="shade"></div>
+      <img class="sil-o" id="vSil" alt="">
+      <button class="arw p" id="aPrev" aria-label="Назад">‹</button>
+      <button class="arw n" id="aNext" aria-label="Вперёд">›</button>
+      <div class="cap"><h2 id="vName"></h2><div class="m" id="vMeta"></div></div>
+    </div>
+    <div class="thumbrail" id="rail"></div>
+  </div>
+  <aside class="panel">
+    <div class="crumb">
+      <button class="back" id="toStart">‹ Все модели</button>
+      <span class="mn" id="cName"></span>
+      <img id="cSil" alt="">
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="pb" id="pb"></div>
+    <div class="pf">
+      <div class="sumrow">
+        <div><div class="k">Итого</div><div class="t" id="fTot">—</div></div>
+        <div class="m2" id="fM2"></div>
+      </div>
+      <div class="btns">
+        <button class="back2" id="bBack">‹</button>
+        <button class="next" id="bNext">Далее</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+'use strict';
+const VERSION='3.2';
+const DATA = __DATA__, EX = __EX__, INT = __INT__, SIL = __SIL__;
+
+const ADDONS=[
+ {k:'rab', n:'Монтаж домокомплекта', d:'Сборка бригадой на участке за 7–10 дней.'},
+ {k:'fund',n:'Свайный фундамент',    d:'Винтовые сваи с обвязкой.'},
+ {k:'otd', n:'Чистовая отделка',     d:'Полы, стены, потолки, санузел под ключ.'},
+ {k:'inzh',n:'Инженерные системы',   d:'Электрика, вода, канализация, отопление.'}];
+const LNAME={mat:'Домокомплект',rab:'Монтаж домокомплекта',fund:'Свайный фундамент',otd:'Чистовая отделка',inzh:'Инженерные системы'};
+const ROOF=[['#b0543a','Терракота'],['#3a4048','Графит'],['#8a2a2c','Вишня'],['#7a8082','Серебро'],['#5c2c34','Бордо']];
+const FAC=[['#c6a67a','Натур'],['#96744e','Орех'],['#5c5046','Кофе'],['#2e2e2e','Уголь'],['#ded6c8','Лён']];
+const PRO=[['#242424','Чёрный'],['#6e6e6e','Графит'],['#ececec','Белый'],['#7e603c','Дуб']];
+const FLR=[['#c4a680','Дуб светлый'],['#8c6642','Дуб тёмный'],['#b2b0ac','Бетон'],['#54504e','Графит']];
+const WAL=[['#f2f0ec','Белый'],['#ded8cc','Тёплый'],['#c4c4c0','Серый'],['#ceb496','Дерево']];
+const KIT=[['#eeece8','Белый'],['#96744e','Орех'],['#3c423e','Хвоя'],['#282828','Графит']];
+const MODES=[['Без отделки','черновой пол и обрешётка'],['Под чистовую','стены готовы под финиш'],
+ ['Светлый','дуб, белые стены'],['Тёплый','орех, тёплый белый'],['Графит','тёмный пол, хвоя']];
+// порядок шагов: планировка → экстерьер → комплектация → интерьер (по желанию) → заявка
+const STEPS=['Планировка','Экстерьер','Комплектация','Интерьер','Заявка'];
+
+let S={screen:'start',step:0,m:2,v:0,add:{rab:false,fund:false,otd:false,inzh:false},
+       roof:1,fac:0,pro:0,mode:0,flr:0,wal:0,kit:1,exIdx:1,inIdx:0,city:'',visited:[false,false,false,false,false]};
+// ── сборка сохраняется сама и переживает перезагрузку ──
+try{const sv=JSON.parse(localStorage.getItem('skyframe3')||'null');
+    if(sv&&sv.v===VERSION&&DATA[sv.S?.m]) S=Object.assign(S,sv.S);}catch(e){}
+const persist=()=>{try{localStorage.setItem('skyframe3',JSON.stringify({v:VERSION,S}))}catch(e){}};
+
+const $=id=>document.getElementById(id);
+const rub=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽';
+const pl=(n,a,b,c)=>{const m=n%100,k=n%10;return m>=11&&m<=14?c:k===1?a:k>=2&&k<=4?b:c};
+const M=()=>DATA[S.m], V=()=>M().variants[S.v];
+const chosen=()=>ADDONS.filter(a=>S.add[a.k]);
+const total=()=>V().mat+chosen().reduce((s,a)=>s+V()[a.k],0);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sq=m=>{const a=m.variants.map(v=>v.m2),lo=Math.min(...a),hi=Math.max(...a);return (lo===hi?lo:lo+'–'+hi)+' м²'};
+const lvl=()=>{const o=k=>S.add[k];
+  if(o('rab')&&o('fund')&&o('otd')&&o('inzh'))return'Под ключ с монтажом';
+  if(o('rab')&&o('fund')&&!o('otd')&&!o('inzh'))return'Под чистовую с монтажом';
+  return chosen().length?'Своя комплектация':'Только домокомплект'};
+const extName=()=>`${ROOF[S.roof][1]} / ${FAC[S.fac][1].toLowerCase()} / ${PRO[S.pro][1].toLowerCase()}`;
+
+/* ═══ СТАРТ ═══ */
+function renderStart(){
+  const saved = S.visited.some(x=>x);
+  $('start').innerHTML=`
+    <div class="hd1">Выберите модель</div>
+    <div class="hd2">${DATA.length} моделей · ${DATA.reduce((s,m)=>s+m.variants.length,0)} конфигураций · домокомплект от ${rub(Math.min(...DATA.flatMap(m=>m.variants.map(v=>v.mat))))}. Кликните по дому — и соберите его по шагам: планировка, экстерьер, комплектация.</div>
+    ${saved?`<button class="resume" id="resume">Продолжить сборку: <b>${esc(M().name)}, ${V().m2} м² · от ${rub(total())}</b> →</button>`:''}
+    <div class="grid">`+DATA.map((m,i)=>`
+      <button class="card" data-i="${i}">
+        <span class="go">Собрать →</span>
+        <img class="ph" src="${m.photo}" alt="${esc(m.name)}" loading="lazy">
+        <span class="in">
+          <img class="si" src="${SIL[i]}" alt="">
+          <span><span class="n">${esc(m.name)}</span>
+          <span class="q">${sq(m)} · ${m.variants.length} ${pl(m.variants.length,'конфигурация','конфигурации','конфигураций')} · от ${rub(Math.min(...m.variants.map(v=>v.mat)))}</span></span>
+        </span>
+      </button>`).join('')+`</div>`;
+  $('start').querySelectorAll('.card').forEach(b=>b.onclick=()=>enter(+b.dataset.i));
+  const r=$('resume'); if(r) r.onclick=()=>{S.screen='app';render()};
+}
+function enter(i){
+  if(i!==S.m){ S.m=i;S.v=0;S.add={rab:false,fund:false,otd:false,inzh:false};S.visited=[false,false,false,false,false]; }
+  S.screen='app'; S.step=0; S.visited[0]=true; render();
+}
+
+/* ═══ СЦЕНА ═══ */
+function renderStage(){
+  const m=M(), v=V(), st=S.step;
+  $('view').classList.toggle('contain', st===0);
+  let src=m.photo, name=m.name, meta='';
+  if(st===0){ src=v.plan; name='Планировка · '+v.title;
+    meta=`${esc(m.name)} · потолок до 3,2 м · производство 30–120 дней · монтаж 7–10 дней`;
+  }else if(st===1){ src=EX[S.exIdx]||m.photo;
+    meta=`Экстерьер: <b>${esc(extName())}</b> — не меняет цену домокомплекта`;
+  }else if(st===2){ meta=`${esc(v.title)} · <b>${esc(lvl())}</b>`;
+  }else if(st===3){ src=INT[S.inIdx]||m.photo;
+    meta=`Интерьер: <b>${esc(MODES[S.mode][0])}</b>${S.mode>=2?` · ${FLR[S.flr][1].toLowerCase()}, стены ${WAL[S.wal][1].toLowerCase()}`:''}`;
+  }else{ meta=`${esc(v.title)} · ${esc(lvl().toLowerCase())} · <b>от ${rub(total())}</b>`; }
+  swapImg($('vImg'),src,name);
+  $('vSil').src=SIL[S.m];
+  $('vName').textContent=name; $('vMeta').innerHTML=meta;
+  const arrows = st===0? M().variants.length>1 : st===1 ? EX.length>1 : st===3 ? INT.length>1 : false;
+  $('aPrev').style.display=$('aNext').style.display=arrows?'grid':'none';
+  const rail=$('rail');
+  if(st===1){ rail.className='thumbrail on';
+    rail.innerHTML=EX.map((s,i)=>`<button aria-pressed="${i===S.exIdx}" data-i="${i}"><img src="${s}" alt=""></button>`).join('');
+    rail.querySelectorAll('button').forEach(b=>b.onclick=()=>{S.exIdx=+b.dataset.i;S.roof=Math.min(S.exIdx,ROOF.length-1);render()});
+  }else if(st===3){ rail.className='thumbrail on';
+    rail.innerHTML=INT.map((s,i)=>`<button aria-pressed="${i===S.inIdx}" data-i="${i}"><img src="${s}" alt=""></button>`).join('');
+    rail.querySelectorAll('button').forEach(b=>b.onclick=()=>{S.inIdx=+b.dataset.i;render()});
+  }else{ rail.className='thumbrail'; rail.innerHTML=''; }
+}
+// старый кадр остаётся на экране, пока новый не догрузится — без миганий и прыжков
+function swapImg(el,src,alt){
+  if(el.dataset.cur===src){el.alt=alt;return}
+  el.dataset.cur=src;
+  const t=new Image();
+  t.onload=()=>{ if(el.dataset.cur!==src) return; el.classList.add('ld');
+    setTimeout(()=>{el.src=src;el.alt=alt;el.classList.remove('ld')},110); };
+  t.onerror=()=>{ if(el.dataset.cur===src){el.src=src;el.alt=alt;} };
+  t.src=src;
+}
+function stageArrow(d){
+  if(S.step===0){ S.v=(S.v+d+M().variants.length)%M().variants.length; }
+  else if(S.step===1){ S.exIdx=(S.exIdx+d+EX.length)%EX.length; S.roof=Math.min(S.exIdx,ROOF.length-1); }
+  else if(S.step===3){ S.inIdx=(S.inIdx+d+INT.length)%INT.length; }
+  render();
+}
+
+/* ═══ ПАНЕЛЬ ═══ */
+const sw=(arr,cur,key)=>`<div class="sw">`+arr.map(([c,n],i)=>
+  `<button aria-pressed="${i===cur}" data-sw="${key}" data-i="${i}"><i style="background:${c}"></i><em>${n}</em></button>`).join('')+`</div>`;
+
+function stepHtml(){
+  const m=M(), v=V();
+  switch(S.step){
+  case 0: return `<div class="step-t">Планировка и площадь</div>
+    <div class="step-s">Чертёж — слева. Планировку можно адаптировать: перегородки, состав санузлов.</div>
+    <div class="rows">`+m.variants.map((x,i)=>`<button aria-pressed="${i===S.v}" data-var="${i}">
+      <span class="t"><b>${esc(x.title)}</b><span>домокомплект ${rub(x.mat)}</span></span>
+      <span class="p">${x.m2} м²</span></button>`).join('')+`</div>`;
+  case 1: return `<div class="step-t">Экстерьер</div>
+    <div class="step-s">Кровля меняет фотографию слева. Фасад и профиль — образцами.</div>
+    <div class="gh">Цвет кровли</div>${sw(ROOF,S.roof,'roof')}
+    <div class="gh">Фасадная доска</div>${sw(FAC,S.fac,'fac')}
+    <div class="gh">Оконный профиль</div>${sw(PRO,S.pro,'pro')}
+    <div class="note">Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.</div>`;
+  case 2: return `<div class="step-t">Комплектация</div>
+    <div class="step-s">Домокомплект входит всегда. Остальное — по отдельности, любой этап можно заказать позже.</div>
+    <div class="rows">
+      <div class="r"><span class="bx on"></span><span class="t"><b>Домокомплект внешнего контура<span class="always">включено</span></b>
+        <span>Панели пола, стен и кровли, окна, двери, фасад.</span></span><span class="p">${rub(v.mat)}</span></div>`
+    +ADDONS.map(a=>`<button data-chk="${a.k}" aria-pressed="${!!S.add[a.k]}">
+        <span class="bx"></span><span class="t"><b>${a.n} <span class="star">*</span></b><span>${a.d}</span></span>
+        <span class="p">от ${rub(v[a.k])}</span></button>`).join('')+`</div>
+    <div class="fine"><b>*</b> С монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей России.</div>`;
+  case 3: return `<div class="step-t">Интерьер <span style="font-size:12px;color:var(--mute);font-weight:400">· по желанию</span></div>
+    <div class="step-s">Можно выбрать сейчас, а можно вернуться к этому после договора.</div>
+    <div class="pills">`+MODES.map(([t,s],i)=>`<button class="pill" aria-pressed="${i===S.mode}" data-mode="${i}">${t}<small>${s}</small></button>`).join('')+`</div>`
+    +(S.mode<2
+      ? `<div class="note">${MODES[S.mode][1]}. Материалы выбираются, когда добавлена чистовая отделка на шаге «Комплектация».</div>`
+      : `<div class="gh">Пол</div>${sw(FLR,S.flr,'flr')}
+         <div class="gh">Стены</div>${sw(WAL,S.wal,'wal')}
+         <div class="gh">Мебельные фасады</div>${sw(KIT,S.kit,'kit')}`)
+    +`<button class="skip" data-skip>Пропустить — сразу к заявке →</button>`;
+  case 4: {
+    const inc=['mat',...chosen().map(a=>a.k)];
+    return `<div class="step-t">Ваш расчёт</div>
+    <div class="step-s">${esc(m.name)}, ${esc(v.title)} · ${esc(lvl().toLowerCase())} · ${esc(extName().toLowerCase())}</div>`
+    +inc.map(k=>`<div class="ln"><span>${LNAME[k]}${k!=='mat'?' <span class="star">*</span>':''}</span><b>${rub(v[k])}</b></div>`).join('')
+    +ADDONS.filter(a=>!S.add[a.k]).map(a=>`<div class="ln" style="opacity:.45"><span>${a.n} — не выбрано</span><b>от ${rub(v[a.k])}</b></div>`).join('')
+    +`<div class="gh" style="margin-top:22px">Доставка</div>
+    <input type="text" id="city" placeholder="Город и область" value="${esc(S.city)}">
+    <div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы.<br>
+    <b>**</b> Расчёт справочный и не является публичной офертой. Сборка сохраняется в этом браузере автоматически.</div>`;
+  }}
+}
+function bindStep(){
+  const pb=$('pb');
+  pb.querySelectorAll('[data-var]').forEach(b=>b.onclick=()=>{S.v=+b.dataset.var;render()});
+  pb.querySelectorAll('[data-sw]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.sw,i=+b.dataset.i;
+    if(k==='roof'){S.roof=i;S.exIdx=Math.min(i,EX.length-1)}
+    else if(k==='fac')S.fac=i; else if(k==='pro')S.pro=i;
+    else if(k==='flr')S.flr=i; else if(k==='wal')S.wal=i; else S.kit=i;
+    render();
+  });
+  pb.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{S.mode=+b.dataset.mode;render()});
+  pb.querySelectorAll('[data-chk]').forEach(b=>b.onclick=()=>{S.add[b.dataset.chk]=!S.add[b.dataset.chk];render()});
+  const sk=pb.querySelector('[data-skip]'); if(sk) sk.onclick=()=>go(4);
+  const c=pb.querySelector('#city'); if(c) c.oninput=e=>{S.city=e.target.value;persist()};
+}
+function renderPanel(){
+  $('cName').textContent=M().name; $('cSil').src=SIL[S.m];
+  $('tabs').innerHTML=STEPS.map((t,i)=>
+    `<button aria-current="${i===S.step}" class="${S.visited[i]&&i!==S.step?'done':''}" data-tab="${i}">
+       ${String(i+1).padStart(2,'0')}<b>${t}</b></button>`).join('');
+  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>go(+b.dataset.tab));
+  $('pb').innerHTML=stepHtml(); bindStep();
+  $('fTot').textContent='от '+rub(total())+(chosen().length?' *':'');
+  $('fM2').innerHTML=`${V().m2} м²<br>от ${rub(total()/V().m2)} / м²`;
+  $('bBack').textContent = S.step===0 ? '‹ Модели' : '‹';
+  $('bNext').textContent = S.step===STEPS.length-1 ? 'Отправить заявку' : 'Далее · '+STEPS[S.step+1];
+}
+function render(){
+  const app=S.screen==='app';
+  $('app').classList.toggle('on',app);
+  $('start').style.display=app?'none':'block';
+  if(app){ renderStage(); renderPanel(); } else renderStart();
+  persist();
+}
+function go(i){ S.step=Math.max(0,Math.min(STEPS.length-1,i)); S.visited[S.step]=true; render(); $('pb').scrollTop=0; }
+
+$('logo').onclick=()=>{S.screen='start';render()};
+$('toStart').onclick=()=>{S.screen='start';render()};
+$('bBack').onclick=()=>{ S.step===0 ? (S.screen='start',render()) : go(S.step-1); };
+$('bNext').onclick=()=>{
+  if(S.step===STEPS.length-1){ alert('Прототип: заявка пока не подключена к CRM. Итог: от '+rub(total())); return; }
+  go(S.step+1);
+};
+$('aPrev').onclick=()=>stageArrow(-1);
+$('aNext').onclick=()=>stageArrow(1);
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(S.screen!=='app')return;
+  if(e.key==='ArrowLeft')stageArrow(-1);
+  if(e.key==='ArrowRight')stageArrow(1);
+});
+render();
+// греем кэш: обложки, планировки, кровля, интерьеры, силуэты
+(function(){
+  const all=[...DATA.map(m=>m.photo),...DATA.flatMap(m=>m.variants.map(v=>v.plan)),...EX,...INT,...SIL];
+  let i=0;
+  (function next(){ if(i>=all.length) return;
+    const im=new Image(); im.onload=im.onerror=()=>setTimeout(next,30); im.src=all[i++]; })();
+})();
+</script>
+</body>
+</html>

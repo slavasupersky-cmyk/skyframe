@@ -1,0 +1,12 @@
+{
+  "key": "skyframe",
+  "title": "Skyframe",
+  "tagline": "модульные дома",
+  "phone": "+7 (499) 647-76-80",
+  "phone_href": "tel:+74996477680",
+  "catalog_pdf": "katalog-skyframe.pdf",
+  "engine": "classic",
+  "output": ".",
+  "accent": "#c9f24e",
+  "_комментарий": "engine: classic (текущая 1.7 в корне). Поменяете на wizard/steps — пересоберётся другой интерфейс"
+}

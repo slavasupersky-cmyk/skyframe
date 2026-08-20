@@ -1,0 +1,13 @@
+{
+  "key": "mashko",
+  "title": "MASHKO",
+  "tagline": "каркасные дома и бани",
+  "phone": "+7 999 002-57-43",
+  "phone_href": "tel:+79990025743",
+  "catalog_pdf": "",
+  "engine": "classic",
+  "output": "d/mashko",
+  "accent": "#f5a623",
+  "media_from": "skyframe",
+  "_комментарий": "media_from — брать картинки из чужого пака, чтобы не дублировать мегабайты"
+}
