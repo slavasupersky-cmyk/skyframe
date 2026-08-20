@@ -1,0 +1,14 @@
+{
+  "key": "skyframe-v4",
+  "title": "Skyframe",
+  "tagline": "модульные дома",
+  "phone": "+7 (499) 647-76-80",
+  "phone_href": "tel:+74996477680",
+  "catalog_pdf": "../katalog-skyframe.pdf",
+  "engine": "v4",
+  "output": "v4",
+  "accent": "#c9f24e",
+  "media_from": "skyframe",
+  "catalog_from": "skyframe",
+  "_комментарий": "основная рабочая версия: витрина (герой, технология, плитка) + пошаговый конфигуратор"
+}
