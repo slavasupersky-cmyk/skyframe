@@ -88,15 +88,16 @@ def collect(brand_key, brand, rows):
 
     # кадры экстерьера/интерьера и фото витрины можно брать у другого пака (одни и те же, не дублируем)
     oroot = os.path.join(CONTENT, brand.get('options_from', brand.get('media_from', brand_key)))
-    opt = os.path.join(oroot, 'options')
-    roof = sorted(_ls(os.path.join(opt, 'roof')))
-    inter = sorted(_ls(os.path.join(opt, 'interior')))
+    # своя папка пака важнее общей: например, свои кадры кровли, а интерьеры — общие
+    pick = lambda sub: os.path.join(mroot, sub) if _ls(os.path.join(mroot, sub)) else os.path.join(oroot, sub)
+    roof = sorted(_ls(pick('options/roof')))
+    inter = sorted(_ls(pick('options/interior')))
     if not roof:
         problems.append('options/roof: нет ни одной картинки кровли')
 
     # site/ — картинки витрины (разрез, процесс, объекты). Ключ = имя файла без расширения.
     site = {os.path.splitext(os.path.basename(f))[0]: f
-            for f in _ls(os.path.join(oroot, 'site'))}
+            for f in _ls(pick('site'))}
 
     out = [models[k] for k in order]
     for m in out:

@@ -206,6 +206,14 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .view .cap h4{font-size:clamp(21px,2.8vw,38px);font-weight:500;letter-spacing:-.033em;line-height:1.02}
 .view .cap .m{font-size:12.5px;margin-top:8px;color:rgba(255,255,255,.78)}
 .view .cap .m b{color:var(--lime);font-weight:500}
+.chipx{display:inline-flex;align-items:center;gap:7px;margin:4px 16px 0 0;white-space:nowrap}
+.chipx i{width:12px;height:12px;box-shadow:0 0 0 1px rgba(255,255,255,.55)}
+.view .chipx b{color:#fff}
+.leg2{display:none;font-size:12.5px;color:var(--mute2);margin-top:10px;line-height:1.5}
+.leg2 b{color:var(--ink);font-weight:500}
+.leg2 .chipx i{box-shadow:0 0 0 1px rgba(0,0,0,.18)}
+.chipx.hd2{display:flex;color:var(--lime);margin-bottom:4px}
+@media(max-width:600px){.chipx{white-space:normal;margin-right:10px}}
 .arw{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:42px;height:42px;
      background:rgba(255,255,255,.9);color:var(--ink);display:grid;place-items:center;font-size:19px;transition:.14s}
 .arw:hover{background:#fff}.arw.p{left:14px}.arw.n{right:14px}
@@ -360,6 +368,9 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
   #st0 .pic{position:relative;inset:auto;aspect-ratio:16/10}
   #st0 .shade,#st0 .silo{display:none}
   #st0 .cap{position:static;padding:16px 16px 18px;background:var(--dark)}
+  /* на телефоне подписи экстерьера и интерьера не закрывают фото, а стоят под ним */
+  #v2 .cap,#v4 .cap{display:none}
+  .leg2{display:block}
   #st0 .cap>div{width:100%}
   #st0 .cap .btn{width:100%;justify-content:center}
   .arw{width:38px;height:38px}.arw.p{left:10px}.arw.n{right:10px}
@@ -529,7 +540,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
   <!-- 1 планировка -->
   <section class="st" id="st1">
     <div class="sthd">
-      <div class="eyebrow"><span class="no">01</span><span class="lbl">Планировка</span></div>
+      <div class="eyebrow"><span class="no">02</span><span class="lbl">Планировка</span></div>
       <h3>Габариты вашего будущего дома и состав помещений</h3>
     </div>
     <div class="chips" id="chips1"></div>
@@ -548,7 +559,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
   <!-- 2 экстерьер -->
   <section class="st" id="st2">
     <div class="sthd">
-      <div class="eyebrow"><span class="no">02</span><span class="lbl">Экстерьер</span></div>
+      <div class="eyebrow"><span class="no">03</span><span class="lbl">Экстерьер</span></div>
       <h3>__EXT_TITLE__</h3>
     </div>
     <div class="two">
@@ -562,6 +573,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
           <div class="cap"><div><div class="m" id="v2meta"></div></div></div>
         </div>
         <div class="rail lite" id="rail2"></div>
+        <div class="leg2" id="v2leg"></div>
       </div>
       <div class="col" id="opt2"></div>
     </div>
@@ -570,7 +582,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
   <!-- 3 комплектация -->
   <section class="st" id="st3">
     <div class="sthd">
-      <div class="eyebrow"><span class="no">03</span><span class="lbl">Комплектация</span></div>
+      <div class="eyebrow"><span class="no">04</span><span class="lbl">Комплектация</span></div>
       <h3>Уровень готовности</h3>
       <p>Домокомплект внешнего контура входит всегда. Остальное отмечайте по отдельности — любой этап можно заказать позже.</p>
     </div>
@@ -586,7 +598,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
   <!-- 4 интерьер -->
   <section class="st" id="st4">
     <div class="sthd">
-      <div class="eyebrow"><span class="no">04</span><span class="lbl">Интерьер</span></div>
+      <div class="eyebrow"><span class="no">05</span><span class="lbl">Интерьер</span></div>
       <h3>Отделка внутри <span style="font-size:13px;color:var(--mute);font-weight:400">· по желанию</span></h3>
       <p>Можно выбрать сейчас, а можно вернуться к этому после договора.</p>
     </div>
@@ -602,6 +614,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
           <div class="cap"><div><div class="m" id="v4meta"></div></div></div>
         </div>
         <div class="rail lite" id="rail4"></div>
+        <div class="leg2" id="v4leg"></div>
       </div>
       <div class="col" id="opt4"></div>
     </div>
@@ -610,7 +623,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
   <!-- 5 заявка -->
   <section class="st" id="st5">
     <div class="sthd">
-      <div class="eyebrow"><span class="no">05</span><span class="lbl">Заявка</span></div>
+      <div class="eyebrow"><span class="no">06</span><span class="lbl">Заявка</span></div>
       <h3>Ваш расчёт</h3>
       <p id="sumHead"></p>
     </div>
@@ -827,18 +840,28 @@ const isRoofModel=()=>!ROOF_MODEL||M().key===ROOF_MODEL;
 const roofModelName=()=>{const d=DATA.find(x=>x.key===ROOF_MODEL);return d?d.name:''};
 function exList(){
   const ex=EX.map((s,i)=>({src:s,roof:EX_LINKED?Math.min(i,ROOF.length-1):-2}));
-  return isRoofModel()?ex:[{src:M().photo,roof:-1}].concat(ex);
+  if(isRoofModel()) return ex;
+  // XT.examples:false — у остальных моделей только их собственное фото, без кадров чужого дома
+  return XT&&XT.examples===false?[{src:M().photo,roof:-1}]:[{src:M().photo,roof:-1}].concat(ex);
 }
 function exPick(i){
   const L=exList(); S.exIdx=(i+L.length)%L.length;
   if(L[S.exIdx].roof>=0) S.roof=L[S.exIdx].roof;
 }
 function exDefault(){ S.exIdx=isRoofModel()?Math.max(0,exList().findIndex(x=>x.roof===S.roof)):0; }
+// подпись под фото экстерьера: что выбрано, с цветными метками
+function legend(fr){
+  const chip=k=>{const x=EXG[k].items[S[k]];
+    return '<span class="chipx"><i style="background:'+x[0]+'"></i>'+esc(EXG[k].t.split(':')[0])+': <b>'+esc(x[1])+(x[2]?' '+esc(x[2]):'')+'</b></span>'};
+  const head=fr.roof>=0&&isRoofModel()?'<span class="chipx hd2">Цвет кровли на фото — как выбран</span>':'';
+  return head+EX_ORDER.map(chip).join('');
+}
 function renderExt(){
   const L=exList(); if(S.exIdx>=L.length) S.exIdx=0;
   const fr=L[S.exIdx];
   swapImg($('v2img'),fr.src,'Экстерьер',$('v2bg'));
-  $('v2meta').innerHTML = fr.roof===-2
+  const one=L.length<2; $('a2p').hidden=one; $('a2n').hidden=one; $('rail2').hidden=one;
+  $('v2meta').innerHTML = XT&&XT.legend ? legend(fr) : fr.roof===-2
     ? esc((XT&&XT.photos_caption||'Пример цвета кровли на модели {model}').replace('{model}',roofModelName()))
     : (fr.roof>=0 && !isRoofModel())
     ? 'Цвет кровли <b>«'+esc(ROOF[fr.roof][1])+'»</b> — пример на модели '+esc(roofModelName())
@@ -853,6 +876,7 @@ function renderExt(){
       (isRoofModel()?'':'Цвета кровли показаны на примере модели '+esc(roofModelName())+'. ')+
       'Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.')+'</div>';
   bindSw($('opt2'));
+  $('v2leg').innerHTML=$('v2meta').innerHTML;
 }
 
 /* ═══════════ ШАГ 3 · КОМПЛЕКТАЦИЯ ═══════════ */
@@ -883,7 +907,7 @@ function renderInt(){
   if(S.inIdx>=INT.length) S.inIdx=0;
   const src=INT[S.inIdx]||M().photo;
   swapImg($('v4img'),src,'Интерьер',$('v4bg'));
-  $('v4meta').innerHTML='Интерьер: <b>'+esc(MODES[S.mode][0])+'</b>'+
+  $('v4meta').innerHTML='Примеры отделки в наших домах · выбрано: <b>'+esc(MODES[S.mode][0])+'</b>'+
     (S.mode>=2?' · '+FLR[S.flr][1].toLowerCase()+', стены '+WAL[S.wal][1].toLowerCase():'');
   const rail=$('rail4');
   setRail(rail,'int',()=>INT.map((s,i)=>
@@ -896,6 +920,7 @@ function renderInt(){
       '<div class="gh">Стены</div>'+sw(WAL,S.wal,'wal')+
       '<div class="gh">Мебельные фасады</div>'+sw(KIT,S.kit,'kit');
   bindSw($('opt4'));
+  $('v4leg').innerHTML=$('v4meta').innerHTML;
 }
 function bindSw(root){
   qsa(root,'[data-sw]').forEach(b=>b.onclick=()=>{
@@ -919,7 +944,7 @@ function sumHtml(){
 }
 function renderSum(){
   const m=M(), v=V();
-  $('sumHead').textContent=m.name+', '+v.title+' · '+lvl().toLowerCase()+' · '+extName().toLowerCase();
+  $('sumHead').textContent=m.name+', '+v.title+' · '+lvl().toLowerCase()+' · '+lc(extName());
   $('sum5').innerHTML=sumHtml();
   qsa($('sum5'),'[data-add]').forEach(b=>b.onclick=()=>{S.add[b.dataset.add]=true;render()});
   if($('city').value!==S.city) $('city').value=S.city;
@@ -990,7 +1015,7 @@ function renderBar(){
   $('dTot').textContent='от '+rub(total())+star;
   $('bNext').textContent = S.step>=STEPS.length-1 ? 'Оставить заявку' : 'Далее · '+STEPS[S.step+1]+' ↓';
   $('dBody').innerHTML='<h4>'+esc(M().name)+', '+esc(v.title)+'</h4>'+
-    '<div class="cfg2">'+esc(lvl())+' · '+esc(extName().toLowerCase())+'</div>'+
+    '<div class="cfg2">'+esc(lvl())+' · '+esc(lc(extName()))+'</div>'+
     '<div style="margin-top:16px">'+sumHtml()+'</div>'+
     '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы.<br>'+
     '<b>**</b> Расчёт справочный и не является публичной офертой.</div>';
