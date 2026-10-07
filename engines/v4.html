@@ -81,7 +81,8 @@ h2{font-size:clamp(25px,3.3vw,44px);font-weight:500;letter-spacing:-.033em;line-
 @media(max-width:520px){.layers li{flex-wrap:wrap;gap:4px 14px}.layers span{flex:1 0 100%;padding-left:30px}}
 figure{margin:0}
 .cut{position:sticky;top:calc(var(--hd) + 24px)}
-.cut img{width:100%;height:auto;object-fit:contain}
+/* место под разрез занято заранее — секции ниже не прыгают, пока картинка грузится */
+.cut img{width:100%;height:auto;aspect-ratio:1250/1300;object-fit:contain}
 figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);margin-top:12px}
 
 /* 02 процесс */
@@ -172,9 +173,11 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 
 /* кадр в блоке */
 .view{position:relative;flex:1 1 auto;min-height:clamp(230px,40vh,520px);background:#121212;overflow:hidden}
+.view .pic{position:absolute;inset:0;overflow:hidden}
 .view img.main{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;
   padding:clamp(8px,1.4vh,22px);transition:opacity .22s ease}
-.view img.main.ld{opacity:0}
+.view img.main.ld,.view img.bgfill.ld{opacity:0}
+.view img.bgfill{transition:opacity .22s ease}
 /* подложка — тот же кадр, размытый: дом влезает целиком, а поле не выглядит дырой */
 .view img.bgfill{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;padding:0;z-index:0;
   filter:blur(30px) saturate(.72) brightness(.46);transform:scale(1.05)}
@@ -234,7 +237,7 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .rows button:hover{background:var(--tint)}
 .rows .t{flex:1 1 auto;min-width:0}
 .rows .t b{display:block;font-size:14.5px;font-weight:500}
-.rows .t span{display:block;font-size:12px;color:var(--mute);margin-top:3px;line-height:1.45}
+.rows .t>span{display:block;font-size:12px;color:var(--mute);margin-top:3px;line-height:1.45}
 .rows .p{flex:0 0 auto;font-size:14px;font-weight:500;white-space:nowrap}
 .bx{flex:0 0 auto;width:18px;height:18px;margin-top:2px;box-shadow:inset 0 0 0 1px #c2c2c2;background:#fff;position:relative}
 .rows button[aria-pressed="true"] .bx,.bx.on{background:var(--ink);box-shadow:none}
@@ -260,9 +263,26 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .add{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:9px 0;color:var(--mute);
      width:100%;text-align:left;border-bottom:1px solid var(--line)}
 .add:hover{color:var(--ink)}
-input[type=text]{width:100%;padding:13px 15px;font:inherit;font-size:14.5px;box-shadow:inset 0 0 0 1px var(--line);outline:none;background:#fff}
-input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
+input[type=text],input[type=tel]{width:100%;padding:13px 15px;font:inherit;font-size:16px;border:0;border-radius:0;
+  box-shadow:inset 0 0 0 1px var(--line);outline:none;background:#fff;-webkit-appearance:none;appearance:none}
+input[type=text]:focus,input[type=tel]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
+input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
+.fld{display:flex;flex-direction:column;gap:10px}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:12px;color:var(--mute2);margin-top:14px;cursor:pointer;line-height:1.45}
+.agree input{-webkit-appearance:none;appearance:none;flex:0 0 18px;width:18px;height:18px;margin-top:1px;
+  box-shadow:inset 0 0 0 1px #c2c2c2;background:#fff;position:relative;cursor:pointer;border-radius:0}
+.agree input:checked{background:var(--ink);box-shadow:none}
+.agree input:checked::after{content:"";position:absolute;left:6px;top:3px;width:4px;height:9px;
+  border:solid var(--lime);border-width:0 2px 2px 0;transform:rotate(43deg)}
+.agree.bad input{box-shadow:inset 0 0 0 2px #d4553a}
+.ferr{font-size:12.5px;color:#c2412a;margin-top:10px}
 .send{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.btn[disabled]{opacity:.55;cursor:default}
+.ok{background:var(--tint);padding:22px 20px;box-shadow:inset 3px 0 0 var(--lime)}
+.ok b{display:block;font-size:19px;font-weight:500;letter-spacing:-.02em}
+.ok p{font-size:13.5px;color:var(--mute2);margin-top:8px;line-height:1.5}
+.ok .demo{font-size:11.5px;color:var(--mute);margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.ok button{margin-top:14px;font-size:12.5px;color:var(--mute2);border-bottom:1px solid var(--line)}
 .hint{margin-top:14px;font-size:12px;color:var(--mute);display:flex;align-items:center;gap:8px}
 
 /* ══════ нижняя полоса с ценой ══════ */
@@ -273,7 +293,8 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 .bar .v{font-size:14px;font-weight:500;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar .obj{flex:1 1 auto;min-width:0}
 .bar .inc{flex:0 1 auto;min-width:0}
-.bar .tot{margin-left:auto;text-align:right;flex:0 0 auto}
+.bar .tot{margin-left:auto;text-align:right;flex:0 0 auto;cursor:pointer}
+.bar .kx{display:none}
 .bar .tot .s{font-size:clamp(18px,2vw,26px);font-weight:500;letter-spacing:-.03em;
   box-shadow:inset 0 -8px 0 var(--lime);white-space:nowrap}
 .bar .est{padding:13px 17px;font-size:13px;box-shadow:inset 0 0 0 1px #4a4a4a;flex:0 0 auto}
@@ -282,14 +303,22 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 .bar .go:hover{background:var(--lime-dk)}
 @media(max-width:1000px){.bar .inc{display:none}}
 @media(max-width:700px){.bar{gap:8px}.bar .est{display:none}.bar .obj .v{font-size:12.5px}}
+/* на телефоне в полосе только цена и кнопка; тап по цене открывает смету */
+@media(max-width:560px){:root{--bar:74px}
+  .bar{gap:12px;padding:0 16px}.bar .obj{display:none}
+  .bar .tot{margin-left:0;text-align:left;flex:1 1 auto;min-width:0}
+  .bar .kx{display:inline;color:#c8c8c8}
+  .bar .go{padding:13px 16px;font-size:13.5px}}
 
 /* ══════ смета ══════ */
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.44);z-index:70;opacity:0;pointer-events:none;transition:opacity .28s}
 .scrim.on{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,93vw);background:#fff;z-index:75;
-        transform:translateX(101%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;
-        box-shadow:-18px 0 50px rgba(0,0,0,.18)}
-.drawer.on{transform:none}
+        transform:translateX(101%);display:flex;flex-direction:column;
+        /* закрытая смета прячется целиком: раньше её тень вылезала серой полосой у правого края экрана */
+        visibility:hidden;transition:transform .3s cubic-bezier(.4,0,.2,1),visibility 0s linear .3s}
+.drawer.on{transform:none;visibility:visible;box-shadow:-18px 0 50px rgba(0,0,0,.18);
+        transition:transform .3s cubic-bezier(.4,0,.2,1),visibility 0s}
 .dh{display:flex;align-items:center;justify-content:space-between;padding:17px 22px;border-bottom:1px solid var(--line)}
 .dh b{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mute);font-weight:400}
 .dx{width:36px;height:36px;background:var(--tint);font-size:21px;line-height:1;display:grid;place-items:center}
@@ -308,7 +337,14 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
   .cut{position:static}
   .st{min-height:auto;padding:26px 16px 34px}
   #st0{min-height:auto}
-  #st0 .view{min-height:0;aspect-ratio:16/10}
+  /* первый шаг на телефоне: фото отдельно, подпись и кнопка — под ним, ничего не наезжает */
+  #st0 .view{min-height:0;aspect-ratio:auto;display:flex;flex-direction:column;overflow:visible}
+  #st0 .pic{position:relative;inset:auto;aspect-ratio:16/10}
+  #st0 .shade,#st0 .silo{display:none}
+  #st0 .cap{position:static;padding:16px 16px 18px;background:var(--dark)}
+  #st0 .cap>div{width:100%}
+  #st0 .cap .btn{width:100%;justify-content:center}
+  .arw{width:38px;height:38px}.arw.p{left:10px}.arw.n{right:10px}
   .view{min-height:0;aspect-ratio:16/10}
   .frame{min-height:0;aspect-ratio:4/3}
 }
@@ -332,7 +368,27 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
     <div class="lbl" style="color:rgba(255,255,255,.62)">Заводское производство · Prefab</div>
     <h1>Дом приезжает готовым.<br>Собирается за 7–10 дней.</h1>
     <p>Панели собираются в цеху, а не в поле под дождём. Планировки на любой сценарий, кровля и фасад — на выбор. Цену видно сразу, без звонка менеджеру.</p>
-    <div class="facts" id="facts"></div>
+    <div class="facts" id="facts">
+      <div><b>__N_MODELS__</b><span>моделей</span></div>
+      <div><b>__N_CONFIGS__</b><span>конфигураций</span></div>
+      <div><b>__M2_RANGE__</b><span>м² площадь</span></div>
+      <div><b>30–90</b><span>дней производство</span></div>
+      <div><b>R 5.88</b><span>норма 3.2</span></div>
+    </div>
+    <script>
+    /* данные каталога объявлены здесь, а не в конце страницы: фон героя начинает грузиться сразу */
+    const DATA = __DATA__, EX = __EX__, INT = __INT__, SIL = __SIL__;
+    // картинки витрины из папки content/<бренд>/site/ — ключ равен имени файла
+    const SITE = __SITE__;
+    // модель, на которой сняты кадры кровли (options/roof); у остальных показываем их собственное фото
+    const ROOF_MODEL = __ROOFMODEL__;
+    // куда отправлять заявку (POST JSON). Пусто — демо-режим, заявка никуда не уходит
+    const LEAD_URL = __LEAD__;
+    (function(){
+      const h=document.getElementById('heroImg'); h.fetchPriority='high';
+      h.src=DATA[Math.min(4,DATA.length-1)].photo;
+    })();
+    </script>
     <div class="cta">
       <button class="btn btn-l" id="toModels">Выбрать модель ↓</button>
       <a class="btn btn-g" href="__CATALOG__" download>Скачать каталог · PDF</a>
@@ -360,7 +416,7 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
         </ol>
       </div>
       <figure class="cut">
-        <img id="img-razrez" alt="Разрез стены, перекрытия и кровли" loading="lazy">
+        <img id="img-razrez" alt="Разрез стены, перекрытия и кровли" loading="lazy" width="1250" height="1300">
         <figcaption>Разрез стены, перекрытия и кровли</figcaption>
       </figure>
     </div>
@@ -431,13 +487,15 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
   <!-- 0 дом -->
   <section class="st" id="st0">
     <div class="view" id="v0">
-      <img class="bgfill" id="v0bg" alt="" aria-hidden="true">
-      <img class="main" id="v0img" alt="">
-      <div class="shade"></div>
-      <img class="silo" id="v0sil" alt="" aria-hidden="true">
-      <div class="cnt" id="v0cnt"></div>
-      <button class="arw p" id="a0p" aria-label="Предыдущая модель">‹</button>
-      <button class="arw n" id="a0n" aria-label="Следующая модель">›</button>
+      <div class="pic">
+        <img class="bgfill" id="v0bg" alt="" aria-hidden="true">
+        <img class="main" id="v0img" alt="">
+        <div class="shade"></div>
+        <img class="silo" id="v0sil" alt="" aria-hidden="true">
+        <div class="cnt" id="v0cnt"></div>
+        <button class="arw p" id="a0p" aria-label="Предыдущая модель">‹</button>
+        <button class="arw n" id="a0n" aria-label="Следующая модель">›</button>
+      </div>
       <div class="cap">
         <div><h4 id="v0name"></h4><div class="m" id="v0meta"></div></div>
         <button class="btn btn-l" id="v0cta">Собрать этот дом ↓</button>
@@ -538,8 +596,18 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
       <div class="col" id="sum5"></div>
       <div class="col">
         <div class="gh">Доставка и связь</div>
-        <input type="text" id="city" placeholder="Город и область">
-        <div class="send"><button class="btn btn-l" id="send">Отправить заявку</button></div>
+        <form id="lead" novalidate>
+          <div class="fld">
+            <input type="text" id="fName" name="name" placeholder="Имя" autocomplete="name">
+            <input type="tel" id="fPhone" name="phone" placeholder="Телефон" autocomplete="tel" inputmode="tel">
+            <input type="text" id="city" name="city" placeholder="Город и область — для расчёта доставки" autocomplete="address-level1">
+          </div>
+          <label class="agree" id="fAgreeL"><input type="checkbox" id="fAgree">
+            <span>Согласен на обработку персональных данных</span></label>
+          <div class="ferr" id="fErr" hidden></div>
+          <div class="send"><button class="btn btn-l" id="send" type="submit">Отправить заявку</button></div>
+        </form>
+        <div class="ok" id="leadOk" hidden></div>
         <div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей территории РФ.<br>
         <b>**</b> Расчёт справочный и не является публичной офертой.<br>
         Сборка сохраняется в этом браузере автоматически.</div>
@@ -552,7 +620,7 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 <div class="bar" id="bar">
   <div class="obj"><div class="k">Ваш дом</div><div class="v" id="bObj">—</div></div>
   <div class="inc"><div class="k">Включено</div><div class="v" id="bInc">—</div></div>
-  <div class="tot"><div class="k">Итого</div><div class="s" id="bTot">—</div></div>
+  <div class="tot" id="bTotBox" role="button" tabindex="0" aria-label="Открыть смету"><div class="k">Итого<span class="kx"> · смета ›</span></div><div class="s" id="bTot">—</div></div>
   <button class="est" id="bEst">Смета ▸</button>
   <button class="go" id="bNext">Далее ↓</button>
 </div>
@@ -569,10 +637,8 @@ input[type=text]:focus{box-shadow:inset 0 0 0 2px var(--ink)}
 
 <script>
 'use strict';
-const VERSION='4.1';
-const DATA = __DATA__, EX = __EX__, INT = __INT__, SIL = __SIL__;
-// картинки витрины из папки content/<бренд>/site/ — ключ равен имени файла
-const SITE = __SITE__;
+const VERSION='4.2';
+// DATA, EX, INT, SIL, SITE, ROOF_MODEL, LEAD_URL объявлены выше, в герое
 
 /* ─────────── справочники ─────────── */
 const ADDONS=[
@@ -618,27 +684,30 @@ const extName=()=>ROOF[S.roof][1]+' / '+FAC[S.fac][1].toLowerCase()+' / '+PRO[S.
 const sw=(arr,cur,key)=>'<div class="sw">'+arr.map((x,i)=>
   '<button aria-pressed="'+(i===cur)+'" data-sw="'+key+'" data-i="'+i+'">'+
   '<i style="background:'+x[0]+'"></i><em>'+x[1]+'</em></button>').join('')+'</div>';
-// старый кадр держится на экране, пока новый не догрузится — без миганий
-function swapImg(el,src,alt){
+// старый кадр держится на экране, пока новый не догрузится — без миганий.
+// Размытая подложка (bg) меняется в тот же момент, что и сам кадр, а не раньше него.
+function swapImg(el,src,alt,bg){
   if(el.dataset.cur===src){el.alt=alt;return}
   el.dataset.cur=src;
+  const first=!el.getAttribute('src');
+  const put=()=>{el.src=src;el.alt=alt;if(bg)bg.src=src};
+  if(first){ put(); return; }               // первый показ — без затемнения
   const t=new Image();
-  t.onload=()=>{ if(el.dataset.cur!==src)return; el.classList.add('ld');
-    setTimeout(()=>{el.src=src;el.alt=alt;el.classList.remove('ld')},110); };
-  t.onerror=()=>{ if(el.dataset.cur===src){el.src=src;el.alt=alt;} };
+  t.onload=()=>{ if(el.dataset.cur!==src)return; el.classList.add('ld'); if(bg)bg.classList.add('ld');
+    setTimeout(()=>{ if(el.dataset.cur!==src)return; put(); el.classList.remove('ld'); if(bg)bg.classList.remove('ld'); },110); };
+  t.onerror=()=>{ if(el.dataset.cur===src) put(); };
   t.src=src;
+}
+// ленты превью не пересобираются на каждый клик: только если поменялся их состав.
+// Иначе картинки в них перерисовываются и мигают, а прокрутка ленты сбрасывается.
+function setRail(el,sig,build,bind){
+  if(el.dataset.sig!==sig){ el.innerHTML=build(); el.dataset.sig=sig; bind(); }
+}
+function markPressed(el,attr,cur){
+  qsa(el,'['+attr+']').forEach(b=>b.setAttribute('aria-pressed',String(+b.getAttribute(attr)===cur)));
 }
 
 /* ═══════════ ВИТРИНА ═══════════ */
-function renderFacts(){
-  const all=DATA.reduce((a,m)=>a.concat(m.variants.map(v=>v.m2)),[]);
-  const f=[[DATA.length,'моделей'],
-           [DATA.reduce((s,m)=>s+m.variants.length,0),'конфигураций'],
-           [Math.min.apply(null,all)+'–'+Math.max.apply(null,all),'м² площадь'],
-           ['30–90','дней производство'],['R 5.88','норма 3.2']];
-  $('facts').innerHTML=f.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
-  $('heroImg').src=DATA[Math.min(4,DATA.length-1)].photo;
-}
 // подставляем фотографии витрины; если файла нет — блок с ним просто прячется
 function wireSite(){
   ['razrez','process-1','process-2','process-3','obj-1','obj-3','obj-4'].forEach(k=>{
@@ -678,21 +747,24 @@ function scrollPage(id){
 /* ═══════════ ШАГ 0 · ДОМ ═══════════ */
 function renderHouse(){
   const m=M();
-  swapImg($('v0img'),m.photo,m.name);
-  $('v0bg').src=m.photo;
+  swapImg($('v0img'),m.photo,m.name,$('v0bg'));
   $('v0sil').src=SIL[S.m];
   $('v0name').textContent=m.name;
   $('v0meta').innerHTML=esc(m.factory).toUpperCase()+' · '+sq(m)+' · '+cfgWord(m)+
     ' · домокомплект от <b>'+rub(minKit(m))+'</b>';
   $('v0cnt').textContent=String(S.m+1).padStart(2,'0')+' / '+String(DATA.length).padStart(2,'0');
   const rail=$('rail0');
-  rail.innerHTML=DATA.map((x,i)=>
-    '<button class="sil" aria-pressed="'+(i===S.m)+'" data-m="'+i+'">'+
+  setRail(rail,'models',()=>DATA.map((x,i)=>
+    '<button class="sil" data-m="'+i+'">'+
       '<img src="'+SIL[i]+'" alt="" aria-hidden="true">'+
-      '<span class="n">'+esc(x.name)+'</span><span class="q">от '+rub(minKit(x))+'</span></button>').join('');
-  qsa(rail,'[data-m]').forEach(b=>b.onclick=()=>pickModel(+b.dataset.m));
+      '<span class="n">'+esc(x.name)+'</span><span class="q">от '+rub(minKit(x))+'</span></button>').join(''),
+    ()=>qsa(rail,'[data-m]').forEach(b=>b.onclick=()=>pickModel(+b.dataset.m)));
+  markPressed(rail,'data-m',S.m);
+  // ленту центрируем только когда сменилась модель — а не на каждый клик где-то ещё
   const cur=rail.children[S.m];
-  if(cur){ const x=cur.offsetLeft-(rail.clientWidth-cur.clientWidth)/2;
+  if(cur && rail.dataset.cm!==String(S.m) && rail.clientWidth){
+    rail.dataset.cm=String(S.m);
+    const x=cur.offsetLeft-(rail.clientWidth-cur.clientWidth)/2;
     if(rail.scrollTo) rail.scrollTo({left:x,behavior:booted?'smooth':'auto'}); else rail.scrollLeft=x; }
 }
 
@@ -710,19 +782,37 @@ function renderPlan(){
 }
 
 /* ═══════════ ШАГ 2 · ЭКСТЕРЬЕР ═══════════ */
+// Кадры кровли (options/roof) сняты на одной модели — ROOF_MODEL. У неё лента = эти кадры.
+// У остальных первым идёт фото самой модели, а цвета кровли — честно подписанные примеры,
+// чтобы человек, выбравший «Рассвет», не видел вместо своего дома чужой A-frame.
+const isRoofModel=()=>!ROOF_MODEL||M().key===ROOF_MODEL;
+const roofModelName=()=>{const d=DATA.find(x=>x.key===ROOF_MODEL);return d?d.name:''};
+function exList(){
+  const ex=EX.map((s,i)=>({src:s,roof:Math.min(i,ROOF.length-1)}));
+  return isRoofModel()?ex:[{src:M().photo,roof:-1}].concat(ex);
+}
+function exPick(i){
+  const L=exList(); S.exIdx=(i+L.length)%L.length;
+  if(L[S.exIdx].roof>=0) S.roof=L[S.exIdx].roof;
+}
+function exDefault(){ S.exIdx=isRoofModel()?Math.max(0,exList().findIndex(x=>x.roof===S.roof)):0; }
 function renderExt(){
-  const src=EX[S.exIdx]||M().photo;
-  swapImg($('v2img'),src,'Экстерьер');
-  $('v2bg').src=src;
-  $('v2meta').innerHTML='Экстерьер: <b>'+esc(extName())+'</b> — не меняет стоимость домокомплекта';
+  const L=exList(); if(S.exIdx>=L.length) S.exIdx=0;
+  const fr=L[S.exIdx];
+  swapImg($('v2img'),fr.src,'Экстерьер',$('v2bg'));
+  $('v2meta').innerHTML = (fr.roof>=0 && !isRoofModel())
+    ? 'Цвет кровли <b>«'+esc(ROOF[fr.roof][1])+'»</b> — пример на модели '+esc(roofModelName())
+    : 'Экстерьер: <b>'+esc(extName())+'</b> — не меняет стоимость домокомплекта';
   const rail=$('rail2');
-  rail.innerHTML=EX.map((s,i)=>
-    '<button class="th" aria-pressed="'+(i===S.exIdx)+'" data-i="'+i+'"><img src="'+s+'" alt=""></button>').join('');
-  qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{S.exIdx=+b.dataset.i;S.roof=Math.min(S.exIdx,ROOF.length-1);render()});
+  setRail(rail,'ex:'+(isRoofModel()?'roof':M().key),()=>L.map((x,i)=>
+    '<button class="th" data-i="'+i+'"><img src="'+x.src+'" alt=""></button>').join(''),
+    ()=>qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{exPick(+b.dataset.i);render()}));
+  markPressed(rail,'data-i',S.exIdx);
   $('opt2').innerHTML='<div class="gh">Цвет кровли</div>'+sw(ROOF,S.roof,'roof')+
     '<div class="gh">Фасадная доска</div>'+sw(FAC,S.fac,'fac')+
     '<div class="gh">Оконный профиль</div>'+sw(PRO,S.pro,'pro')+
-    '<div class="note">Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.</div>';
+    '<div class="note">'+(isRoofModel()?'':'Цвета кровли показаны на примере модели '+esc(roofModelName())+'. ')+
+    'Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.</div>';
   bindSw($('opt2'));
 }
 
@@ -734,13 +824,13 @@ function renderPack(){
     '<span>Утеплённые панели пола, стен и кровли, окна, двери, фасадная доска.</span></span>'+
     '<span class="p">'+rub(v.mat)+'</span></div>'+
     ADDONS.map(a=>'<button data-chk="'+a.k+'" aria-pressed="'+(!!S.add[a.k])+'">'+
-      '<span class="bx"></span><span class="t"><b>'+a.n+' <span class="star">*</span></b>'+
+      '<span class="bx"></span><span class="t"><b>'+a.n+'&nbsp;<span class="star">*</span></b>'+
       '<span>'+a.d+'</span></span><span class="p">от '+rub(v[a.k])+'</span></button>').join('');
   qsa($('rows3'),'[data-chk]').forEach(b=>b.onclick=()=>{S.add[b.dataset.chk]=!S.add[b.dataset.chk];render()});
   const inc=['mat'].concat(chosen().map(a=>a.k));
   $('side3').innerHTML='<div style="font-size:17px;font-weight:500;letter-spacing:-.02em">'+esc(lvl())+'</div>'+
     '<div style="margin-top:14px">'+
-    inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?' <span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
+    inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?'&nbsp;<span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
     '</div>'+
     '<div class="ln" style="border-bottom:0;padding-top:14px"><span>Итого</span><b style="font-size:18px">от '+rub(total())+'</b></div>'+
     '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей территории РФ.</div>';
@@ -751,15 +841,16 @@ function renderInt(){
   $('pills4').innerHTML=MODES.map((x,i)=>
     '<button class="pill" aria-pressed="'+(i===S.mode)+'" data-mode="'+i+'">'+x[0]+'<small>'+x[1]+'</small></button>').join('');
   qsa($('pills4'),'[data-mode]').forEach(b=>b.onclick=()=>{S.mode=+b.dataset.mode;render()});
+  if(S.inIdx>=INT.length) S.inIdx=0;
   const src=INT[S.inIdx]||M().photo;
-  swapImg($('v4img'),src,'Интерьер');
-  $('v4bg').src=src;
+  swapImg($('v4img'),src,'Интерьер',$('v4bg'));
   $('v4meta').innerHTML='Интерьер: <b>'+esc(MODES[S.mode][0])+'</b>'+
     (S.mode>=2?' · '+FLR[S.flr][1].toLowerCase()+', стены '+WAL[S.wal][1].toLowerCase():'');
   const rail=$('rail4');
-  rail.innerHTML=INT.map((s,i)=>
-    '<button class="th" aria-pressed="'+(i===S.inIdx)+'" data-i="'+i+'"><img src="'+s+'" alt=""></button>').join('');
-  qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{S.inIdx=+b.dataset.i;render()});
+  setRail(rail,'int',()=>INT.map((s,i)=>
+    '<button class="th" data-i="'+i+'"><img src="'+s+'" alt=""></button>').join(''),
+    ()=>qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{S.inIdx=+b.dataset.i;render()}));
+  markPressed(rail,'data-i',S.inIdx);
   $('opt4').innerHTML = S.mode<2
     ? '<div class="note">'+MODES[S.mode][1]+'. Материалы выбираются, когда добавлена чистовая отделка на шаге «Комплектация».</div>'
     : '<div class="gh">Пол</div>'+sw(FLR,S.flr,'flr')+
@@ -770,7 +861,7 @@ function renderInt(){
 function bindSw(root){
   qsa(root,'[data-sw]').forEach(b=>b.onclick=()=>{
     const k=b.dataset.sw,i=+b.dataset.i;
-    if(k==='roof'){S.roof=i;S.exIdx=Math.min(i,EX.length-1)}
+    if(k==='roof'){S.roof=i;const j=exList().findIndex(x=>x.roof===i);if(j>=0)S.exIdx=j}
     else if(k==='fac')S.fac=i; else if(k==='pro')S.pro=i;
     else if(k==='flr')S.flr=i; else if(k==='wal')S.wal=i; else S.kit=i;
     render();
@@ -780,12 +871,12 @@ function bindSw(root){
 /* ═══════════ ШАГ 5 · ЗАЯВКА ═══════════ */
 function sumHtml(){
   const v=V(), inc=['mat'].concat(chosen().map(a=>a.k)), rest=ADDONS.filter(a=>!S.add[a.k]);
-  return inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?' <span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
+  return inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?'&nbsp;<span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
     '<div class="ln" style="border-bottom:0;padding-top:14px"><span>Итого</span><b style="font-size:19px">от '+rub(total())+'</b></div>'+
     (rest.length?'<div class="gh">Можно добавить</div>':'')+
     rest.map(a=>'<button class="add" data-add="'+a.k+'"><span>'+a.n+'</span><b>от '+rub(v[a.k])+'</b></button>').join('')+
-    '<div class="add" style="cursor:default"><span>Доставка</span><b>'+
-      (S.city.trim()?'посчитаем по '+esc(S.city):'уточните регион')+'</b></div>';
+    '<div class="add" style="cursor:default"><span>Доставка'+(S.city.trim()?' · '+esc(S.city.trim()):'')+'</span><b>'+
+      (S.city.trim()?'посчитаем':'уточните регион')+'</b></div>';
 }
 function renderSum(){
   const m=M(), v=V();
@@ -793,6 +884,62 @@ function renderSum(){
   $('sum5').innerHTML=sumHtml();
   qsa($('sum5'),'[data-add]').forEach(b=>b.onclick=()=>{S.add[b.dataset.add]=true;render()});
   if($('city').value!==S.city) $('city').value=S.city;
+}
+
+// +7 (999) 123-45-67 — по мере ввода; 8 в начале превращается в +7
+function fmtPhone(v){
+  let d=String(v).replace(/\D/g,''); if(!d) return '';
+  if(d[0]==='8') d='7'+d.slice(1); else if(d[0]!=='7') d='7'+d;
+  const p=d.slice(1,11); let s='+7';
+  if(p.length) s+=' ('+p.slice(0,3);
+  if(p.length>3) s+=') '+p.slice(3,6);
+  if(p.length>6) s+='-'+p.slice(6,8);
+  if(p.length>8) s+='-'+p.slice(8,10);
+  return s;
+}
+function leadData(){
+  return {name:$('fName').value.trim(), phone:$('fPhone').value.trim(), city:S.city.trim(),
+    model:M().name, config:V().title, m2:V().m2, level:lvl(), options:chosen().map(a=>a.n),
+    exterior:extName(), interior:MODES[S.mode][0], total:total(), total_text:'от '+rub(total()),
+    page:location.href, ts:new Date().toISOString()};
+}
+async function submitLead(){
+  const L=leadData(), digits=L.phone.replace(/\D/g,''), agree=$('fAgree').checked;
+  const okN=L.name.length>=2, okP=digits.length===11||digits.length===10;
+  $('fName').classList.toggle('bad',!okN); $('fPhone').classList.toggle('bad',!okP);
+  $('fAgreeL').classList.toggle('bad',!agree);
+  const miss=[]; if(!okN) miss.push('имя'); if(!okP) miss.push('телефон');
+  let msg=miss.length?'Укажите '+miss.join(' и ')+'.':'';
+  if(!agree) msg+=(msg?' ':'')+'Отметьте согласие на обработку данных.';
+  const err=$('fErr');
+  if(msg){
+    err.textContent=msg; err.hidden=false;
+    const f=!okN?$('fName'):!okP?$('fPhone'):$('fAgree');
+    f.scrollIntoView({block:'center',behavior:'smooth'}); f.focus({preventScroll:true});
+    return;
+  }
+  err.hidden=true;
+  if(!LEAD_URL){ showOk(L,true); return; }
+  const btn=$('send'); btn.disabled=true; btn.textContent='Отправляем…';
+  try{
+    const r=await fetch(LEAD_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(L)});
+    if(!r.ok) throw new Error(r.status);
+    showOk(L,false);
+  }catch(e){
+    err.innerHTML='Не получилось отправить заявку. Позвоните нам: <a href="__PHONE_HREF__" style="text-decoration:underline">__PHONE__</a>';
+    err.hidden=false;
+  }finally{ btn.disabled=false; btn.textContent='Отправить заявку'; }
+}
+function showOk(L,demo){
+  $('lead').hidden=true;
+  $('leadOk').innerHTML=(demo
+      ? '<b>Расчёт собран</b><p>'+esc(L.model)+', '+esc(L.config)+' — '+esc(L.total_text)+'. Контакт: '+esc(L.name)+', '+esc(L.phone)+'.</p>'+
+        '<div class="demo">Демо-версия: заявка пока никуда не отправляется. В рабочей версии она сразу уходит менеджеру — в CRM, Telegram или на почту.</div>'
+      : '<b>Спасибо, '+esc(L.name)+'!</b><p>Заявка у менеджера: '+esc(L.model)+', '+esc(L.config)+' — '+esc(L.total_text)+
+        '. Перезвоним на '+esc(L.phone)+' и посчитаем доставку.</p>')+
+    '<button type="button" id="leadAgain">Изменить данные</button>';
+  $('leadOk').hidden=false;
+  $('leadAgain').onclick=()=>{ $('leadOk').hidden=true; $('lead').hidden=false; };
 }
 
 /* ═══════════ ПОЛОСА ЦЕНЫ И СМЕТА ═══════════ */
@@ -850,7 +997,8 @@ function render(){
 }
 function enter(i){
   if(i!==S.m){ S.m=i;S.v=0;S.add={rab:false,fund:false,otd:false,inzh:false};
-               S.visited=[false,false,false,false,false,false]; }
+               S.visited=[false,false,false,false,false,false]; exDefault(); }
+  warm();
   backTo=window.pageYOffset||0;
   S.screen='app'; S.step=0; S.visited[0]=true; S.touched=true;
   render();
@@ -859,7 +1007,7 @@ function enter(i){
 function pickModel(i){
   if(i===S.m) return;
   S.m=i;S.v=0;S.add={rab:false,fund:false,otd:false,inzh:false};
-  S.visited=[true,false,false,false,false,false];
+  S.visited=[true,false,false,false,false,false]; exDefault();
   render();
 }
 // возвращаемся туда же, откуда ушли, — страница не «прыгает» наверх
@@ -867,7 +1015,7 @@ function leave(){ S.screen='show'; render(); window.scrollTo(0,backTo); }
 
 function arrow(step,d){
   if(step===0){ pickModel((S.m+d+DATA.length)%DATA.length); }
-  else if(step===2){ S.exIdx=(S.exIdx+d+EX.length)%EX.length; S.roof=Math.min(S.exIdx,ROOF.length-1); render(); }
+  else if(step===2){ exPick(S.exIdx+d); render(); }
   else if(step===4){ S.inIdx=(S.inIdx+d+INT.length)%INT.length; render(); }
 }
 
@@ -881,9 +1029,23 @@ $('a0p').onclick=()=>arrow(0,-1); $('a0n').onclick=()=>arrow(0,1);
 $('a2p').onclick=()=>arrow(2,-1); $('a2n').onclick=()=>arrow(2,1);
 $('a4p').onclick=()=>arrow(4,-1); $('a4n').onclick=()=>arrow(4,1);
 $('city').oninput=e=>{S.city=e.target.value;renderSum();renderBar();persist()};
-$('send').onclick=()=>alert('Прототип: заявка пока не подключена к CRM.\nИтог: от '+rub(total()));
-$('bNext').onclick=()=>{ S.step>=STEPS.length-1 ? $('send').click() : goStep(S.step+1); };
+$('lead').addEventListener('submit',e=>{e.preventDefault();submitLead()});
+$('fPhone').addEventListener('input',e=>{
+  e.target.classList.remove('bad');
+  if(e.inputType&&e.inputType.indexOf('delete')===0) return;   // стирать маска не мешает
+  e.target.value=fmtPhone(e.target.value);
+});
+$('fPhone').addEventListener('blur',e=>{e.target.value=fmtPhone(e.target.value)});
+$('fName').addEventListener('input',e=>e.target.classList.remove('bad'));
+$('fAgree').addEventListener('change',()=>$('fAgreeL').classList.remove('bad'));
+$('bNext').onclick=()=>{
+  if(S.step<STEPS.length-1){ goStep(S.step+1); return; }
+  if($('lead').hidden) return;
+  if($('lead').requestSubmit) $('lead').requestSubmit(); else submitLead();
+};
 $('bEst').onclick=openDrawer;
+$('bTotBox').onclick=openDrawer;
+$('bTotBox').onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openDrawer(); } };
 $('dClose').onclick=closeDrawer;
 $('scrim').onclick=closeDrawer;
 $('dGo').onclick=()=>{ closeDrawer(); goStep(5); };
@@ -897,18 +1059,25 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ═══════════ СТАРТ ═══════════ */
-renderFacts(); wireSite(); renderGrid(); render();
-requestAnimationFrame(()=>{ booted=true; });
-
-/* греем кэш по очереди, чтобы не забивать канал */
-(function(){
+/* греем кэш картинок конфигуратора по очереди, чтобы не забивать канал.
+   Стартуем, когда витрина уже догрузилась (или сразу при входе в конфигуратор),
+   а не в первую секунду — иначе на телефоне фоновые 8 МБ тормозят видимые фото. */
+let warmed=false;
+function warm(){
+  if(warmed) return; warmed=true;
   const all=DATA.map(m=>m.photo)
     .concat(DATA.reduce((a,m)=>a.concat(m.variants.map(v=>v.plan)),[]))
     .concat(EX,INT,SIL);
   let i=0;
   (function nxt(){ if(i>=all.length)return;
     const im=new Image(); im.onload=im.onerror=()=>setTimeout(nxt,30); im.src=all[i++]; })();
-})();
+}
+
+if(!S.touched) exDefault();
+wireSite(); renderGrid(); render();
+requestAnimationFrame(()=>{ booted=true; });
+if(document.readyState==='complete') setTimeout(warm,1500);
+else window.addEventListener('load',()=>setTimeout(warm,1500));
 </script>
 </body>
 </html>

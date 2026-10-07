@@ -98,6 +98,11 @@ def collect(brand_key, brand, rows):
     return out, roof, inter, site, problems
 
 
+def _m2_range(models):
+    a = [v['m2'] for m in models for v in m['variants']]
+    return f'{min(a)}–{max(a)}' if min(a) != max(a) else str(a[0])
+
+
 def _ls(d):
     if not os.path.isdir(d):
         return []
@@ -134,7 +139,7 @@ def build(brand_key, check_only=False):
     for m in models:
         sils.append(put(m['sil']))
         data.append({
-            'name': m['name'], 'factory': m['factory'],
+            'key': m['key'], 'name': m['name'], 'factory': m['factory'],
             'photo': put(m['cover']),
             'variants': [{'title': v['title'], 'm2': v['m2'], 'mat': v['mat'], 'rab': v['rab'],
                           'fund': v['fund'], 'otd': v['otd'], 'inzh': v['inzh'],
@@ -150,6 +155,13 @@ def build(brand_key, check_only=False):
             .replace('__DATA__', j(data)).replace('__EX__', j(ex))
             .replace('__INT__', j(it)).replace('__SIL__', j(sils))
             .replace('__SITE__', j(st))
+            # v4: на какой модели сняты кадры кровли и куда слать заявку (пусто — демо-режим)
+            .replace('__ROOFMODEL__', j(brand.get('roof_model', '')))
+            .replace('__LEAD__', j(brand.get('lead_endpoint', '')))
+            # v4: цифры героя пишутся в разметку при сборке — тогда они видны с первой отрисовки
+            .replace('__N_MODELS__', str(len(models)))
+            .replace('__N_CONFIGS__', str(sum(len(m['variants']) for m in models)))
+            .replace('__M2_RANGE__', _m2_range(models))
             .replace('__TITLE__', brand['title']).replace('__PHONE__', brand['phone'])
             .replace('__PHONE_HREF__', brand['phone_href'])
             .replace('__CATALOG__', brand.get('catalog_pdf') or '#')
