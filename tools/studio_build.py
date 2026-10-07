@@ -30,6 +30,8 @@ IMG_EXT = ('.jpg', '.jpeg', '.png', '.webp')
 MAX_SIDE, MAX_BYTES = 1800, 650_000          # тяжелее — сожмём копию в build/img
 CARD_W = 760                                 # ширина превью для карточек каталога
 
+USED = set()                                 # копии, нужные в этой сборке; остальные удаляются
+
 PRICE_COLS = ['kit_factory', 'windows', 'seam', 'foundation', 'mount', 'crane', 'finish', 'mep']
 
 
@@ -77,7 +79,8 @@ def optimize(src, bdir, max_side=MAX_SIDE, quality=82, tag=''):
         light = size <= MAX_BYTES and max(w, h) <= max_side and src.lower().endswith(('.jpg', '.jpeg'))
         if light and not tag:
             return src, (w, h)
-        key = hashlib.md5(f'{src}:{os.path.getmtime(src)}:{size}:{max_side}:{quality}'.encode()).hexdigest()[:10]
+        # имя копии зависит только от содержимого — сборка на любом компьютере даёт те же файлы
+        key = hashlib.md5(open(src, 'rb').read() + f':{max_side}:{quality}'.encode()).hexdigest()[:10]
         rel = os.path.relpath(src, os.path.join(bdir, 'media'))
         name = re.sub(r'[^a-z0-9_-]+', '-', os.path.splitext(rel)[0].lower()) + (f'-{tag}' if tag else '') + f'-{key}.jpg'
         dst = os.path.join(bdir, 'build', 'img', name)
@@ -85,6 +88,7 @@ def optimize(src, bdir, max_side=MAX_SIDE, quality=82, tag=''):
         if max(w, h) > max_side:
             r = max_side / max(w, h)
             im2 = im2.resize((round(w * r), round(h * r)), Image.LANCZOS)
+        USED.add(os.path.abspath(dst))
         if not os.path.exists(dst):
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             im2.save(dst, 'JPEG', quality=quality, optimize=True, progressive=True)
@@ -191,6 +195,10 @@ def build(key, check_only=False):
     catalog = {'brand': public, 'groups': groups, 'models': out_models, 'shared': shared_img}
 
     os.makedirs(os.path.join(bdir, 'build'), exist_ok=True)
+    imgdir = os.path.join(bdir, 'build', 'img')
+    for f in (os.listdir(imgdir) if os.path.isdir(imgdir) else []):
+        if os.path.abspath(os.path.join(imgdir, f)) not in USED:
+            os.remove(os.path.join(imgdir, f))          # устаревшие копии
     json.dump(catalog, open(os.path.join(bdir, 'build', 'catalog.json'), 'w', encoding='utf-8'),
               ensure_ascii=False, indent=1)
 
