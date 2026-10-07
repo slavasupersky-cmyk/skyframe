@@ -29,14 +29,19 @@ def read_catalog(path):
     """catalog.xlsx → список строк-словарей. Первая строка — заголовки, порядок колонок фиксирован."""
     import openpyxl
     ws = openpyxl.load_workbook(path, data_only=True)['catalog']
+    head = [c.value for c in ws[1]]
     rows = []
     for r in ws.iter_rows(min_row=2, values_only=True):
         if not r or not r[0]:
             continue
         row = dict(zip(COLS, r))
+        # колонки после «Инженерии» — из чего сложен домокомплект (например «С завода», «Окна», «Фальц»)
+        row['parts'] = [[str(head[i]), int(r[i])] for i in range(len(COLS), len(r))
+                        if i < len(head) and head[i] and r[i]]
         for k in PRICE_COLS:
             row[k] = int(row.get(k) or 0)
-        row['m2'] = int(row.get('m2') or 0)
+        m = float(row.get('m2') or 0)
+        row['m2'] = int(m) if m == int(m) else m   # 81.5 м² тоже бывает
         for k in ('model', 'config'):
             row[k] = str(row[k]).strip()
         rows.append(row)
@@ -79,9 +84,11 @@ def collect(brand_key, brand, rows):
         models[mk]['variants'].append({
             'key': ck, 'title': row['label'] or f"{row['m2']} м²", 'm2': row['m2'],
             'mat': row['kit'], 'rab': row['mount'], 'fund': row['foundation'],
-            'otd': row['finish'], 'inzh': row['mep'], 'plan_src': plan})
+            'otd': row['finish'], 'inzh': row['mep'], 'plan_src': plan, 'parts': row['parts']})
 
-    opt = os.path.join(mroot, 'options')
+    # кадры экстерьера/интерьера и фото витрины можно брать у другого пака (одни и те же, не дублируем)
+    oroot = os.path.join(CONTENT, brand.get('options_from', brand.get('media_from', brand_key)))
+    opt = os.path.join(oroot, 'options')
     roof = sorted(_ls(os.path.join(opt, 'roof')))
     inter = sorted(_ls(os.path.join(opt, 'interior')))
     if not roof:
@@ -89,7 +96,7 @@ def collect(brand_key, brand, rows):
 
     # site/ — картинки витрины (разрез, процесс, объекты). Ключ = имя файла без расширения.
     site = {os.path.splitext(os.path.basename(f))[0]: f
-            for f in _ls(os.path.join(mroot, 'site'))}
+            for f in _ls(os.path.join(oroot, 'site'))}
 
     out = [models[k] for k in order]
     for m in out:
@@ -98,9 +105,37 @@ def collect(brand_key, brand, rows):
     return out, roof, inter, site, problems
 
 
+def _brand_mark(brand, put):
+    """Шапка: логотип из content/<бренд>/<logo>, иначе название и подпись текстом."""
+    if brand.get('logo'):
+        src = put(os.path.join(CONTENT, brand['key'], brand['logo']))
+        return f'<img src="{src}" alt="{brand["title"]}" width="113" height="30">'
+    return f'<b>{brand["title"]}</b><em>{brand.get("tagline", "модульные дома")}</em>'
+
+
+def _contacts(brand, put):
+    """Подвал с контактами — только если в brand.json есть блок contacts."""
+    c = brand.get('contacts')
+    if not c:
+        return ''
+    logo = (f'<img src="{put(os.path.join(CONTENT, brand["key"], brand["logo"]))}" alt="{brand["title"]}" loading="lazy">'
+            if brand.get('logo') else f'<b style="color:#fff;font-size:18px">{brand["title"]}</b>')
+    col = lambda k, items: ('<div><div class="k">' + k + '</div>' + ''.join(items) + '</div>') if items else ''
+    tel = [f'<a href="{brand["phone_href"]}">{brand["phone"]}</a>'] + [f'<span>{x}</span>' for x in c.get('phone_note', [])]
+    mail = ([f'<a href="mailto:{c["email"]}">{c["email"]}</a>'] if c.get('email') else []) + \
+           ([f'<a href="{c["site"]}" target="_blank" rel="noopener">{c["site_label"]}</a>'] if c.get('site') else [])
+    addr = [f'<span>{x}</span>' for x in c.get('address', [])]
+    return ('<footer class="sc ft" id="contacts"><div class="wrap">'
+            f'<div>{logo}<span style="margin-top:14px;color:#8a8a8a;font-size:13px">{c.get("about", "")}</span></div>'
+            + col('Телефон', tel) + col('Почта и сайт', mail) + col('Производство', addr)
+            + (f'<div class="legal">{c["legal"]}</div>' if c.get('legal') else '')
+            + '</div></footer>')
+
+
 def _m2_range(models):
     a = [v['m2'] for m in models for v in m['variants']]
-    return f'{min(a)}–{max(a)}' if min(a) != max(a) else str(a[0])
+    f = lambda x: str(x).replace('.', ',')
+    return f'{f(min(a))}–{f(max(a))}' if min(a) != max(a) else f(a[0])
 
 
 def _ls(d):
@@ -143,12 +178,13 @@ def build(brand_key, check_only=False):
             'photo': put(m['cover']),
             'variants': [{'title': v['title'], 'm2': v['m2'], 'mat': v['mat'], 'rab': v['rab'],
                           'fund': v['fund'], 'otd': v['otd'], 'inzh': v['inzh'],
-                          'plan': put(v['plan_src'])}
+                          'plan': put(v['plan_src']), **({'parts': v['parts']} if v['parts'] else {})}
                          for v in m['variants']]})
     ex = [put(p) for p in roof]
     it = [put(p) for p in inter]
     st = {k: put(v) for k, v in sorted(site.items())}
 
+    hero = brand.get('hero', {})
     engine = open(os.path.join(ENGINES, brand.get('engine', 'wizard') + '.html'), encoding='utf-8').read()
     j = lambda x: json.dumps(x, ensure_ascii=False, separators=(',', ':'))
     html = (engine
@@ -162,6 +198,20 @@ def build(brand_key, check_only=False):
             .replace('__N_MODELS__', str(len(models)))
             .replace('__N_CONFIGS__', str(sum(len(m['variants']) for m in models)))
             .replace('__M2_RANGE__', _m2_range(models))
+            # v4: фирстиль — логотип, акцент, тексты героя, контакты, образцы экстерьера
+            .replace('__HEAD_EXTRA__', '\n<meta name="robots" content="noindex,nofollow">' if brand.get('noindex') else '')
+            .replace('__BRAND_MARK__', _brand_mark(brand, put))
+            .replace('__CAT_ATTR__', '' if brand.get('catalog_pdf') else 'hidden')
+            .replace('__HERO_LABEL__', hero.get('label', 'Заводское производство · Prefab'))
+            .replace('__HERO_TITLE__', hero.get('title', 'Дом приезжает готовым.<br>Собирается за 7–10 дней.'))
+            .replace('__HERO_LEAD__', hero.get('lead', 'Панели собираются в цеху, а не в поле под дождём. Планировки на любой сценарий, кровля и фасад — на выбор. Цену видно сразу, без звонка менеджеру.'))
+            .replace('__CONTACTS__', _contacts(brand, put))
+            .replace('__EXT__', j(brand['exterior']) if brand.get('exterior') else 'null')
+            .replace('__EXT_TITLE__', (brand.get('exterior') or {}).get('title', 'Кровля, фасадная доска и оконный профиль'))
+            .replace('__ADDONS__', j(brand['addons']) if brand.get('addons') else 'null')
+            .replace('__KIT__', j(brand['kit']) if brand.get('kit') else 'null')
+            .replace('__ACCENT_DK__', brand.get('accent_dark', '#aede2f'))
+            .replace('__ACCENT_URL__', brand.get('accent', '#c9f24e').replace('#', '%23'))
             .replace('__TITLE__', brand['title']).replace('__PHONE__', brand['phone'])
             .replace('__PHONE_HREF__', brand['phone_href'])
             .replace('__CATALOG__', brand.get('catalog_pdf') or '#')

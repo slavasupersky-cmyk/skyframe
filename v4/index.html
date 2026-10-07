@@ -29,6 +29,8 @@ a{color:inherit;text-decoration:none}
 .hd .lg b{font-size:16px;font-weight:600;letter-spacing:.02em}
 .hd .lg em{font-style:normal;color:#8a8a8a;font-size:12px}
 .hd .lg:hover em{color:#c8c8c8}
+.hd .lg img{display:block;height:30px;width:auto}
+.acc{color:var(--lime);font-style:normal}
 .hd .r{display:flex;align-items:center;gap:clamp(14px,2vw,26px);font-size:12.5px;color:#c8c8c8}
 .hd .cat{border-bottom:1px solid var(--lime);padding-bottom:2px}
 .hd .r a:hover{color:#fff}
@@ -130,6 +132,17 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .card:hover .go{opacity:1}
 .foot{margin-top:clamp(28px,4vh,48px);padding-top:20px;border-top:1px solid rgba(255,255,255,.12);
       font-size:11.5px;color:#6f6f6f;line-height:1.6;max-width:90ch}
+
+/* подвал с контактами (если они заданы в brand.json) */
+.ft{background:#0b0b0b;color:#c8c8c8;padding-top:clamp(40px,6vh,64px);padding-bottom:clamp(40px,6vh,64px)}
+.ft .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) repeat(3,minmax(0,1fr));gap:28px}
+@media(max-width:900px){.ft .wrap{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.ft .wrap{grid-template-columns:1fr}}
+.ft img{height:38px;width:auto;display:block}
+.ft .k{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:#6f6f6f;margin-bottom:8px}
+.ft a,.ft span{display:block;font-size:14px;line-height:1.6;color:#e6e6e6}
+.ft a:hover{color:var(--lime)}
+.ft .legal{grid-column:1/-1;font-size:11px;color:#6f6f6f;border-top:1px solid rgba(255,255,255,.12);padding-top:18px}
 
 /* ══════ КОНФИГУРАТОР — свой скролл сверху вниз ══════ */
 #cfg{position:fixed;inset:var(--hd) 0 var(--bar) 0;z-index:30;display:none;background:var(--paper);
@@ -251,6 +264,11 @@ figcaption{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:
 .sw button[aria-pressed="true"] i{box-shadow:0 0 0 3px var(--lime)}
 .sw em{font-style:normal;display:block;font-size:9.5px;color:var(--mute);margin-top:6px;line-height:1.25}
 .sw button[aria-pressed="true"] em{color:var(--ink);font-weight:500}
+.sw em small{display:block;font-size:9px;color:var(--mute);font-weight:400}
+.sw.w button{width:76px}.sw.w i{width:76px;height:40px}
+.p.ind,.ln b.ind,.add b.ind{font-weight:400;color:var(--mute)}
+.pt{display:block;font-size:11.5px;color:var(--mute);margin-top:4px;line-height:1.45;font-weight:400}
+.rows .t .pt{margin-top:6px}
 .pills{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}
 .pill{padding:10px 14px;font-size:13px;font-weight:500;text-align:left;box-shadow:inset 0 0 0 1px var(--line);transition:.14s}
 .pill small{display:block;font-size:10.5px;font-weight:400;color:var(--mute);margin-top:2px}
@@ -355,7 +373,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
 <header class="hd" id="hdr">
   <button class="lg" id="logo"><b>Skyframe</b><em>модульные дома</em></button>
   <div class="r">
-    <a class="cat" href="../katalog-skyframe.pdf" download>Каталог PDF</a>
+    <a class="cat" href="../katalog-skyframe.pdf" download >Каталог PDF</a>
     <a href="tel:+74996477680">+7 (499) 647-76-80</a>
   </div>
 </header>
@@ -384,6 +402,8 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
     const ROOF_MODEL = "pik";
     // куда отправлять заявку (POST JSON). Пусто — демо-режим, заявка никуда не уходит
     const LEAD_URL = "";
+    // настройки бренда: образцы экстерьера и тексты дополнительных опций (null — как у Skyframe)
+    const XT = null, ADD_TX = null, KIT_TX = null;
     (function(){
       const h=document.getElementById('heroImg'); h.fetchPriority='high';
       h.src=DATA[Math.min(4,DATA.length-1)].photo;
@@ -391,7 +411,7 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
     </script>
     <div class="cta">
       <button class="btn btn-l" id="toModels">Выбрать модель ↓</button>
-      <a class="btn btn-g" href="../katalog-skyframe.pdf" download>Скачать каталог · PDF</a>
+      <a class="btn btn-g" href="../katalog-skyframe.pdf" download >Скачать каталог · PDF</a>
     </div>
   </section>
 
@@ -472,6 +492,8 @@ input.bad,input.bad:focus{box-shadow:inset 0 0 0 2px #d4553a}
       </div>
     </div>
   </section>
+
+  
 
 </main>
 
@@ -647,9 +669,21 @@ const ADDONS=[
  {k:'otd', n:'Чистовая отделка',     d:'Полы, стены, потолки, санузел под ключ.'},
  {k:'inzh',n:'Инженерные системы',   d:'Электрика, вода, канализация, отопление.'}];
 const LNAME={mat:'Домокомплект',rab:'Монтаж домокомплекта',fund:'Свайный фундамент',otd:'Чистовая отделка',inzh:'Инженерные системы'};
-const ROOF=[['#b0543a','Терракота'],['#3a4048','Графит'],['#8a2a2c','Вишня'],['#7a8082','Серебро'],['#5c2c34','Бордо']];
-const FAC =[['#c6a67a','Натур'],['#96744e','Орех'],['#5c5046','Кофе'],['#2e2e2e','Уголь'],['#ded6c8','Лён']];
-const PRO =[['#242424','Чёрный'],['#6e6e6e','Графит'],['#ececec','Белый'],['#7e603c','Дуб']];
+// три группы образцов экстерьера: roof связана с кадрами кровли, fac и pro — просто выбор
+const EXG = XT ? XT.groups : {
+  roof:{t:'Цвет кровли',     items:[['#b0543a','Терракота'],['#3a4048','Графит'],['#8a2a2c','Вишня'],['#7a8082','Серебро'],['#5c2c34','Бордо']]},
+  fac: {t:'Фасадная доска',  items:[['#c6a67a','Натур'],['#96744e','Орех'],['#5c5046','Кофе'],['#2e2e2e','Уголь'],['#ded6c8','Лён']]},
+  pro: {t:'Оконный профиль', items:[['#242424','Чёрный'],['#6e6e6e','Графит'],['#ececec','Белый'],['#7e603c','Дуб']]}};
+const EX_ORDER = XT && XT.order ? XT.order : ['roof','fac','pro'];
+const EX_LINKED = !XT || XT.photos_linked !== false;   // кадры кровли = выбранный цвет?
+const ROOF=EXG.roof.items, FAC=EXG.fac.items, PRO=EXG.pro.items;
+// как называть базовый комплект (у завода может быть «домокомплект с окнами и фальцем»)
+const KT=Object.assign({row:'Домокомплект внешнего контура',name:'Домокомплект',from:'домокомплект',
+  desc:'Утеплённые панели пола, стен и кровли, окна, двери, фасадная доска.'},KIT_TX||{});
+LNAME.mat=KT.name;
+// из чего сложен комплект, если в таблице есть доп. колонки (с завода + окна + фальц)
+const parts=v=>v.parts&&v.parts.length?'<small class="pt">'+v.parts.map(p=>esc(p[0])+' '+rub(p[1])).join(' + ')+'</small>':'';
+if(ADD_TX) ADDONS.forEach(a=>{ if(ADD_TX[a.k]){ if(ADD_TX[a.k].n){a.n=ADD_TX[a.k].n;LNAME[a.k]=a.n;} if(ADD_TX[a.k].d)a.d=ADD_TX[a.k].d; } });
 const FLR =[['#c4a680','Дуб светлый'],['#8c6642','Дуб тёмный'],['#b2b0ac','Бетон'],['#54504e','Графит']];
 const WAL =[['#f2f0ec','Белый'],['#ded8cc','Тёплый'],['#c4c4c0','Серый'],['#ceb496','Дерево']];
 const KIT =[['#eeece8','Белый'],['#96744e','Орех'],['#3c423e','Хвоя'],['#282828','Графит']];
@@ -658,7 +692,7 @@ const MODES=[['Без отделки','черновой пол и обрешёт
 const STEPS=['Дом','Планировка','Экстерьер','Комплектация','Интерьер','Заявка'];
 
 let S={screen:'show',step:0,m:0,v:0,add:{rab:false,fund:false,otd:false,inzh:false},
-       roof:1,fac:0,pro:0,mode:0,flr:0,wal:0,kit:1,exIdx:1,inIdx:0,city:'',
+       roof:XT&&XT.def?XT.def[0]:1,fac:XT&&XT.def?XT.def[1]:0,pro:XT&&XT.def?XT.def[2]:0,mode:0,flr:0,wal:0,kit:1,exIdx:1,inIdx:0,city:'',
        visited:[false,false,false,false,false,false],touched:false};
 try{const sv=JSON.parse(localStorage.getItem('skyframe4')||'null');
     if(sv&&sv.v===VERSION&&DATA[sv.S&&sv.S.m]) S=Object.assign(S,sv.S,{screen:'show',step:0});}catch(e){}
@@ -667,6 +701,10 @@ const persist=()=>{try{localStorage.setItem('skyframe4',JSON.stringify({v:VERSIO
 const $=id=>document.getElementById(id);
 const qsa=(el,s)=>Array.prototype.slice.call(el.querySelectorAll(s));
 const rub=n=>new Intl.NumberFormat('ru-RU').format(Math.round(n))+' ₽';
+const m2=n=>String(n).replace('.',',');
+const lc=t=>/\d/.test(t)?t:t.toLowerCase();   // «RAL 7016» не превращаем в «ral 7016»
+// 0 в прайсе = позиция считается индивидуально: в сумму не входит, но её можно отметить в заявке
+const ap=(n,pre)=>n>0?(pre||'')+rub(n):'индивидуально';
 const pl=(n,a,b,c)=>{const m=n%100,k=n%10;return m>=11&&m<=14?c:k===1?a:k>=2&&k<=4?b:c};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const M=()=>DATA[S.m], V=()=>M().variants[S.v];
@@ -674,16 +712,16 @@ const chosen=()=>ADDONS.filter(a=>S.add[a.k]);
 const total=()=>V().mat+chosen().reduce((s,a)=>s+V()[a.k],0);
 const minKit=m=>Math.min.apply(null,m.variants.map(v=>v.mat));
 const sq=m=>{const a=m.variants.map(v=>v.m2),lo=Math.min.apply(null,a),hi=Math.max.apply(null,a);
-             return (lo===hi?lo:lo+'–'+hi)+' м²'};
+             return (lo===hi?m2(lo):m2(lo)+'–'+m2(hi))+' м²'};
 const cfgWord=m=>m.variants.length+' '+pl(m.variants.length,'конфигурация','конфигурации','конфигураций');
 const lvl=()=>{const o=k=>S.add[k];
   if(o('rab')&&o('fund')&&o('otd')&&o('inzh'))return'Под ключ с монтажом';
   if(o('rab')&&o('fund')&&!o('otd')&&!o('inzh'))return'Под чистовую с монтажом';
   return chosen().length?'Своя комплектация':'Только домокомплект'};
-const extName=()=>ROOF[S.roof][1]+' / '+FAC[S.fac][1].toLowerCase()+' / '+PRO[S.pro][1].toLowerCase();
-const sw=(arr,cur,key)=>'<div class="sw">'+arr.map((x,i)=>
+const extName=()=>ROOF[S.roof][1]+' / '+lc(FAC[S.fac][1])+' / '+lc(PRO[S.pro][1]);
+const sw=(arr,cur,key)=>'<div class="sw'+(arr.some(x=>x[2])?' w':'')+'">'+arr.map((x,i)=>
   '<button aria-pressed="'+(i===cur)+'" data-sw="'+key+'" data-i="'+i+'">'+
-  '<i style="background:'+x[0]+'"></i><em>'+x[1]+'</em></button>').join('')+'</div>';
+  '<i style="background:'+x[0]+'"></i><em>'+x[1]+(x[2]?'<small>'+x[2]+'</small>':'')+'</em></button>').join('')+'</div>';
 // старый кадр держится на экране, пока новый не догрузится — без миганий.
 // Размытая подложка (bg) меняется в тот же момент, что и сам кадр, а не раньше него.
 function swapImg(el,src,alt,bg){
@@ -718,7 +756,7 @@ function wireSite(){
 }
 function renderGrid(){
   $('mSub').innerHTML=DATA.length+' '+pl(DATA.length,'модель','модели','моделей')+' · '+
-    DATA.reduce((s,m)=>s+m.variants.length,0)+' конфигураций · домокомплект от '+
+    DATA.reduce((s,m)=>s+m.variants.length,0)+' конфигураций · '+KT.from+' от '+
     rub(Math.min.apply(null,DATA.map(minKit)))+
     '. Кликните по дому — и соберите его, листая экран вниз: планировка, экстерьер, комплектация.';
   $('grid').innerHTML=DATA.map((m,i)=>
@@ -728,7 +766,7 @@ function renderGrid(){
       '<span class="in">'+
         '<img class="si" src="'+SIL[i]+'" alt="" aria-hidden="true">'+
         '<span><span class="n">'+esc(m.name)+'</span>'+
-        '<span class="q">'+sq(m)+' · '+cfgWord(m)+'<br>домокомплект <b>от '+rub(minKit(m))+'</b></span></span>'+
+        '<span class="q">'+sq(m)+' · '+cfgWord(m)+'<br>'+KT.from+' <b>от '+rub(minKit(m))+'</b></span></span>'+
       '</span></button>').join('');
   qsa($('grid'),'.card').forEach(b=>b.onclick=()=>enter(+b.dataset.i));
 }
@@ -736,7 +774,7 @@ function renderResume(){
   const r=$('resume');
   if(!S.touched){ r.hidden=true; return; }
   r.hidden=false;
-  r.innerHTML='Продолжить сборку: <b>'+esc(M().name)+', '+V().m2+' м² · от '+rub(total())+'</b> →';
+  r.innerHTML='Продолжить сборку: <b>'+esc(M().name)+', '+m2(V().m2)+' м² · от '+rub(total())+'</b> →';
 }
 function scrollPage(id){
   const el=$(id); if(!el) return;
@@ -750,8 +788,8 @@ function renderHouse(){
   swapImg($('v0img'),m.photo,m.name,$('v0bg'));
   $('v0sil').src=SIL[S.m];
   $('v0name').textContent=m.name;
-  $('v0meta').innerHTML=esc(m.factory).toUpperCase()+' · '+sq(m)+' · '+cfgWord(m)+
-    ' · домокомплект от <b>'+rub(minKit(m))+'</b>';
+  $('v0meta').innerHTML=(m.factory?esc(m.factory).toUpperCase()+' · ':'')+sq(m)+' · '+cfgWord(m)+
+    ' · '+KT.from+' от <b>'+rub(minKit(m))+'</b>';
   $('v0cnt').textContent=String(S.m+1).padStart(2,'0')+' / '+String(DATA.length).padStart(2,'0');
   const rail=$('rail0');
   setRail(rail,'models',()=>DATA.map((x,i)=>
@@ -776,7 +814,7 @@ function renderPlan(){
   qsa($('chips1'),'[data-var]').forEach(b=>b.onclick=()=>{S.v=+b.dataset.var;render()});
   swapImg($('planImg'),v.plan,'Планировка '+m.name+', '+v.title);
   $('planTag').textContent=m.name+' · '+esc(v.title);
-  $('spec1').innerHTML=[['Площадь',v.m2+' м²'],['Конфигурация',v.title],['Домокомплект',rub(v.mat)],
+  $('spec1').innerHTML=[['Площадь',m2(v.m2)+' м²'],['Конфигурация',v.title],[KT.name,rub(v.mat)],
     ['Высота потолка','до 3,2 м'],['Производство','30–90 дней'],['Монтаж контура','2–15 дней']]
     .map(x=>'<div><span>'+x[0]+'</span><b>'+esc(x[1])+'</b></div>').join('');
 }
@@ -788,7 +826,7 @@ function renderPlan(){
 const isRoofModel=()=>!ROOF_MODEL||M().key===ROOF_MODEL;
 const roofModelName=()=>{const d=DATA.find(x=>x.key===ROOF_MODEL);return d?d.name:''};
 function exList(){
-  const ex=EX.map((s,i)=>({src:s,roof:Math.min(i,ROOF.length-1)}));
+  const ex=EX.map((s,i)=>({src:s,roof:EX_LINKED?Math.min(i,ROOF.length-1):-2}));
   return isRoofModel()?ex:[{src:M().photo,roof:-1}].concat(ex);
 }
 function exPick(i){
@@ -800,7 +838,9 @@ function renderExt(){
   const L=exList(); if(S.exIdx>=L.length) S.exIdx=0;
   const fr=L[S.exIdx];
   swapImg($('v2img'),fr.src,'Экстерьер',$('v2bg'));
-  $('v2meta').innerHTML = (fr.roof>=0 && !isRoofModel())
+  $('v2meta').innerHTML = fr.roof===-2
+    ? esc((XT&&XT.photos_caption||'Пример цвета кровли на модели {model}').replace('{model}',roofModelName()))
+    : (fr.roof>=0 && !isRoofModel())
     ? 'Цвет кровли <b>«'+esc(ROOF[fr.roof][1])+'»</b> — пример на модели '+esc(roofModelName())
     : 'Экстерьер: <b>'+esc(extName())+'</b> — не меняет стоимость домокомплекта';
   const rail=$('rail2');
@@ -808,11 +848,10 @@ function renderExt(){
     '<button class="th" data-i="'+i+'"><img src="'+x.src+'" alt=""></button>').join(''),
     ()=>qsa(rail,'[data-i]').forEach(b=>b.onclick=()=>{exPick(+b.dataset.i);render()}));
   markPressed(rail,'data-i',S.exIdx);
-  $('opt2').innerHTML='<div class="gh">Цвет кровли</div>'+sw(ROOF,S.roof,'roof')+
-    '<div class="gh">Фасадная доска</div>'+sw(FAC,S.fac,'fac')+
-    '<div class="gh">Оконный профиль</div>'+sw(PRO,S.pro,'pro')+
-    '<div class="note">'+(isRoofModel()?'':'Цвета кровли показаны на примере модели '+esc(roofModelName())+'. ')+
-    'Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.</div>';
+  $('opt2').innerHTML=EX_ORDER.map(k=>'<div class="gh">'+esc(EXG[k].t)+'</div>'+sw(EXG[k].items,S[k],k)).join('')+
+    '<div class="note">'+(XT&&XT.note?esc(XT.note):
+      (isRoofModel()?'':'Цвета кровли показаны на примере модели '+esc(roofModelName())+'. ')+
+      'Отделка не меняет стоимость домокомплекта — фиксируется на этапе договора.')+'</div>';
   bindSw($('opt2'));
 }
 
@@ -820,17 +859,17 @@ function renderExt(){
 function renderPack(){
   const v=V();
   $('rows3').innerHTML='<div class="r"><span class="bx on"></span>'+
-    '<span class="t"><b>Домокомплект внешнего контура<span class="always">включено</span></b>'+
-    '<span>Утеплённые панели пола, стен и кровли, окна, двери, фасадная доска.</span></span>'+
+    '<span class="t"><b>'+esc(KT.row)+'<span class="always">включено</span></b>'+
+    '<span>'+esc(KT.desc)+'</span>'+parts(v)+'</span>'+
     '<span class="p">'+rub(v.mat)+'</span></div>'+
     ADDONS.map(a=>'<button data-chk="'+a.k+'" aria-pressed="'+(!!S.add[a.k])+'">'+
       '<span class="bx"></span><span class="t"><b>'+a.n+'&nbsp;<span class="star">*</span></b>'+
-      '<span>'+a.d+'</span></span><span class="p">от '+rub(v[a.k])+'</span></button>').join('');
+      '<span>'+a.d+'</span></span><span class="p'+(v[a.k]>0?'':' ind')+'">'+ap(v[a.k],'от ')+'</span></button>').join('');
   qsa($('rows3'),'[data-chk]').forEach(b=>b.onclick=()=>{S.add[b.dataset.chk]=!S.add[b.dataset.chk];render()});
   const inc=['mat'].concat(chosen().map(a=>a.k));
   $('side3').innerHTML='<div style="font-size:17px;font-weight:500;letter-spacing:-.02em">'+esc(lvl())+'</div>'+
     '<div style="margin-top:14px">'+
-    inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?'&nbsp;<span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
+    inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?'&nbsp;<span class="star">*</span>':parts(v))+'</span><b'+(v[k]>0?'':' class="ind"')+'>'+ap(v[k])+'</b></div>').join('')+
     '</div>'+
     '<div class="ln" style="border-bottom:0;padding-top:14px"><span>Итого</span><b style="font-size:18px">от '+rub(total())+'</b></div>'+
     '<div class="fine"><b>*</b> Комплектации с монтажом — ориентир по ЦФО, до 250 км от Москвы. Работаем по всей территории РФ.</div>';
@@ -871,10 +910,10 @@ function bindSw(root){
 /* ═══════════ ШАГ 5 · ЗАЯВКА ═══════════ */
 function sumHtml(){
   const v=V(), inc=['mat'].concat(chosen().map(a=>a.k)), rest=ADDONS.filter(a=>!S.add[a.k]);
-  return inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?'&nbsp;<span class="star">*</span>':'')+'</span><b>'+rub(v[k])+'</b></div>').join('')+
+  return inc.map(k=>'<div class="ln"><span>'+LNAME[k]+(k!=='mat'?'&nbsp;<span class="star">*</span>':parts(v))+'</span><b'+(v[k]>0?'':' class="ind"')+'>'+ap(v[k])+'</b></div>').join('')+
     '<div class="ln" style="border-bottom:0;padding-top:14px"><span>Итого</span><b style="font-size:19px">от '+rub(total())+'</b></div>'+
     (rest.length?'<div class="gh">Можно добавить</div>':'')+
-    rest.map(a=>'<button class="add" data-add="'+a.k+'"><span>'+a.n+'</span><b>от '+rub(v[a.k])+'</b></button>').join('')+
+    rest.map(a=>'<button class="add" data-add="'+a.k+'"><span>'+a.n+'</span><b'+(v[a.k]>0?'':' class="ind"')+'>'+ap(v[a.k],'от ')+'</b></button>').join('')+
     '<div class="add" style="cursor:default"><span>Доставка'+(S.city.trim()?' · '+esc(S.city.trim()):'')+'</span><b>'+
       (S.city.trim()?'посчитаем':'уточните регион')+'</b></div>';
 }
@@ -945,7 +984,7 @@ function showOk(L,demo){
 /* ═══════════ ПОЛОСА ЦЕНЫ И СМЕТА ═══════════ */
 function renderBar(){
   const v=V(), star=chosen().length?' *':'';
-  $('bObj').textContent=M().name+' · '+v.m2+' м² · '+ROOF[S.roof][1].toLowerCase()+' / '+FAC[S.fac][1].toLowerCase();
+  $('bObj').textContent=M().name+' · '+m2(v.m2)+' м² · '+lc(ROOF[S.roof][1])+' / '+lc(FAC[S.fac][1]);
   $('bInc').textContent=lvl();
   $('bTot').textContent='от '+rub(total())+star;
   $('dTot').textContent='от '+rub(total())+star;
