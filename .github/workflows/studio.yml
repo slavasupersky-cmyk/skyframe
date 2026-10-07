@@ -1,0 +1,35 @@
+# Пересобирает конфигураторы, когда меняются таблицы, картинки или движок.
+# Поправили variants.csv на GitHub или загрузили картинки в brands/<бренд>/media/ —
+# через минуту-две страница на GitHub Pages обновится сама.
+name: studio-build
+on:
+  push:
+    branches: [main]
+    paths: ['brands/**', 'studio/**', 'tools/studio_build.py']
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency: { group: studio-build, cancel-in-progress: false }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pillow
+      - name: Сборка каталогов
+        run: python3 tools/studio_build.py
+      - name: Сохранить результат
+        run: |
+          git config user.name "studio-build"
+          git config user.email "studio-build@users.noreply.github.com"
+          git add -A brands/*/build d
+          if git diff --cached --quiet; then echo "без изменений"; exit 0; fi
+          git commit -m "Пересборка каталога после изменения таблиц или картинок"
+          git push
+          # коммит от GITHUB_TOKEN сам не запускает публикацию — просим GitHub Pages пересобраться
+          curl -s -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github+json" \
+               "https://api.github.com/repos/${{ github.repository }}/pages/builds" || true

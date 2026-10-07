@@ -1,0 +1,17 @@
+group,id,name,note,color
+seam,ral7016,Антрацит,RAL 7016,#393E42
+seam,ral9005,Чёрный,RAL 9005,#151515
+seam,ral7024,Графит,RAL 7024,#484D51
+seam,ral8017,Шоколад,RAL 8017,#45322C
+seam,ral3009,Оксид,RAL 3009,#703730
+seam,ral9003,Белый,RAL 9003,#ECEDE8
+facade,planken,Планкен,сосна,#B08455
+facade,thermo,Термодревесина,ясень или сосна,#7F563A
+facade,painted,Крашеный планкен,любой цвет по RAL,#5C615B
+terrace,larch,Лиственница,натуральная,#BA9467
+terrace,thermoash,Термоясень,тёмный,#775339
+terrace,wpc,ДПК,серый,#7F8382
+interior,raw,Без отделки,"черновой пол, обрешётка",#CDBFA6
+interior,light,Светлая,"дуб, белые стены",#D9C4A0
+interior,warm,Тёплая,"орех, тёплый белый",#8C6642
+interior,graphite,Графит,"тёмный пол, фасады цвета хвои",#3C423E

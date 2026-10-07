@@ -1,0 +1,1444 @@
+{
+ "brand": {
+  "title": "MASHKO",
+  "site_title": "MASHKO — соберите свой дом",
+  "description": "Конфигуратор домов Mashko: выберите модель, планировку, материалы и комплектацию — стоимость видно сразу.",
+  "logo": "../../brands/mashko/logo-dark.svg",
+  "logo_light": "../../brands/mashko/logo.svg",
+  "accent": "#F39240",
+  "accent_ink": "#17191C",
+  "phone": "+7 999 002-57-43",
+  "phone_href": "tel:+79990025743",
+  "phone_note": "WhatsApp и Telegram",
+  "email": "mail@mashkobuild.ru",
+  "site": "https://mashkobuild.ru/",
+  "site_label": "mashkobuild.ru",
+  "address": "Беларусь, Минская обл., Молодечненский р-н, п. Красное, ул. Привокзальная, 45",
+  "hours": "Пн–Пт, 9:00–18:00",
+  "legal": "ООО «МАШКО БИЛД», УНП 692273180",
+  "noindex": true,
+  "lead_endpoint": "",
+  "intro": {
+   "model": "aframe",
+   "title": "Дом, собранный\nза сезон",
+   "lead": "Префаб по скандинавской технологии: заводские панели, монтаж тёплого контура на участке за считанные дни. Выберите модель и соберите её — цена считается сразу."
+  },
+  "base": {
+   "title": "Домокомплект с окнами и фальцем",
+   "desc": "Заводской домокомплект: утеплённые панели пола, стен и кровли, двери, окна, фальц на кровлю и фасад.",
+   "parts": [
+    [
+     "kit_factory",
+     "С завода"
+    ],
+    [
+     "windows",
+     "Окна"
+    ],
+    [
+     "seam",
+     "Фальц"
+    ]
+   ]
+  },
+  "packages": [
+   {
+    "id": "mount",
+    "title": "Монтаж и кран",
+    "desc": "Сборка тёплого контура бригадой на участке и кран для разгрузки.",
+    "price": [
+     "mount",
+     "crane"
+    ],
+    "regional": true
+   },
+   {
+    "id": "foundation",
+    "title": "Свайный фундамент",
+    "desc": "Винтовые сваи с обвязкой. Буронабивные сваи или плита — по геологии участка.",
+    "price": [
+     "foundation"
+    ],
+    "regional": true
+   },
+   {
+    "id": "finish",
+    "title": "Чистовая отделка",
+    "desc": "Полы, стены, потолки и санузел под ключ.",
+    "price": [
+     "finish"
+    ]
+   },
+   {
+    "id": "mep",
+    "title": "Инженерные системы",
+    "desc": "Электрика, вода, канализация, отопление, вентиляция.",
+    "price": [
+     "mep"
+    ]
+   }
+  ],
+  "groups": [
+   {
+    "id": "seam",
+    "title": "Фальц: кровля и фасад",
+    "view": "hero",
+    "short": "Фальц"
+   },
+   {
+    "id": "facade",
+    "title": "Фасад",
+    "view": "facade",
+    "short": "Фасад"
+   },
+   {
+    "id": "terrace",
+    "title": "Терраса",
+    "view": "terrace",
+    "short": "Терраса"
+   },
+   {
+    "id": "interior",
+    "title": "Отделка внутри",
+    "view": "interior",
+    "requires": "finish",
+    "free": "raw",
+    "short": "Отделка"
+   }
+  ],
+  "notes": {
+   "regional": "Фундамент, монтаж и кран посчитаны для ЦФО, до 250 км от Москвы. По другим регионам уточним после указания города.",
+   "offer": "Расчёт справочный и не является публичной офертой. Доставка считается отдельно.",
+   "individual": "Позиции «индивидуально» считаются по проекту и в итог не входят."
+  }
+ },
+ "groups": [
+  {
+   "id": "seam",
+   "title": "Фальц: кровля и фасад",
+   "view": "hero",
+   "short": "Фальц",
+   "items": [
+    {
+     "id": "ral7016",
+     "name": "Антрацит",
+     "note": "RAL 7016",
+     "color": "#393E42"
+    },
+    {
+     "id": "ral9005",
+     "name": "Чёрный",
+     "note": "RAL 9005",
+     "color": "#151515"
+    },
+    {
+     "id": "ral7024",
+     "name": "Графит",
+     "note": "RAL 7024",
+     "color": "#484D51"
+    },
+    {
+     "id": "ral8017",
+     "name": "Шоколад",
+     "note": "RAL 8017",
+     "color": "#45322C"
+    },
+    {
+     "id": "ral3009",
+     "name": "Оксид",
+     "note": "RAL 3009",
+     "color": "#703730"
+    },
+    {
+     "id": "ral9003",
+     "name": "Белый",
+     "note": "RAL 9003",
+     "color": "#ECEDE8"
+    }
+   ]
+  },
+  {
+   "id": "facade",
+   "title": "Фасад",
+   "view": "facade",
+   "short": "Фасад",
+   "items": [
+    {
+     "id": "planken",
+     "name": "Планкен",
+     "note": "сосна",
+     "color": "#B08455"
+    },
+    {
+     "id": "thermo",
+     "name": "Термодревесина",
+     "note": "ясень или сосна",
+     "color": "#7F563A"
+    },
+    {
+     "id": "painted",
+     "name": "Крашеный планкен",
+     "note": "любой цвет по RAL",
+     "color": "#5C615B"
+    }
+   ]
+  },
+  {
+   "id": "terrace",
+   "title": "Терраса",
+   "view": "terrace",
+   "short": "Терраса",
+   "items": [
+    {
+     "id": "larch",
+     "name": "Лиственница",
+     "note": "натуральная",
+     "color": "#BA9467"
+    },
+    {
+     "id": "thermoash",
+     "name": "Термоясень",
+     "note": "тёмный",
+     "color": "#775339"
+    },
+    {
+     "id": "wpc",
+     "name": "ДПК",
+     "note": "серый",
+     "color": "#7F8382"
+    }
+   ]
+  },
+  {
+   "id": "interior",
+   "title": "Отделка внутри",
+   "view": "interior",
+   "requires": "finish",
+   "free": "raw",
+   "short": "Отделка",
+   "items": [
+    {
+     "id": "raw",
+     "name": "Без отделки",
+     "note": "черновой пол, обрешётка",
+     "color": "#CDBFA6"
+    },
+    {
+     "id": "light",
+     "name": "Светлая",
+     "note": "дуб, белые стены",
+     "color": "#D9C4A0"
+    },
+    {
+     "id": "warm",
+     "name": "Тёплая",
+     "note": "орех, тёплый белый",
+     "color": "#8C6642"
+    },
+    {
+     "id": "graphite",
+     "name": "Графит",
+     "note": "тёмный пол, фасады цвета хвои",
+     "color": "#3C423E"
+    }
+   ]
+  }
+ ],
+ "models": [
+  {
+   "id": "kantri",
+   "name": "Kantri",
+   "description": "Компактный модуль с двускатной кровлей и полностью остеклённым фасадом. Спальные места, кухонная зона, санузел в одном объёме.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 16,
+     "label": "",
+     "prices": {
+      "kit_factory": 948000,
+      "windows": 279360,
+      "seam": 186240,
+      "foundation": 84000,
+      "mount": 88400,
+      "crane": 34000,
+      "finish": 290000,
+      "mep": 190000
+     }
+    },
+    {
+     "id": "2",
+     "area": 16,
+     "label": "Вариант 2",
+     "prices": {
+      "kit_factory": 948000,
+      "windows": 279360,
+      "seam": 186240,
+      "foundation": 84000,
+      "mount": 88400,
+      "crane": 34000,
+      "finish": 290000,
+      "mep": 190000
+     }
+    },
+    {
+     "id": "3",
+     "area": 20,
+     "label": "",
+     "prices": {
+      "kit_factory": 1188000,
+      "windows": 210300,
+      "seam": 140200,
+      "foundation": 105000,
+      "mount": 110500,
+      "crane": 34000,
+      "finish": 350000,
+      "mep": 250000
+     }
+    },
+    {
+     "id": "4",
+     "area": 24,
+     "label": "",
+     "prices": {
+      "kit_factory": 1428000,
+      "windows": 256440,
+      "seam": 170960,
+      "foundation": 126000,
+      "mount": 132600,
+      "crane": 34000,
+      "finish": 470000,
+      "mep": 250000
+     }
+    },
+    {
+     "id": "5",
+     "area": 24,
+     "label": "Вариант 5",
+     "prices": {
+      "kit_factory": 1428000,
+      "windows": 256440,
+      "seam": 170960,
+      "foundation": 126000,
+      "mount": 132600,
+      "crane": 34000,
+      "finish": 470000,
+      "mep": 250000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/kantri/cover.jpg",
+    "plan-1": "../../brands/mashko/media/kantri/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/kantri/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/kantri/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/kantri/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/kantri/plan-5.jpg",
+    "_card": "../../brands/mashko/build/img/kantri-cover-card-d43ed2d909.jpg"
+   }
+  },
+  {
+   "id": "mirror",
+   "name": "Mirror",
+   "description": "Компактный дом с плоской кровлей и двумя стеклянными фасадами от пола до потолка. Формат для аренды, глэмпинга и гостевого дома: панорамное остекление, душ за стеклянной стеной, выход на террасу.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 18,
+     "label": "Студия, 2 стекла",
+     "prices": {
+      "kit_factory": 1644000,
+      "windows": 312330,
+      "seam": 208220,
+      "foundation": 56000,
+      "mount": 99450,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "2",
+     "area": 18,
+     "label": "Студия, 3 стекла",
+     "prices": {
+      "kit_factory": 1644000,
+      "windows": 528330,
+      "seam": 352220,
+      "foundation": 56000,
+      "mount": 99450,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "3",
+     "area": 27,
+     "label": "Спальня, 2 стекла",
+     "prices": {
+      "kit_factory": 2232000,
+      "windows": 344895,
+      "seam": 229930,
+      "foundation": 84000,
+      "mount": 149175,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "4",
+     "area": 27,
+     "label": "Спальня, 3 стекла",
+     "prices": {
+      "kit_factory": 2232000,
+      "windows": 560895,
+      "seam": 373930,
+      "foundation": 84000,
+      "mount": 149175,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/mirror/cover.jpg",
+    "plan-1": "../../brands/mashko/media/mirror/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/mirror/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/mirror/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/mirror/plan-4.jpg",
+    "_card": "../../brands/mashko/build/img/mirror-cover-card-b77476cbd5.jpg"
+   }
+  },
+  {
+   "id": "chalet",
+   "name": "Chalet",
+   "description": "Дом с двускатной кровлей и панорамным фасадным остеклением. Спальня, гостиная с кухней и терраса.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 36,
+     "label": "",
+     "prices": {
+      "kit_factory": 1944000,
+      "windows": 394740,
+      "seam": 263160,
+      "foundation": 112000,
+      "mount": 198900,
+      "crane": 68000,
+      "finish": 590000,
+      "mep": 490000
+     }
+    },
+    {
+     "id": "2",
+     "area": 36,
+     "label": "С сауной",
+     "prices": {
+      "kit_factory": 1944000,
+      "windows": 394740,
+      "seam": 263160,
+      "foundation": 112000,
+      "mount": 198900,
+      "crane": 68000,
+      "finish": 590000,
+      "mep": 490000
+     }
+    },
+    {
+     "id": "3",
+     "area": 42,
+     "label": "",
+     "prices": {
+      "kit_factory": 2268000,
+      "windows": 461730,
+      "seam": 307820,
+      "foundation": 140000,
+      "mount": 232050,
+      "crane": 68000,
+      "finish": 750000,
+      "mep": 510000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/chalet/cover.jpg",
+    "plan-1": "../../brands/mashko/media/chalet/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/chalet/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/chalet/plan-3.jpg",
+    "_card": "../../brands/mashko/build/img/chalet-cover-card-92fbae7c8b.jpg"
+   }
+  },
+  {
+   "id": "aframe",
+   "name": "A-Frame",
+   "description": "Дом-пик: скаты доходят до земли, фасад остеклён во всю высоту. Гостиная с кухней и панорамным остеклением, спальня на антресоли.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 44,
+     "label": "",
+     "prices": {
+      "kit_factory": 2376000,
+      "windows": 277740,
+      "seam": 185160,
+      "foundation": 112000,
+      "mount": 243100,
+      "crane": 34000,
+      "finish": 690000,
+      "mep": 630000
+     }
+    },
+    {
+     "id": "2",
+     "area": 58,
+     "label": "",
+     "prices": {
+      "kit_factory": 3132000,
+      "windows": 408930,
+      "seam": 272620,
+      "foundation": 140000,
+      "mount": 320450,
+      "crane": 34000,
+      "finish": 0,
+      "mep": 0
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/aframe/cover.jpg",
+    "ext-hero-ral3009": "../../brands/mashko/media/aframe/ext-hero-ral3009.jpg",
+    "ext-hero-ral7016": "../../brands/mashko/media/aframe/ext-hero-ral7016.jpg",
+    "ext-hero-ral7024": "../../brands/mashko/media/aframe/ext-hero-ral7024.jpg",
+    "ext-hero-ral8017": "../../brands/mashko/media/aframe/ext-hero-ral8017.jpg",
+    "ext-hero-ral9005": "../../brands/mashko/media/aframe/ext-hero-ral9005.jpg",
+    "plan-1": "../../brands/mashko/media/aframe/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/aframe/plan-2.jpg",
+    "_card": "../../brands/mashko/build/img/aframe-cover-card-8e17df30ad.jpg"
+   }
+  },
+  {
+   "id": "classic",
+   "name": "Classic",
+   "description": "Гостевой дом или баня, которые растут вместе с участком: от студии 30 м² до дома 83 м² с двумя спальнями и сауной. Плоская кровля, вертикальный фасад, панорамные двери в пол.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 30,
+     "label": "Спальня",
+     "prices": {
+      "kit_factory": 1980000,
+      "windows": 630150,
+      "seam": 420100,
+      "foundation": 84000,
+      "mount": 165750,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "3",
+     "area": 30,
+     "label": "С баней",
+     "prices": {
+      "kit_factory": 1980000,
+      "windows": 630150,
+      "seam": 420100,
+      "foundation": 84000,
+      "mount": 165750,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "2",
+     "area": 30,
+     "label": "Спальня, вариант 2",
+     "prices": {
+      "kit_factory": 2141500,
+      "windows": 630150,
+      "seam": 420100,
+      "foundation": 112000,
+      "mount": 276250,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "4",
+     "area": 45,
+     "label": "Спальня",
+     "prices": {
+      "kit_factory": 2970000,
+      "windows": 569625,
+      "seam": 379750,
+      "foundation": 126000,
+      "mount": 248625,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "5",
+     "area": 45,
+     "label": "Баня с хозблоком",
+     "prices": {
+      "kit_factory": 2970000,
+      "windows": 569625,
+      "seam": 379750,
+      "foundation": 126000,
+      "mount": 248625,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "6",
+     "area": 69,
+     "label": "2 спальни, сауна",
+     "prices": {
+      "kit_factory": 4554000,
+      "windows": 538065,
+      "seam": 358710,
+      "foundation": 168000,
+      "mount": 381225,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "7",
+     "area": 83,
+     "label": "2 спальни, сауна",
+     "prices": {
+      "kit_factory": 5478000,
+      "windows": 1148055,
+      "seam": 765370,
+      "foundation": 238000,
+      "mount": 458575,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/classic/cover.jpg",
+    "plan-1": "../../brands/mashko/media/classic/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/classic/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/classic/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/classic/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/classic/plan-5.jpg",
+    "plan-6": "../../brands/mashko/media/classic/plan-6.jpg",
+    "plan-7": "../../brands/mashko/media/classic/plan-7.jpg",
+    "_card": "../../brands/mashko/build/img/classic-cover-card-b8fe02a0b2.jpg"
+   }
+  },
+  {
+   "id": "nordic",
+   "name": "Nordic",
+   "description": "Одноэтажный дом с плоской кровлей и глубокой террасой под выносом кровли. Спальни, гостиная, кухня-столовая, панорамное остекление фасадов. Опционально спальню можно заменить на сауну.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 65,
+     "label": "1 спальня",
+     "prices": {
+      "kit_factory": 3108000,
+      "windows": 96525,
+      "seam": 64350,
+      "foundation": 168000,
+      "mount": 359125,
+      "crane": 68000,
+      "finish": 1290000,
+      "mep": 660000
+     }
+    },
+    {
+     "id": "4",
+     "area": 65,
+     "label": "1 ванная",
+     "prices": {
+      "kit_factory": 3348000,
+      "windows": 31725,
+      "seam": 21150,
+      "foundation": 168000,
+      "mount": 359125,
+      "crane": 68000,
+      "finish": 1290000,
+      "mep": 660000
+     }
+    },
+    {
+     "id": "2",
+     "area": 75,
+     "label": "2 спальни",
+     "prices": {
+      "kit_factory": 3360000,
+      "windows": 180987,
+      "seam": 120658,
+      "foundation": 252000,
+      "mount": 414375,
+      "crane": 68000,
+      "finish": 1350000,
+      "mep": 900000
+     }
+    },
+    {
+     "id": "5",
+     "area": 75,
+     "label": "Сауна и ванная",
+     "prices": {
+      "kit_factory": 3636000,
+      "windows": 173751,
+      "seam": 115834,
+      "foundation": 252000,
+      "mount": 414375,
+      "crane": 68000,
+      "finish": 1350000,
+      "mep": 900000
+     }
+    },
+    {
+     "id": "3",
+     "area": 82,
+     "label": "С сауной",
+     "prices": {
+      "kit_factory": 3660000,
+      "windows": 163765,
+      "seam": 109177,
+      "foundation": 294000,
+      "mount": 453050,
+      "crane": 68000,
+      "finish": 1470000,
+      "mep": 990000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/nordic/cover.jpg",
+    "plan-1": "../../brands/mashko/media/nordic/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/nordic/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/nordic/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/nordic/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/nordic/plan-5.jpg",
+    "_card": "../../brands/mashko/build/img/nordic-cover-card-0f4bdb3b52.jpg"
+   }
+  },
+  {
+   "id": "alpinebarn",
+   "name": "Alpine Barn",
+   "description": "Одноэтажный дом с двускатной кровлей и глубокой террасой под выносом кровли. Самая широкая линейка планировок — от двух до четырёх спален, гостиная кухня-столовая с панорамным остеклением.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 54,
+     "label": "",
+     "prices": {
+      "kit_factory": 2916000,
+      "windows": 648750,
+      "seam": 432500,
+      "foundation": 140000,
+      "mount": 298350,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "2",
+     "area": 72,
+     "label": "",
+     "prices": {
+      "kit_factory": 3888000,
+      "windows": 852360,
+      "seam": 568240,
+      "foundation": 168000,
+      "mount": 397800,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "3",
+     "area": 93,
+     "label": "",
+     "prices": {
+      "kit_factory": 5022000,
+      "windows": 1101465,
+      "seam": 734310,
+      "foundation": 252000,
+      "mount": 513825,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "4",
+     "area": 96,
+     "label": "",
+     "prices": {
+      "kit_factory": 5184000,
+      "windows": 1139760,
+      "seam": 759840,
+      "foundation": 252000,
+      "mount": 530400,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "5",
+     "area": 117,
+     "label": "",
+     "prices": {
+      "kit_factory": 6318000,
+      "windows": 1460745,
+      "seam": 973830,
+      "foundation": 315000,
+      "mount": 646425,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "6",
+     "area": 142,
+     "label": "",
+     "prices": {
+      "kit_factory": 7668000,
+      "windows": 1655910,
+      "seam": 1103940,
+      "foundation": 378000,
+      "mount": 784550,
+      "crane": 136000,
+      "finish": 0,
+      "mep": 0
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/alpinebarn/cover.jpg",
+    "plan-1": "../../brands/mashko/media/alpinebarn/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/alpinebarn/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/alpinebarn/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/alpinebarn/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/alpinebarn/plan-5.jpg",
+    "plan-6": "../../brands/mashko/media/alpinebarn/plan-6.jpg",
+    "_card": "../../brands/mashko/build/img/alpinebarn-cover-card-548bb40405.jpg"
+   }
+  },
+  {
+   "id": "fachwerk",
+   "name": "Alpine Fachwerk",
+   "description": "Одноэтажный фахверк: двускатная кровля, остеклённый фронтон, высокие потолки в общей зоне. Линейка растёт от 54 до 142 м² — от двух спален до четырёх со свободной гостиной и кабинетом.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 54,
+     "label": "2 спальни",
+     "prices": {
+      "kit_factory": 3045600,
+      "windows": 714990,
+      "seam": 476660,
+      "foundation": 140000,
+      "mount": 298350,
+      "crane": 68000,
+      "finish": 990000,
+      "mep": 630000
+     }
+    },
+    {
+     "id": "2",
+     "area": 72,
+     "label": "2 спальни",
+     "prices": {
+      "kit_factory": 4060800,
+      "windows": 892680,
+      "seam": 595120,
+      "foundation": 168000,
+      "mount": 397800,
+      "crane": 68000,
+      "finish": 1290000,
+      "mep": 870000
+     }
+    },
+    {
+     "id": "3",
+     "area": 93,
+     "label": "2 спальни",
+     "prices": {
+      "kit_factory": 5245200,
+      "windows": 1183545,
+      "seam": 789030,
+      "foundation": 252000,
+      "mount": 513825,
+      "crane": 102000,
+      "finish": 1850000,
+      "mep": 940000
+     }
+    },
+    {
+     "id": "4",
+     "area": 96,
+     "label": "3 спальни",
+     "prices": {
+      "kit_factory": 5414400,
+      "windows": 1217520,
+      "seam": 811680,
+      "foundation": 252000,
+      "mount": 530400,
+      "crane": 102000,
+      "finish": 1900000,
+      "mep": 980000
+     }
+    },
+    {
+     "id": "5",
+     "area": 117,
+     "label": "3 спальни",
+     "prices": {
+      "kit_factory": 6598800,
+      "windows": 1586025,
+      "seam": 1057350,
+      "foundation": 315000,
+      "mount": 646425,
+      "crane": 102000,
+      "finish": 2190000,
+      "mep": 1320000
+     }
+    },
+    {
+     "id": "6",
+     "area": 142,
+     "label": "4 спальни, кабинет",
+     "prices": {
+      "kit_factory": 8008800,
+      "windows": 1811430,
+      "seam": 1207620,
+      "foundation": 378000,
+      "mount": 784550,
+      "crane": 136000,
+      "finish": 2750000,
+      "mep": 1510000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/fachwerk/cover.jpg",
+    "plan-1": "../../brands/mashko/media/fachwerk/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/fachwerk/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/fachwerk/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/fachwerk/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/fachwerk/plan-5.jpg",
+    "plan-6": "../../brands/mashko/media/fachwerk/plan-6.jpg",
+    "_card": "../../brands/mashko/build/img/fachwerk-cover-card-ea89f14cde.jpg"
+   }
+  },
+  {
+   "id": "montblanc",
+   "name": "Mont Blanc",
+   "description": "Компактный дом с просторной двусветной гостиной и панорамным остеклением в два яруса. Вторая спальня выходит на второй свет. Опционально — сауна.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 54,
+     "label": "",
+     "prices": {
+      "kit_factory": 2916000,
+      "windows": 1023390,
+      "seam": 682260,
+      "foundation": 112000,
+      "mount": 298350,
+      "crane": 68000,
+      "finish": 1090000,
+      "mep": 530000
+     }
+    },
+    {
+     "id": "2",
+     "area": 54,
+     "label": "С сауной",
+     "prices": {
+      "kit_factory": 2916000,
+      "windows": 1023390,
+      "seam": 682260,
+      "foundation": 112000,
+      "mount": 298350,
+      "crane": 68000,
+      "finish": 1090000,
+      "mep": 530000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/montblanc/cover.jpg",
+    "plan-1": "../../brands/mashko/media/montblanc/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/montblanc/plan-2.jpg",
+    "_card": "../../brands/mashko/build/img/montblanc-cover-card-0d8f76c395.jpg"
+   }
+  },
+  {
+   "id": "barn72",
+   "name": "Barn 72",
+   "description": "Барн с двускатной кровлей и глубокой террасой под кровлей. Гостиная с кухней, разные комбинации спален — от двух до четырёх.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 54,
+     "label": "",
+     "prices": {
+      "kit_factory": 2916000,
+      "windows": 1215390,
+      "seam": 810260,
+      "foundation": 140000,
+      "mount": 298350,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "2",
+     "area": 72,
+     "label": "",
+     "prices": {
+      "kit_factory": 3888000,
+      "windows": 627720,
+      "seam": 418480,
+      "foundation": 168000,
+      "mount": 397800,
+      "crane": 68000,
+      "finish": 1290000,
+      "mep": 870000
+     }
+    },
+    {
+     "id": "3",
+     "area": 102,
+     "label": "",
+     "prices": {
+      "kit_factory": 5508000,
+      "windows": 673470,
+      "seam": 448980,
+      "foundation": 252000,
+      "mount": 563550,
+      "crane": 102000,
+      "finish": 1990000,
+      "mep": 1070000
+     }
+    },
+    {
+     "id": "4",
+     "area": 108,
+     "label": "",
+     "prices": {
+      "kit_factory": 5832000,
+      "windows": 811980,
+      "seam": 541320,
+      "foundation": 252000,
+      "mount": 596700,
+      "crane": 102000,
+      "finish": 2150000,
+      "mep": 1090000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/barn72/cover.jpg",
+    "plan-1": "../../brands/mashko/media/barn72/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/barn72/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/barn72/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/barn72/plan-4.jpg",
+    "_card": "../../brands/mashko/build/img/barn72-cover-card-013345dcc4.jpg"
+   }
+  },
+  {
+   "id": "manhattan",
+   "name": "Manhattan",
+   "description": "Одноэтажный дом с плоской кровлей и архитектурным рядом опор по фасаду. Уединённые спальни по разным сторонам дома, общая гостиная-кухня по центру. Есть версия с навесом для автомобилей.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 69,
+     "label": "",
+     "prices": {
+      "kit_factory": 4554000,
+      "windows": 522465,
+      "seam": 348310,
+      "foundation": 294000,
+      "mount": 381225,
+      "crane": 68000,
+      "finish": 1300000,
+      "mep": 770000
+     }
+    },
+    {
+     "id": "3",
+     "area": 81.5,
+     "label": "С навесом для машин",
+     "prices": {
+      "kit_factory": 5382000,
+      "windows": 496124,
+      "seam": 330749,
+      "foundation": 378000,
+      "mount": 450288,
+      "crane": 102000,
+      "finish": 1500000,
+      "mep": 960000
+     }
+    },
+    {
+     "id": "2",
+     "area": 81.5,
+     "label": "",
+     "prices": {
+      "kit_factory": 5382000,
+      "windows": 666260,
+      "seam": 444173,
+      "foundation": 378000,
+      "mount": 450288,
+      "crane": 102000,
+      "finish": 1500000,
+      "mep": 960000
+     }
+    },
+    {
+     "id": "4",
+     "area": 89,
+     "label": "",
+     "prices": {
+      "kit_factory": 5868000,
+      "windows": 749109,
+      "seam": 499406,
+      "foundation": 420000,
+      "mount": 491725,
+      "crane": 102000,
+      "finish": 1650000,
+      "mep": 1020000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/manhattan/cover.jpg",
+    "plan-1": "../../brands/mashko/media/manhattan/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/manhattan/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/manhattan/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/manhattan/plan-4.jpg",
+    "_card": "../../brands/mashko/build/img/manhattan-cover-card-767829d834.jpg"
+   }
+  },
+  {
+   "id": "alpinemax",
+   "name": "Alpine Max",
+   "description": "Одноэтажный барнхаус с панорамным остеклением во всю ширину фасада. Та же модульная сетка, что и у альпийской линейки: от 72 до 142 м², от двух спален до четырёх с кабинетом.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 72,
+     "label": "2 спальни",
+     "prices": {
+      "kit_factory": 4060800,
+      "windows": 964680,
+      "seam": 643120,
+      "foundation": 168000,
+      "mount": 397800,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "2",
+     "area": 93,
+     "label": "2 спальни",
+     "prices": {
+      "kit_factory": 5245200,
+      "windows": 1203945,
+      "seam": 802630,
+      "foundation": 252000,
+      "mount": 513825,
+      "crane": 68000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "3",
+     "area": 96,
+     "label": "3 спальни",
+     "prices": {
+      "kit_factory": 5414400,
+      "windows": 1073520,
+      "seam": 715680,
+      "foundation": 252000,
+      "mount": 530400,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "4",
+     "area": 117,
+     "label": "3 спальни",
+     "prices": {
+      "kit_factory": 6598800,
+      "windows": 1514025,
+      "seam": 1009350,
+      "foundation": 315000,
+      "mount": 646425,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "5",
+     "area": 142,
+     "label": "4 спальни, кабинет",
+     "prices": {
+      "kit_factory": 8008800,
+      "windows": 1615830,
+      "seam": 1077220,
+      "foundation": 378000,
+      "mount": 784550,
+      "crane": 102000,
+      "finish": 0,
+      "mep": 0
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/alpinemax/cover.jpg",
+    "plan-1": "../../brands/mashko/media/alpinemax/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/alpinemax/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/alpinemax/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/alpinemax/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/alpinemax/plan-5.jpg",
+    "_card": "../../brands/mashko/build/img/alpinemax-cover-card-9efffbb743.jpg"
+   }
+  },
+  {
+   "id": "openspace",
+   "name": "Open Space",
+   "description": "Одноэтажный дом с панорамным остеклением по двум фасадам. Уединённые спальни по разным сторонам дома, общее пространство гостиной кухни-столовой, санузлы, открытая общая терраса.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 112,
+     "label": "3 спальни с мастер-спальней",
+     "prices": {
+      "kit_factory": 6115200,
+      "windows": 1230000,
+      "seam": 820000,
+      "foundation": 378000,
+      "mount": 618800,
+      "crane": 102000,
+      "finish": 2100000,
+      "mep": 1260000
+     }
+    },
+    {
+     "id": "2",
+     "area": 112,
+     "label": "4 спальни",
+     "prices": {
+      "kit_factory": 6115200,
+      "windows": 1230000,
+      "seam": 820000,
+      "foundation": 378000,
+      "mount": 618800,
+      "crane": 102000,
+      "finish": 2100000,
+      "mep": 1260000
+     }
+    },
+    {
+     "id": "3",
+     "area": 112,
+     "label": "2 мастер-спальни",
+     "prices": {
+      "kit_factory": 6115200,
+      "windows": 1230000,
+      "seam": 820000,
+      "foundation": 378000,
+      "mount": 618800,
+      "crane": 102000,
+      "finish": 2100000,
+      "mep": 1260000
+     }
+    },
+    {
+     "id": "4",
+     "area": 112,
+     "label": "3 спальни, большой хозблок",
+     "prices": {
+      "kit_factory": 6115200,
+      "windows": 1230000,
+      "seam": 820000,
+      "foundation": 378000,
+      "mount": 618800,
+      "crane": 102000,
+      "finish": 2100000,
+      "mep": 1260000
+     }
+    },
+    {
+     "id": "5",
+     "area": 112,
+     "label": "3 спальни, навес на 2 авто",
+     "prices": {
+      "kit_factory": 6115200,
+      "windows": 1230000,
+      "seam": 820000,
+      "foundation": 378000,
+      "mount": 618800,
+      "crane": 102000,
+      "finish": 2100000,
+      "mep": 1260000
+     }
+    },
+    {
+     "id": "6",
+     "area": 112,
+     "label": "3 спальни и сауна",
+     "prices": {
+      "kit_factory": 6115200,
+      "windows": 1230000,
+      "seam": 820000,
+      "foundation": 378000,
+      "mount": 618800,
+      "crane": 102000,
+      "finish": 2100000,
+      "mep": 1260000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/openspace/cover.jpg",
+    "plan-1": "../../brands/mashko/media/openspace/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/openspace/plan-2.jpg",
+    "plan-3": "../../brands/mashko/media/openspace/plan-3.jpg",
+    "plan-4": "../../brands/mashko/media/openspace/plan-4.jpg",
+    "plan-5": "../../brands/mashko/media/openspace/plan-5.jpg",
+    "plan-6": "../../brands/mashko/media/openspace/plan-6.jpg",
+    "_card": "../../brands/mashko/build/img/openspace-cover-card-c84f4b6f47.jpg"
+   }
+  },
+  {
+   "id": "andorra",
+   "name": "Andorra",
+   "description": "Одноэтажный дом с плоской парящей выносной кровлей. Три спальни, гардеробная и встроенный навес для машин.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 130,
+     "label": "",
+     "prices": {
+      "kit_factory": 8580000,
+      "windows": 1041450,
+      "seam": 694300,
+      "foundation": 434000,
+      "mount": 718250,
+      "crane": 136000,
+      "finish": 2300000,
+      "mep": 1600000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/andorra/cover.jpg",
+    "plan-1": "../../brands/mashko/media/andorra/plan-1.jpg",
+    "_card": "../../brands/mashko/build/img/andorra-cover-card-c647bcf21c.jpg"
+   }
+  },
+  {
+   "id": "boston",
+   "name": "Boston",
+   "description": "Двухэтажный дом с балконами по всему фасаду второго этажа и просторной открытой террасой первого этажа. Панорамное остекление, спальни, общая гостиная кухня-столовая, встроенный гараж для автомобилей.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 125,
+     "label": "",
+     "prices": {
+      "kit_factory": 7824000,
+      "windows": 1674825,
+      "seam": 1116550,
+      "foundation": 378000,
+      "mount": 690625,
+      "crane": 136000,
+      "finish": 2500000,
+      "mep": 1250000
+     }
+    },
+    {
+     "id": "2",
+     "area": 222,
+     "label": "",
+     "prices": {
+      "kit_factory": 13852800,
+      "windows": 3008550,
+      "seam": 2005700,
+      "foundation": 518000,
+      "mount": 1226550,
+      "crane": 170000,
+      "finish": 4500000,
+      "mep": 2160000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/boston/cover.jpg",
+    "plan-1": "../../brands/mashko/media/boston/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/boston/plan-2.jpg",
+    "_card": "../../brands/mashko/build/img/boston-cover-card-1772e6e264.jpg"
+   }
+  },
+  {
+   "id": "brooklyn",
+   "name": "Brooklyn",
+   "description": "Флагман линейки: просторный дом из кубических объёмов. Спальни, гостиная кухня-столовая, санузлы, кабинет, гардеробная и хозблок. Панорамное остекление фасадов.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 240,
+     "label": "",
+     "prices": {
+      "kit_factory": 15840000,
+      "windows": 2502000,
+      "seam": 1668000,
+      "foundation": 574000,
+      "mount": 1326000,
+      "crane": 170000,
+      "finish": 4290000,
+      "mep": 2910000
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/brooklyn/cover.jpg",
+    "plan-1": "../../brands/mashko/media/brooklyn/plan-1.jpg",
+    "_card": "../../brands/mashko/build/img/brooklyn-cover-card-bd0f9958f2.jpg"
+   }
+  }
+ ],
+ "shared": {
+  "int-sample-1": "../../brands/mashko/media/_shared/int-sample-1.jpg",
+  "int-sample-2": "../../brands/mashko/media/_shared/int-sample-2.jpg",
+  "int-sample-3": "../../brands/mashko/media/_shared/int-sample-3.jpg",
+  "int-sample-4": "../../brands/mashko/media/_shared/int-sample-4.jpg"
+ }
+}
