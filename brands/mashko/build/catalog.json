@@ -20,7 +20,7 @@
   "lead_endpoint": "",
   "intro": {
    "model": "aframe",
-   "focus": "58% 10%",
+   "focus": "90% 45%",
    "title": "Дом, собранный\nза сезон",
    "lead": "Префаб по скандинавской технологии: заводские панели, монтаж тёплого контура на участке за считанные дни. Выберите модель и соберите её — цена считается сразу."
   },
@@ -517,6 +517,7 @@
     "ext-hero-ral8017": "../../brands/mashko/media/aframe/ext-hero-ral8017.jpg",
     "ext-hero-ral9003": "../../brands/mashko/media/aframe/ext-hero-ral9003.jpg",
     "ext-hero-ral9005": "../../brands/mashko/media/aframe/ext-hero-ral9005.jpg",
+    "hero": "../../brands/mashko/media/aframe/hero.jpg",
     "int-gkl": "../../brands/mashko/media/aframe/int-gkl.jpg",
     "int-mixed": "../../brands/mashko/media/aframe/int-mixed.jpg",
     "int-shell": "../../brands/mashko/media/aframe/int-shell.jpg",
