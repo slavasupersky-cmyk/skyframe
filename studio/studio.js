@@ -22,7 +22,9 @@ const m2 = n => String(n).replace('.', ',') + ' м²';
 const pl = (n, a, b, c) => { const m = n % 100, k = n % 10; return m >= 11 && m <= 14 ? c : k === 1 ? a : k >= 2 && k <= 4 ? b : c; };
 const sum = (v, cols) => cols.reduce((s, c) => s + (+v.prices[c] || 0), 0);
 const kit = v => sum(v, B.base.parts.map(p => p[0]));
-const pkPrice = (v, p) => sum(v, p.price);
+const pkPrice = (v, p) => { const x = sum(v, p.price); return x > 0 ? x : (p.per_m2 ? Math.round(v.area * p.per_m2) : 0); };
+const DLV = B.delivery || null;
+const dlvFrom = () => DLV ? (+DLV.from || 0) : 0;
 const minKit = m => Math.min.apply(null, m.variants.map(kit));
 const areaRange = m => { const a = m.variants.map(v => v.area), lo = Math.min.apply(null, a), hi = Math.max.apply(null, a);
   return lo === hi ? m2(lo) : String(lo).replace('.', ',') + '–' + m2(hi); };
@@ -128,8 +130,10 @@ const V = () => M.variants.find(v => v.id === S.v);
 const item = (g, id) => G[g].items.find(i => i.id === (id || S.sel[g]));
 function total() {
   const v = V();
-  return kit(v) + PKG.filter(p => S.pk.has(p.id)).reduce((s, p) => s + pkPrice(v, p), 0);
+  return kit(v) + dlvFrom() + PKG.filter(p => S.pk.has(p.id)).reduce((s, p) => s + pkPrice(v, p), 0);
 }
+const INT = G.interior || null;
+const finishOn = () => !INT || !INT.requires || S.pk.has(INT.requires);
 function level() {
   const on = PKG.filter(p => S.pk.has(p.id)).length;
   return on === 0 ? 'Только домокомплект' : on === PKG.length ? 'Под ключ' : 'Своя комплектация';
@@ -160,11 +164,16 @@ function frames(tab) {
     const v = V();
     add(I['plan-' + v.id], 'Планировка ' + m2(v.area) + (v.label ? ', ' + v.label.toLowerCase() : ''), 'plan', true);
   } else if (tab === 'int' && G.interior) {
+    // своя картинка модели → любая своя в другом варианте (с пометкой) → общие примеры бренда
     const st = S.sel.interior, it = item('interior');
     const exact = I['int-' + st] || SH['int-' + st];
-    if (exact) add(exact, gname(G.interior) + ': ' + it.name.toLowerCase(), 'int');
+    const own = G.interior.items.map(x => I['int-' + x.id]).filter(Boolean)[0];
+    if (!finishOn() && I['int-shell']) add(I['int-shell'], 'Тёплый контур: без чистовой отделки', 'int');
+    else if (!finishOn() && own) add(own, 'Так выглядит с чистовой отделкой', 'int');
+    else if (exact) add(exact, gname(G.interior) + ': ' + it.name.toLowerCase(), 'int');
+    else if (own) add(own, 'Фото в варианте «' + it.name.toLowerCase() + '» скоро появится', 'int');
     else Object.keys(SH).filter(k => k.indexOf('int-sample') === 0).sort()
-      .forEach(k => add(SH[k], 'Пример отделки в наших домах. Фото выбранного варианта скоро появится', 'int'));
+      .forEach(k => add(SH[k], 'Пример отделки в домах ' + B.title.charAt(0) + B.title.slice(1).toLowerCase(), 'int'));
   }
   return out;
 }
@@ -203,7 +212,7 @@ function paintStage() {
 function stepFrame(d) {
   if (!stage.list || stage.list.length < 2) return;
   stage.i = (stage.i + d + stage.list.length) % stage.list.length;
-  stage.manual = activeSec;
+  pin();
   paintStage();
 }
 
@@ -240,9 +249,13 @@ function renderStudio(m, q) {
               '<div class="body"><div class="sw" role="radiogroup" aria-label="' + esc(g.title) + '"></div><p class="picked"></p></div></section>').join('') +
           '<section class="sec" data-view="hero"><h2>Комплектация</h2>' +
             '<p class="hint">Домокомплект входит всегда. Остальное можно заказать сразу или позже.</p>' +
-            '<div class="body pk" id="pk"></div></section>' +
-          (G.interior ? '<section class="sec" data-view="interior" data-g="interior"><h2>' + esc(G.interior.title) + '</h2>' +
-            '<p class="hint" id="intHint"></p><div class="body styles" id="styles"></div></section>' : '') +
+            '<div class="body pk" id="pk"></div>' +
+            (DLV ? '<div class="opt base dlv"><span class="box">' + ICON.check + '</span><span class="t">' +
+              '<span class="row"><b>' + esc(DLV.title || 'Доставка') + '</b><span class="p num" id="dlvP"></span></span>' +
+              '<span class="d" id="dlvD"></span>' +
+              '<span class="field small"><input id="dCity" autocomplete="address-level2" placeholder=" " value="' + esc(S.form.city) + '">' +
+              '<label for="dCity">' + esc(DLV.ask || 'Город или область') + '</label></span></span></div>' : '') +
+          '</section>' +
           '<section class="sec" data-view="hero" id="order"><h2>Ваш дом</h2><div class="body" id="summary"></div>' +
             '<button class="share" id="share">' + ICON.link + 'Скопировать ссылку на эту конфигурацию</button>' +
             '<div id="lead"></div>' +
@@ -294,21 +307,21 @@ function update(first) {
       '<span class="row"><b>' + esc(B.base.title) + '</b><span class="p num">' + rub(kit(v)) + '</span></span>' +
       '<span class="d">' + esc(B.base.desc) + '</span><span class="parts num">' + esc(parts) + '</span></span></div>' +
     PKG.map(p => { const pr = pkPrice(v, p);
-      return '<button class="opt" data-p="' + p.id + '" aria-pressed="' + S.pk.has(p.id) + '"><span class="box">' + ICON.check + '</span>' +
+      const btn = '<button class="opt" data-p="' + p.id + '" aria-pressed="' + S.pk.has(p.id) + '"><span class="box">' + ICON.check + '</span>' +
         '<span class="t"><span class="row"><b>' + esc(p.title) + (p.regional ? '&nbsp;<span class="star">*</span>' : '') + '</b>' +
-        '<span class="p num' + (pr > 0 ? '' : ' ind') + '">' + (pr > 0 ? rub(pr) : 'индивидуально') + '</span></span>' +
-        '<span class="d">' + esc(p.desc) + '</span></span></button>'; }).join('');
-  // отделка внутри
-  if (G.interior) {
-    const fin = PKG.find(p => p.id === G.interior.requires);
-    const fp = fin ? pkPrice(v, fin) : 0;
-    $('#intHint').textContent = fin ? 'Стиль отделки добавляет в комплектацию «' + fin.title.toLowerCase() + '».' : '';
-    $('#styles').innerHTML = G.interior.items.map(i => {
-      const free = i.id === G.interior.free;
-      return '<button class="opt" data-st="' + esc(i.id) + '" aria-pressed="' + (i.id === S.sel.interior) + '">' +
-        '<i style="background:' + esc(i.color) + '"></i><span class="t"><b>' + esc(i.name) + '</b><span>' + esc(i.note) + '</span></span>' +
-        '<span class="p num">' + (free ? 'без доплаты' : fp > 0 ? '+ ' + rub(fp) : 'по проекту') + '</span></button>';
-    }).join('');
+        '<span class="p num' + (pr > 0 ? '' : ' ind') + '">' + (pr > 0 ? rub(pr) : 'по проекту') + '</span></span>' +
+        '<span class="d">' + esc(p.desc) + '</span></span></button>';
+      const sub = INT && INT.requires === p.id && S.pk.has(p.id)
+        ? '<div class="subopts" data-view="interior" role="radiogroup" aria-label="' + esc(INT.title) + '"><b>' + esc(INT.title) + '</b>' +
+            INT.items.map(i => '<button class="mini" role="radio" data-st="' + esc(i.id) + '" aria-checked="' + (i.id === S.sel.interior) + '" aria-pressed="' + (i.id === S.sel.interior) + '">' +
+              '<i style="background:' + esc(i.color) + '"></i><span><b>' + esc(i.name) + '</b><span>' + esc(i.note) + '</span></span></button>').join('') +
+          '</div>' : '';
+      return btn + sub; }).join('');
+  // доставка
+  if (DLV) {
+    const city = S.form.city.trim();
+    $('#dlvP').textContent = 'от ' + rub(dlvFrom());
+    $('#dlvD').textContent = city ? 'До «' + city + '» посчитаем точно — город уйдёт в заявку.' : (DLV.desc || '') + ' Укажите город — посчитаем точнее.';
   }
   $('#tot').textContent = rub(total());
   renderSummary();
@@ -317,7 +330,8 @@ function update(first) {
 
 function lines() {
   const v = V(), out = [[B.base.title, rub(kit(v)), false]];
-  PKG.filter(p => S.pk.has(p.id)).forEach(p => { const pr = pkPrice(v, p); out.push([p.title + (p.regional ? ' *' : ''), pr > 0 ? rub(pr) : 'индивидуально', !(pr > 0)]); });
+  PKG.filter(p => S.pk.has(p.id)).forEach(p => { const pr = pkPrice(v, p); out.push([p.title + (p.regional ? ' *' : ''), pr > 0 ? rub(pr) : 'по проекту', !(pr > 0)]); });
+  if (DLV) out.push([(DLV.title || 'Доставка') + (S.form.city.trim() ? ' — ' + S.form.city.trim() : ''), 'от ' + rub(dlvFrom()), false]);
   return out;
 }
 // выбранное: пары [что, значение]
@@ -325,7 +339,9 @@ const gname = g => g.short || g.title;
 function chosen() {
   const v = V();
   return [['Планировка', m2(v.area) + (v.label ? ', ' + v.label.toLowerCase() : '')]].concat(GROUPS.map(g => {
-    const it = item(g.id); return [gname(g), it.name + (it.note && /\d/.test(it.note) ? ', ' + it.note : '')];
+    const it = item(g.id);
+    if (g === INT && !finishOn()) return [gname(g), 'без отделки, тёплый контур'];
+    return [gname(g), it.name + (it.note && /\d/.test(it.note) ? ', ' + it.note : '')];
   }));
 }
 const chosenText = () => chosen().map(p => p[0] + ': ' + p[1]);
@@ -361,7 +377,8 @@ function renderLead() {
     '</form>';
   if (S.sent) return;
   ['fName', 'fPhone', 'fCity'].forEach(id => $('#' + id).addEventListener('input', e => {
-    S.form[{ fName: 'name', fPhone: 'phone', fCity: 'city' }[id]] = e.target.value; e.target.parentNode.classList.remove('bad'); }));
+    S.form[{ fName: 'name', fPhone: 'phone', fCity: 'city' }[id]] = e.target.value; e.target.parentNode.classList.remove('bad');
+    if (id === 'fCity') { const d = $('#dCity'); if (d) d.value = e.target.value; update(); } }));
   $('#fPhone').addEventListener('input', e => { e.target.value = e.target.value.replace(/[^\d+()\-\s]/g, ''); });
   $('#fAgree').addEventListener('change', () => $('#fAgreeL').classList.remove('bad'));
   $('#form').addEventListener('submit', e => { e.preventDefault(); submit(); });
@@ -405,7 +422,7 @@ async function submit() {
 let activeSec = null;
 function bindStudio() {
   const st = $('.stage');
-  $$('.views button', st).forEach(b => b.onclick = () => { stage.manual = activeSec; showStage(b.dataset.t); });
+  $$('.views button', st).forEach(b => b.onclick = () => { pin(); showStage(b.dataset.t); });
   $('.arrow.prev', st).onclick = () => stepFrame(-1);
   $('.arrow.next', st).onclick = () => stepFrame(1);
   st.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') stepFrame(-1); if (e.key === 'ArrowRight') stepFrame(1); });
@@ -419,18 +436,22 @@ function bindStudio() {
   const panel = $('.panel');
   panel.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
-    if (b.dataset.v) { S.v = b.dataset.v; update(); showStage('plan'); stage.manual = activeSec; }
-    else if (b.dataset.g && b.dataset.i) { S.sel[b.dataset.g] = b.dataset.i; update(); showStage(VIEW_TAB[G[b.dataset.g].view] || 'ext', G[b.dataset.g].view); stage.manual = activeSec; }
+    if (b.dataset.v) { S.v = b.dataset.v; update(); showStage('plan'); pin(); }
+    else if (b.dataset.g && b.dataset.i) { S.sel[b.dataset.g] = b.dataset.i; update(); showStage(VIEW_TAB[G[b.dataset.g].view] || 'ext', G[b.dataset.g].view); pin(); }
     else if (b.dataset.p) {
       const id = b.dataset.p; S.pk.has(id) ? S.pk.delete(id) : S.pk.add(id);
-      if (G.interior && id === G.interior.requires && !S.pk.has(id)) S.sel.interior = G.interior.free || G.interior.items[0].id;
       update();
+      if (INT && id === INT.requires && S.pk.has(id)) { showStage('int'); pin(); }
     }
     else if (b.dataset.st) {
       S.sel.interior = b.dataset.st;
-      if (G.interior.requires && b.dataset.st !== G.interior.free) S.pk.add(G.interior.requires);
-      update(); showStage('int'); stage.manual = activeSec;
+      update(); showStage('int'); pin();
     }
+  });
+  const dc = $('#dCity');
+  if (dc) dc.addEventListener('input', e => {
+    S.form.city = e.target.value; const f = $('#fCity'); if (f) f.value = e.target.value;
+    update(); renderSummary();
   });
   $('#share').onclick = () => {
     const url = location.href.split('#')[0] + toHash();
@@ -466,6 +487,8 @@ function closeSheet() { const s = $('#sheet'); if (!s || !s.classList.contains('
 function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 1800); }
 
 // Сцена следует за разделом, который сейчас читает человек: планировка → план, отделка → интерьер.
+const scrollPos = () => stacked.matches ? window.pageYOffset : (($('#scroll') || {}).scrollTop || 0);
+function pin() { stage.manual = activeSec || true; stage.pinY = scrollPos(); }
 function onSpy() { if (!spyRaf) spyRaf = requestAnimationFrame(spy); }
 function spy() {
   spyRaf = 0;
@@ -475,10 +498,14 @@ function spy() {
   else { const r = $('#scroll').getBoundingClientRect(); line = r.top + Math.min(170, r.height * 0.3); }
   let cur = secs[0];
   secs.forEach(s => { if (s.getBoundingClientRect().top <= line) cur = s; });
+  // после клика по опции сцена держит выбранный кадр, пока человек не уйдёт в другой раздел;
+  // сдвиг вёрстки от раскрывшихся подопций прокруткой не считается
+  if (stage.manual) {
+    if (cur === stage.manual || Math.abs(scrollPos() - stage.pinY) < 160) { activeSec = cur; return; }
+    stage.manual = null;
+  }
   if (cur === activeSec) return;
   activeSec = cur;
-  if (stage.manual && stage.manual !== cur) stage.manual = null;
-  if (stage.manual) return;
   const view = cur.dataset.view || 'hero';
   const tab = VIEW_TAB[view] || 'ext';
   if (tab === stage.tab && (view === 'hero' ? (stage.list[stage.i] || {}).kind === 'hero' : true) && view !== 'facade' && view !== 'terrace') return;

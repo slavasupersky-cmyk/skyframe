@@ -64,7 +64,7 @@
    {
     "id": "finish",
     "title": "Чистовая отделка",
-    "desc": "Полы, стены, потолки и санузел под ключ.",
+    "desc": "Пол — ламинат, в санузле и прихожей плитка. Санузел — плитка, сантехника и мебель. Стены — на выбор.",
     "price": [
      "finish"
     ]
@@ -72,7 +72,7 @@
    {
     "id": "mep",
     "title": "Инженерные системы",
-    "desc": "Электрика, вода, канализация, отопление, вентиляция.",
+    "desc": "Электрика, водоснабжение, канализация, отопление, вентиляция. Подключение к внешним сетям — отдельно.",
     "price": [
      "mep"
     ]
@@ -99,17 +99,22 @@
    },
    {
     "id": "interior",
-    "title": "Отделка внутри",
+    "title": "Стены внутри",
     "view": "interior",
     "requires": "finish",
-    "free": "raw",
-    "short": "Отделка"
+    "short": "Стены"
    }
   ],
   "notes": {
    "regional": "Фундамент, монтаж и кран посчитаны для ЦФО, до 250 км от Москвы. По другим регионам уточним после указания города.",
-   "offer": "Расчёт справочный и не является публичной офертой. Доставка считается отдельно.",
-   "individual": "Позиции «индивидуально» считаются по проекту и в итог не входят."
+   "offer": "Расчёт справочный и не является публичной офертой.",
+   "individual": "Чистовая отделка и инженерные системы считаются по проекту и в итог не входят."
+  },
+  "delivery": {
+   "title": "Доставка",
+   "from": 120000,
+   "desc": "С завода в Молодечно до участка.",
+   "ask": "Город или область"
   }
  },
  "groups": [
@@ -211,35 +216,28 @@
   },
   {
    "id": "interior",
-   "title": "Отделка внутри",
+   "title": "Стены внутри",
    "view": "interior",
    "requires": "finish",
-   "free": "raw",
-   "short": "Отделка",
+   "short": "Стены",
    "items": [
     {
-     "id": "raw",
-     "name": "Без отделки",
-     "note": "черновой пол, обрешётка",
-     "color": "#CDBFA6"
+     "id": "wood",
+     "name": "Дерево целиком",
+     "note": "стены и потолок — вагонка",
+     "color": "#B98E5E"
     },
     {
-     "id": "light",
-     "name": "Светлая",
-     "note": "дуб, белые стены",
-     "color": "#D9C4A0"
+     "id": "mixed",
+     "name": "Дерево и гипсокартон",
+     "note": "часть стен — окрашенный гипсокартон",
+     "color": "#D8CDBE"
     },
     {
-     "id": "warm",
-     "name": "Тёплая",
-     "note": "орех, тёплый белый",
-     "color": "#8C6642"
-    },
-    {
-     "id": "graphite",
-     "name": "Графит",
-     "note": "тёмный пол, фасады цвета хвои",
-     "color": "#3C423E"
+     "id": "gkl",
+     "name": "Гипсокартон под покраску",
+     "note": "светлые окрашенные стены",
+     "color": "#EFEDE8"
     }
    ]
   }
@@ -261,8 +259,8 @@
       "foundation": 84000,
       "mount": 88400,
       "crane": 34000,
-      "finish": 290000,
-      "mep": 190000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -276,8 +274,8 @@
       "foundation": 84000,
       "mount": 88400,
       "crane": 34000,
-      "finish": 290000,
-      "mep": 190000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -291,8 +289,8 @@
       "foundation": 105000,
       "mount": 110500,
       "crane": 34000,
-      "finish": 350000,
-      "mep": 250000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -306,8 +304,8 @@
       "foundation": 126000,
       "mount": 132600,
       "crane": 34000,
-      "finish": 470000,
-      "mep": 250000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -321,8 +319,8 @@
       "foundation": 126000,
       "mount": 132600,
       "crane": 34000,
-      "finish": 470000,
-      "mep": 250000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -427,8 +425,8 @@
       "foundation": 112000,
       "mount": 198900,
       "crane": 68000,
-      "finish": 590000,
-      "mep": 490000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -442,8 +440,8 @@
       "foundation": 112000,
       "mount": 198900,
       "crane": 68000,
-      "finish": 590000,
-      "mep": 490000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -457,8 +455,8 @@
       "foundation": 140000,
       "mount": 232050,
       "crane": 68000,
-      "finish": 750000,
-      "mep": 510000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -486,8 +484,8 @@
       "foundation": 112000,
       "mount": 243100,
       "crane": 34000,
-      "finish": 690000,
-      "mep": 630000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -513,6 +511,7 @@
     "ext-hero-ral7024": "../../brands/mashko/media/aframe/ext-hero-ral7024.jpg",
     "ext-hero-ral8017": "../../brands/mashko/media/aframe/ext-hero-ral8017.jpg",
     "ext-hero-ral9005": "../../brands/mashko/media/aframe/ext-hero-ral9005.jpg",
+    "int-wood": "../../brands/mashko/media/aframe/int-wood.jpg",
     "plan-1": "../../brands/mashko/media/aframe/plan-1.jpg",
     "plan-2": "../../brands/mashko/media/aframe/plan-2.jpg",
     "_card": "../../brands/mashko/build/img/aframe-cover-card-b1ff2f58bb.jpg"
@@ -657,8 +656,8 @@
       "foundation": 168000,
       "mount": 359125,
       "crane": 68000,
-      "finish": 1290000,
-      "mep": 660000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -672,8 +671,8 @@
       "foundation": 168000,
       "mount": 359125,
       "crane": 68000,
-      "finish": 1290000,
-      "mep": 660000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -687,8 +686,8 @@
       "foundation": 252000,
       "mount": 414375,
       "crane": 68000,
-      "finish": 1350000,
-      "mep": 900000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -702,8 +701,8 @@
       "foundation": 252000,
       "mount": 414375,
       "crane": 68000,
-      "finish": 1350000,
-      "mep": 900000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -717,8 +716,8 @@
       "foundation": 294000,
       "mount": 453050,
       "crane": 68000,
-      "finish": 1470000,
-      "mep": 990000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -855,8 +854,8 @@
       "foundation": 140000,
       "mount": 298350,
       "crane": 68000,
-      "finish": 990000,
-      "mep": 630000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -870,8 +869,8 @@
       "foundation": 168000,
       "mount": 397800,
       "crane": 68000,
-      "finish": 1290000,
-      "mep": 870000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -885,8 +884,8 @@
       "foundation": 252000,
       "mount": 513825,
       "crane": 102000,
-      "finish": 1850000,
-      "mep": 940000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -900,8 +899,8 @@
       "foundation": 252000,
       "mount": 530400,
       "crane": 102000,
-      "finish": 1900000,
-      "mep": 980000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -915,8 +914,8 @@
       "foundation": 315000,
       "mount": 646425,
       "crane": 102000,
-      "finish": 2190000,
-      "mep": 1320000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -930,8 +929,8 @@
       "foundation": 378000,
       "mount": 784550,
       "crane": 136000,
-      "finish": 2750000,
-      "mep": 1510000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -962,8 +961,8 @@
       "foundation": 112000,
       "mount": 298350,
       "crane": 68000,
-      "finish": 1090000,
-      "mep": 530000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -977,8 +976,8 @@
       "foundation": 112000,
       "mount": 298350,
       "crane": 68000,
-      "finish": 1090000,
-      "mep": 530000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1020,8 +1019,8 @@
       "foundation": 168000,
       "mount": 397800,
       "crane": 68000,
-      "finish": 1290000,
-      "mep": 870000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1035,8 +1034,8 @@
       "foundation": 252000,
       "mount": 563550,
       "crane": 102000,
-      "finish": 1990000,
-      "mep": 1070000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1050,8 +1049,8 @@
       "foundation": 252000,
       "mount": 596700,
       "crane": 102000,
-      "finish": 2150000,
-      "mep": 1090000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1080,8 +1079,8 @@
       "foundation": 294000,
       "mount": 381225,
       "crane": 68000,
-      "finish": 1300000,
-      "mep": 770000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1095,8 +1094,8 @@
       "foundation": 378000,
       "mount": 450288,
       "crane": 102000,
-      "finish": 1500000,
-      "mep": 960000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1110,8 +1109,8 @@
       "foundation": 378000,
       "mount": 450288,
       "crane": 102000,
-      "finish": 1500000,
-      "mep": 960000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1125,8 +1124,8 @@
       "foundation": 420000,
       "mount": 491725,
       "crane": 102000,
-      "finish": 1650000,
-      "mep": 1020000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1246,8 +1245,8 @@
       "foundation": 378000,
       "mount": 618800,
       "crane": 102000,
-      "finish": 2100000,
-      "mep": 1260000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1261,8 +1260,8 @@
       "foundation": 378000,
       "mount": 618800,
       "crane": 102000,
-      "finish": 2100000,
-      "mep": 1260000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1276,8 +1275,8 @@
       "foundation": 378000,
       "mount": 618800,
       "crane": 102000,
-      "finish": 2100000,
-      "mep": 1260000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1291,8 +1290,8 @@
       "foundation": 378000,
       "mount": 618800,
       "crane": 102000,
-      "finish": 2100000,
-      "mep": 1260000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1306,8 +1305,8 @@
       "foundation": 378000,
       "mount": 618800,
       "crane": 102000,
-      "finish": 2100000,
-      "mep": 1260000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1321,8 +1320,8 @@
       "foundation": 378000,
       "mount": 618800,
       "crane": 102000,
-      "finish": 2100000,
-      "mep": 1260000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1353,8 +1352,8 @@
       "foundation": 434000,
       "mount": 718250,
       "crane": 136000,
-      "finish": 2300000,
-      "mep": 1600000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1380,8 +1379,8 @@
       "foundation": 378000,
       "mount": 690625,
       "crane": 136000,
-      "finish": 2500000,
-      "mep": 1250000
+      "finish": 0,
+      "mep": 0
      }
     },
     {
@@ -1395,8 +1394,8 @@
       "foundation": 518000,
       "mount": 1226550,
       "crane": 170000,
-      "finish": 4500000,
-      "mep": 2160000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1423,8 +1422,8 @@
       "foundation": 574000,
       "mount": 1326000,
       "crane": 170000,
-      "finish": 4290000,
-      "mep": 2910000
+      "finish": 0,
+      "mep": 0
      }
     }
    ],
@@ -1438,7 +1437,6 @@
  "shared": {
   "int-sample-1": "../../brands/mashko/media/_shared/int-sample-1.jpg",
   "int-sample-2": "../../brands/mashko/media/_shared/int-sample-2.jpg",
-  "int-sample-3": "../../brands/mashko/media/_shared/int-sample-3.jpg",
-  "int-sample-4": "../../brands/mashko/media/_shared/int-sample-4.jpg"
+  "int-sample-3": "../../brands/mashko/media/_shared/int-sample-3.jpg"
  }
 }
