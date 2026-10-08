@@ -69,9 +69,12 @@ function renderGallery() {
   document.title = B.site_title || B.title;
   const nCfg = C.models.reduce((s, m) => s + m.variants.length, 0);
   const hm = C.models.find(m => m.id === (B.intro || {}).model) || C.models[0];
-  const heroSrc = hm.img['ext-evening'] || hm.img.cover || hm.img._card;
+  // обложка: своя hero.jpg → главный кадр в базовом цвете → вечерний → обложка модели
+  const hg = C.groups.find(g => g.view === 'hero');
+  const heroSrc = hm.img.hero || (hg && hm.img['ext-hero-' + hg.items[0].id]) || hm.img['ext-evening'] || hm.img.cover || hm.img._card;
+  const focus = (B.intro || {}).focus || '50% 50%';
   app.innerHTML = header(false) +
-    '<section class="hero"><img src="' + esc(heroSrc) + '" alt="' + esc(hm.name) + '" fetchpriority="high">' +
+    '<section class="hero"><img src="' + esc(heroSrc) + '" alt="' + esc(hm.name) + '" fetchpriority="high" style="object-position:' + esc(focus) + '">' +
       '<div class="hero-in"><h1>' + esc((B.intro || {}).title || B.title).replace(/\n/g, '<br>') + '</h1>' +
         '<p>' + esc((B.intro || {}).lead || '') + '</p>' +
         '<div class="hero-cta"><a class="btn main" href="#/' + esc(hm.id) + '">Собрать ' + esc(hm.name) + '</a>' +
