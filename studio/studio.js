@@ -43,8 +43,10 @@ const stacked = window.matchMedia('(max-width:999px) and (orientation:portrait),
 function header(inStudio) {
   return '<header class="top' + (inStudio ? ' lined' : ' wide') + '">' +
     '<a class="logo" href="#/" aria-label="' + esc(B.title) + ' — все модели">' +
-      (B.logo ? '<img src="' + esc(B.logo) + '" alt="' + esc(B.title) + '" width="98" height="26">' : '<b>' + esc(B.title) + '</b>') + '</a>' +
+      (B.logo ? '<img src="' + esc(B.logo) + '" alt="' + esc(B.title) + '" width="135" height="36">' : '<b>' + esc(B.title) + '</b>') + '</a>' +
+    (B.tool_label ? '<span class="tool">' + esc(B.tool_label).replace(/\n/g, '<br>') + '</span>' : '') +
     '<nav>' + (inStudio ? '<a class="models" href="#/">Все модели</a>' : '') +
+      (B.site ? '<a class="site" href="' + esc(B.site) + '" target="_blank" rel="noopener">' + esc(B.site_nav || B.site_label || 'Сайт') + '<span aria-hidden="true"> ↗</span></a>' : '') +
       (B.phone ? '<a class="tel-txt num" href="' + esc(B.phone_href) + '">' + esc(B.phone) + '</a>' +
                  '<a class="tel-ico" href="' + esc(B.phone_href) + '" aria-label="Позвонить ' + esc(B.phone) + '">' + ICON.tel + '</a>' : '') +
     '</nav></header>';
@@ -101,9 +103,8 @@ const shared = k => (C.shared || {})[k];
 const eyebrow = t => t ? '<p class="eyebrow">' + esc(t) + '</p>' : '';
 function homeUsp(u) {
   if (!u || !u.items || !u.items.length) return '';
-  return '<section class="wrapx band usp">' + (u.title ? '<h2 class="bh">' + esc(u.title) + '</h2>' : '') +
-    '<div class="usp-grid">' + u.items.map(i =>
-      '<div class="u"><b class="num">' + esc(i.k) + '</b><h3>' + esc(i.t) + '</h3><p>' + esc(i.d) + '</p></div>').join('') +
+  return '<section class="wrapx strip"' + (u.title ? ' aria-label="' + esc(u.title) + '"' : '') + '><div class="usp-grid">' + u.items.map(i =>
+      '<div class="u"><b class="num">' + esc(i.k) + '</b><span>' + esc(i.t) + '</span>' + (i.d ? '<p>' + esc(i.d) + '</p>' : '') + '</div>').join('') +
     '</div></section>';
 }
 function homeTech(t) {
@@ -130,6 +131,7 @@ function homeSteps(st) {
       '<ol class="stp">' + st.items.map((it, i) => '<li><span class="no num">' + String(i + 1).padStart(2, '0') + '</span>' +
         '<b>' + esc(it[0]) + '</b><span class="d">' + esc(it[1]) + '</span><u class="num">' + esc(it[2]) + '</u></li>').join('') + '</ol>' +
       (st.note ? '<p class="snote">' + esc(st.note) + '</p>' : '') +
+      (st.link ? '<a class="more" href="' + esc(st.link[1]) + '" target="_blank" rel="noopener">' + esc(st.link[0]) + '<span aria-hidden="true"> ↗</span></a>' : '') +
   '</section></div>';
 }
 function fillGrid() {
