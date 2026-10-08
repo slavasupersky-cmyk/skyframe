@@ -506,15 +506,23 @@
    ],
    "img": {
     "cover": "../../brands/mashko/media/aframe/cover.jpg",
+    "ext-evening": "../../brands/mashko/media/aframe/ext-evening.jpg",
+    "ext-facade-painted": "../../brands/mashko/media/aframe/ext-facade-painted.jpg",
+    "ext-facade-planken": "../../brands/mashko/media/aframe/ext-facade-planken.jpg",
+    "ext-facade-thermo": "../../brands/mashko/media/aframe/ext-facade-thermo.jpg",
     "ext-hero-ral3009": "../../brands/mashko/media/aframe/ext-hero-ral3009.jpg",
     "ext-hero-ral7016": "../../brands/mashko/media/aframe/ext-hero-ral7016.jpg",
     "ext-hero-ral7024": "../../brands/mashko/media/aframe/ext-hero-ral7024.jpg",
     "ext-hero-ral8017": "../../brands/mashko/media/aframe/ext-hero-ral8017.jpg",
+    "ext-hero-ral9003": "../../brands/mashko/media/aframe/ext-hero-ral9003.jpg",
     "ext-hero-ral9005": "../../brands/mashko/media/aframe/ext-hero-ral9005.jpg",
+    "int-gkl": "../../brands/mashko/media/aframe/int-gkl.jpg",
+    "int-mixed": "../../brands/mashko/media/aframe/int-mixed.jpg",
+    "int-shell": "../../brands/mashko/media/aframe/int-shell.jpg",
     "int-wood": "../../brands/mashko/media/aframe/int-wood.jpg",
     "plan-1": "../../brands/mashko/media/aframe/plan-1.jpg",
     "plan-2": "../../brands/mashko/media/aframe/plan-2.jpg",
-    "_card": "../../brands/mashko/build/img/aframe-cover-card-b1ff2f58bb.jpg"
+    "_card": "../../brands/mashko/build/img/aframe-ext-evening-card-b1ff2f58bb.jpg"
    }
   },
   {
