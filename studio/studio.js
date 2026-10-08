@@ -80,17 +80,57 @@ function renderGallery() {
         '<div class="hero-cta"><a class="btn main" href="#/' + esc(hm.id) + '">Собрать ' + esc(hm.name) + '</a>' +
         '<button class="btn glass" id="toGrid">Все модели</button></div></div>' +
       '<a class="hero-tag" href="#/' + esc(hm.id) + '">На фото — ' + esc(hm.name) + '</a></section>' +
-    '<main class="gallery" id="models">' +
-      '<div class="ghead"><h2>Модели</h2><p>' + C.models.length + ' ' + pl(C.models.length, 'модель', 'модели', 'моделей') +
-        ', ' + nCfg + ' ' + pl(nCfg, 'планировка', 'планировки', 'планировок') + '. Цены — за домокомплект с окнами и фальцем.</p></div>' +
-      '<div class="filters" role="group" aria-label="Площадь">' + BUCKETS.map(b =>
-        '<button class="chip" data-b="' + b[0] + '" aria-pressed="' + (b[0] === bucket) + '">' + b[1] + '</button>').join('') + '</div>' +
-      '<div class="grid" id="grid"></div>' + footer() +
+    '<main>' + homeUsp(H.usp) +
+      '<section class="gallery" id="models">' +
+        '<div class="ghead"><h2>Модели</h2><p>' + C.models.length + ' ' + pl(C.models.length, 'модель', 'модели', 'моделей') +
+          ', ' + nCfg + ' ' + pl(nCfg, 'планировка', 'планировки', 'планировок') + '. Цены — за домокомплект с окнами и фальцем.</p></div>' +
+        '<div class="filters" role="group" aria-label="Площадь">' + BUCKETS.map(b =>
+          '<button class="chip" data-b="' + b[0] + '" aria-pressed="' + (b[0] === bucket) + '">' + b[1] + '</button>').join('') + '</div>' +
+        '<div class="grid" id="grid"></div></section>' +
+      homeTech(H.tech) + homeSteps(H.steps) +
+      '<div class="wrapx">' + footer() + '</div>' +
     '</main>';
   $('#toGrid').onclick = () => { const g = $('#models'); window.scrollTo({ top: g.getBoundingClientRect().top + window.pageYOffset - $('.top').offsetHeight, behavior: 'smooth' }); };
   $$('.chip').forEach(b => b.onclick = () => { bucket = b.dataset.b; $$('.chip').forEach(x => x.setAttribute('aria-pressed', String(x === b))); fillGrid(); });
   fillGrid();
   window.scrollTo(0, 0);
+}
+// Блоки главной: преимущества, технология, процесс. Тексты — brand.json → home, картинки — media/_shared/.
+const H = B.home || {};
+const shared = k => (C.shared || {})[k];
+const eyebrow = t => t ? '<p class="eyebrow">' + esc(t) + '</p>' : '';
+function homeUsp(u) {
+  if (!u || !u.items || !u.items.length) return '';
+  return '<section class="wrapx band usp">' + (u.title ? '<h2 class="bh">' + esc(u.title) + '</h2>' : '') +
+    '<div class="usp-grid">' + u.items.map(i =>
+      '<div class="u"><b class="num">' + esc(i.k) + '</b><h3>' + esc(i.t) + '</h3><p>' + esc(i.d) + '</p></div>').join('') +
+    '</div></section>';
+}
+function homeTech(t) {
+  if (!t) return '';
+  const img = t.image && shared(t.image);
+  return '<section class="wrapx band tech" id="tech"><div class="tech-in"><div class="tech-tx">' +
+      eyebrow(t.eyebrow) + '<h2 class="bh">' + esc(t.title) + '</h2>' +
+      (t.lead ? '<p class="lead">' + esc(t.lead) + '</p>' : '') + (t.text ? '<p class="sub">' + esc(t.text) + '</p>' : '') +
+      (t.layers ? (t.layers_title ? '<p class="lt">' + esc(t.layers_title) + '</p>' : '') + '<ol class="layers">' +
+        t.layers.map((l, i) => '<li><span class="n num">' + (i + 1) + '</span><span><b>' + esc(l[0]) + '</b> <i>' + esc(l[1]) + '</i></span></li>').join('') + '</ol>' : '') +
+    '</div>' +
+    (img ? '<figure class="tech-img"><img src="' + esc(img) + '" alt="' + esc(t.caption || '') + '" loading="lazy" width="1250" height="1300">' +
+      (t.caption ? '<figcaption>' + esc(t.caption) + '</figcaption>' : '') + '</figure>' : '') + '</div>' +
+    (t.facts ? '<div class="facts">' + t.facts.map(f => '<div><b class="num">' + esc(f[0]) + '</b><span>' + esc(f[1]) + '</span></div>').join('') + '</div>' : '') +
+  '</section>';
+}
+function homeSteps(st) {
+  if (!st || !st.items) return '';
+  const shots = (st.photos || []).filter(p => shared(p[0]));
+  return '<div class="tint"><section class="wrapx band steps" id="process">' + eyebrow(st.eyebrow) +
+      '<h2 class="bh">' + esc(st.title) + '</h2>' + (st.lead ? '<p class="lead">' + esc(st.lead) + '</p>' : '') +
+      (shots.length ? '<div class="shots">' + shots.map(p => '<figure><img src="' + esc(shared(p[0])) + '" alt="' + esc(p[1]) + '" loading="lazy">' +
+        '<figcaption>' + esc(p[1]) + '</figcaption></figure>').join('') + '</div>' : '') +
+      '<ol class="stp">' + st.items.map((it, i) => '<li><span class="no num">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<b>' + esc(it[0]) + '</b><span class="d">' + esc(it[1]) + '</span><u class="num">' + esc(it[2]) + '</u></li>').join('') + '</ol>' +
+      (st.note ? '<p class="snote">' + esc(st.note) + '</p>' : '') +
+  '</section></div>';
 }
 function fillGrid() {
   const bk = BUCKETS.find(b => b[0] === bucket);

@@ -116,6 +116,150 @@
    "from": 120000,
    "desc": "С завода в Молодечно до участка.",
    "ask": "Город или область"
+  },
+  "pin": [
+   "aframe"
+  ],
+  "home": {
+   "usp": {
+    "title": "Почему дом с завода",
+    "items": [
+     {
+      "k": "Сухой цех",
+      "t": "Дом не мокнет на стройке",
+      "d": "Каркас, утеплитель и обшивку собирают в закрытом сухом цеху, а не под дождём на участке. Машину ведь тоже не красят во дворе."
+     },
+     {
+      "k": "2–15 дней",
+      "t": "Монтаж тёплого контура",
+      "d": "Панели приезжают готовыми, на участке их только соединяют. Стыки не видны и не продуваются."
+     },
+     {
+      "k": "+180%",
+      "t": "Теплее нормы",
+      "d": "Утеплитель 170 мм в стенах и 200 мм в полу и кровле: сопротивление теплопередаче R 5,88 при норме 3,2."
+     },
+     {
+      "k": "15 лет",
+      "t": "Гарантия на каркас",
+      "d": "И 3 года на работы. Цена фиксируется в договоре и не меняется в процессе стройки."
+     },
+     {
+      "k": "10–30 домов",
+      "t": "Базы отдыха и посёлки",
+      "d": "Завод держит темп серии: каждый дом одного качества, сроки — которых не даст бригада на участке."
+     },
+     {
+      "k": "+ модуль",
+      "t": "Дом растёт вместе с вами",
+      "d": "Дом можно достроить новым модулем за несколько дней или перевезти на другой участок."
+     }
+    ]
+   },
+   "tech": {
+    "eyebrow": "Технология",
+    "title": "Скандинавская каркасная технология",
+    "lead": "Дом собирается из готовых заводских панелей: каркас, утеплитель, мембраны и внешняя обшивка ставятся в цеху, а не под дождём на участке. Геометрия задаётся станком, а не рулеткой прораба.",
+    "text": "Пиломатериал проходит сушильную камеру, калибруется и строгается под проект. Каждый этап идёт в отдельном закрытом цеху по внутреннему регламенту и с контролем качества.",
+    "layers_title": "Слои конструкции",
+    "layers": [
+     [
+      "Фальцевая кровля",
+      "стоячий фальц, скрытый крепёж, без сквозных отверстий"
+     ],
+     [
+      "Внешняя обшивка",
+      "фальц или планкен — выбирается на этапе договора"
+     ],
+     [
+      "Вентилируемый зазор",
+      "обрешётка, воздух под фасадом"
+     ],
+     [
+      "Ветро-влагозащитная плита",
+      "жёсткий контур, держит утеплитель"
+     ],
+     [
+      "Каркас с утеплителем",
+      "минеральная вата, 170 мм в стенах, 200 мм в полу и кровле"
+     ],
+     [
+      "Пароизоляция",
+      "замкнутый контур изнутри"
+     ],
+     [
+      "Внутренняя обшивка",
+      "основание под чистовую отделку"
+     ]
+    ],
+    "image": "tech-cut",
+    "caption": "Разрез стены, перекрытия и кровли",
+    "facts": [
+     [
+      "10+ лет",
+      "на рынке домостроения"
+     ],
+     [
+      "1 500 м²",
+      "производственный цех"
+     ],
+     [
+      "24 дома",
+      "в год с завода"
+     ],
+     [
+      "50+ лет",
+      "срок службы дома"
+     ]
+    ]
+   },
+   "steps": {
+    "eyebrow": "Процесс",
+    "title": "От договора до новоселья",
+    "lead": "Один подрядчик и понятные сроки на каждом этапе. От подписания договора до заезда — 4–5 месяцев.",
+    "photos": [
+     [
+      "process-1",
+      "Панели приходят на участок готовыми"
+     ],
+     [
+      "process-2",
+      "Сборка на участке"
+     ],
+     [
+      "process-3",
+      "Тёплый контур закрыт"
+     ]
+    ],
+    "items": [
+     [
+      "Проект и договор",
+      "выбор модели, конфигурации и отделки",
+      "5 дней"
+     ],
+     [
+      "Производство",
+      "панели, окна, кровля — в заводском цеху",
+      "30–90 дней"
+     ],
+     [
+      "Доставка",
+      "фура на участок, разгрузка краном",
+      "1–2 дня"
+     ],
+     [
+      "Монтаж контура*",
+      "дом под крышей, закрытый и утеплённый",
+      "2–15 дней"
+     ],
+     [
+      "Отделка и инженерия",
+      "чистовая отделка, электрика, вода, отопление",
+      "по проекту"
+     ]
+    ],
+    "note": "* Монтаж контура — на подготовленный фундамент. Срок зависит от площади дома."
+   }
   }
  },
  "groups": [
@@ -244,6 +388,63 @@
   }
  ],
  "models": [
+  {
+   "id": "aframe",
+   "name": "A-Frame",
+   "description": "Дом-пик: скаты доходят до земли, фасад остеклён во всю высоту. Гостиная с кухней и панорамным остеклением, спальня на антресоли.",
+   "variants": [
+    {
+     "id": "1",
+     "area": 44,
+     "label": "",
+     "prices": {
+      "kit_factory": 2376000,
+      "windows": 277740,
+      "seam": 185160,
+      "foundation": 112000,
+      "mount": 243100,
+      "crane": 34000,
+      "finish": 0,
+      "mep": 0
+     }
+    },
+    {
+     "id": "2",
+     "area": 58,
+     "label": "",
+     "prices": {
+      "kit_factory": 3132000,
+      "windows": 408930,
+      "seam": 272620,
+      "foundation": 140000,
+      "mount": 320450,
+      "crane": 34000,
+      "finish": 0,
+      "mep": 0
+     }
+    }
+   ],
+   "img": {
+    "cover": "../../brands/mashko/media/aframe/cover.jpg",
+    "ext-facade-painted": "../../brands/mashko/media/aframe/ext-facade-painted.jpg",
+    "ext-facade-planken": "../../brands/mashko/media/aframe/ext-facade-planken.jpg",
+    "ext-facade-thermo": "../../brands/mashko/media/aframe/ext-facade-thermo.jpg",
+    "ext-hero-ral3009": "../../brands/mashko/media/aframe/ext-hero-ral3009.jpg",
+    "ext-hero-ral7016": "../../brands/mashko/media/aframe/ext-hero-ral7016.jpg",
+    "ext-hero-ral7024": "../../brands/mashko/media/aframe/ext-hero-ral7024.jpg",
+    "ext-hero-ral8017": "../../brands/mashko/media/aframe/ext-hero-ral8017.jpg",
+    "ext-hero-ral9003": "../../brands/mashko/media/aframe/ext-hero-ral9003.jpg",
+    "ext-hero-ral9005": "../../brands/mashko/media/aframe/ext-hero-ral9005.jpg",
+    "hero": "../../brands/mashko/media/aframe/hero.jpg",
+    "int-gkl": "../../brands/mashko/media/aframe/int-gkl.jpg",
+    "int-mixed": "../../brands/mashko/media/aframe/int-mixed.jpg",
+    "int-shell": "../../brands/mashko/media/aframe/int-shell.jpg",
+    "int-wood": "../../brands/mashko/media/aframe/int-wood.jpg",
+    "plan-1": "../../brands/mashko/media/aframe/plan-1.jpg",
+    "plan-2": "../../brands/mashko/media/aframe/plan-2.jpg",
+    "_card": "../../brands/mashko/build/img/aframe-cover-card-b1ff2f58bb.jpg"
+   }
+  },
   {
    "id": "kantri",
    "name": "Kantri",
@@ -467,64 +668,6 @@
     "plan-2": "../../brands/mashko/media/chalet/plan-2.jpg",
     "plan-3": "../../brands/mashko/media/chalet/plan-3.jpg",
     "_card": "../../brands/mashko/build/img/chalet-cover-card-cde57d92a5.jpg"
-   }
-  },
-  {
-   "id": "aframe",
-   "name": "A-Frame",
-   "description": "Дом-пик: скаты доходят до земли, фасад остеклён во всю высоту. Гостиная с кухней и панорамным остеклением, спальня на антресоли.",
-   "variants": [
-    {
-     "id": "1",
-     "area": 44,
-     "label": "",
-     "prices": {
-      "kit_factory": 2376000,
-      "windows": 277740,
-      "seam": 185160,
-      "foundation": 112000,
-      "mount": 243100,
-      "crane": 34000,
-      "finish": 0,
-      "mep": 0
-     }
-    },
-    {
-     "id": "2",
-     "area": 58,
-     "label": "",
-     "prices": {
-      "kit_factory": 3132000,
-      "windows": 408930,
-      "seam": 272620,
-      "foundation": 140000,
-      "mount": 320450,
-      "crane": 34000,
-      "finish": 0,
-      "mep": 0
-     }
-    }
-   ],
-   "img": {
-    "cover": "../../brands/mashko/media/aframe/cover.jpg",
-    "ext-evening": "../../brands/mashko/media/aframe/ext-evening.jpg",
-    "ext-facade-painted": "../../brands/mashko/media/aframe/ext-facade-painted.jpg",
-    "ext-facade-planken": "../../brands/mashko/media/aframe/ext-facade-planken.jpg",
-    "ext-facade-thermo": "../../brands/mashko/media/aframe/ext-facade-thermo.jpg",
-    "ext-hero-ral3009": "../../brands/mashko/media/aframe/ext-hero-ral3009.jpg",
-    "ext-hero-ral7016": "../../brands/mashko/media/aframe/ext-hero-ral7016.jpg",
-    "ext-hero-ral7024": "../../brands/mashko/media/aframe/ext-hero-ral7024.jpg",
-    "ext-hero-ral8017": "../../brands/mashko/media/aframe/ext-hero-ral8017.jpg",
-    "ext-hero-ral9003": "../../brands/mashko/media/aframe/ext-hero-ral9003.jpg",
-    "ext-hero-ral9005": "../../brands/mashko/media/aframe/ext-hero-ral9005.jpg",
-    "hero": "../../brands/mashko/media/aframe/hero.jpg",
-    "int-gkl": "../../brands/mashko/media/aframe/int-gkl.jpg",
-    "int-mixed": "../../brands/mashko/media/aframe/int-mixed.jpg",
-    "int-shell": "../../brands/mashko/media/aframe/int-shell.jpg",
-    "int-wood": "../../brands/mashko/media/aframe/int-wood.jpg",
-    "plan-1": "../../brands/mashko/media/aframe/plan-1.jpg",
-    "plan-2": "../../brands/mashko/media/aframe/plan-2.jpg",
-    "_card": "../../brands/mashko/build/img/aframe-ext-evening-card-b1ff2f58bb.jpg"
    }
   },
   {
@@ -1447,6 +1590,10 @@
  "shared": {
   "int-sample-1": "../../brands/mashko/media/_shared/int-sample-1.jpg",
   "int-sample-2": "../../brands/mashko/media/_shared/int-sample-2.jpg",
-  "int-sample-3": "../../brands/mashko/media/_shared/int-sample-3.jpg"
+  "int-sample-3": "../../brands/mashko/media/_shared/int-sample-3.jpg",
+  "process-1": "../../brands/mashko/media/_shared/process-1.jpg",
+  "process-2": "../../brands/mashko/media/_shared/process-2.jpg",
+  "process-3": "../../brands/mashko/media/_shared/process-3.jpg",
+  "tech-cut": "../../brands/mashko/media/_shared/tech-cut.jpg"
  }
 }

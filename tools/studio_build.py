@@ -173,7 +173,8 @@ def build(key, check_only=False):
         shared_img[stem] = rel(p)
 
     kit = lambda v: sum(v['prices'][c] for c, _ in brand['base']['parts'])
-    out_models.sort(key=lambda m: min(kit(v) for v in m['variants']))
+    pin = [x.lower() for x in brand.get('pin', [])]          # модели, которые идут первыми в каталоге
+    out_models.sort(key=lambda m: (pin.index(m['id']) if m['id'] in pin else len(pin), min(kit(v) for v in m['variants'])))
     for m in out_models:
         m['variants'].sort(key=lambda v: (v['area'], kit(v)))
 
